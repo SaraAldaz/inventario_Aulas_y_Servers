@@ -1,0 +1,530 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inventario - {{ aula.codigo }}</title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <!-- =====================================================
+             ENCABEZADO
+        ====================================================== -->
+
+        <header class="encabezado">
+
+            <div class="contenedor">
+
+                <div>
+
+                    <h1>
+                        Aula {{ aula.codigo }}
+                    </h1>
+
+                    <p>
+                        Inventario del aula
+                    </p>
+
+                </div>
+
+                <a href="{% url 'aulas_por_piso' aula.piso.id %}" class="boton-volver">
+
+                    ← Volver a aulas
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             INFORMACIÓN DEL AULA
+        ====================================================== -->
+
+        <div class="informacion-aula">
+
+            <div class="informacion-item">
+
+                <span class="etiqueta">
+                    Piso
+                </span>
+
+                <strong>
+                    {{ aula.piso.numero }}
+                </strong>
+
+            </div>
+
+
+            <div class="informacion-item">
+
+                <span class="etiqueta">
+                    Aula
+                </span>
+
+                <strong>
+                    {{ aula.codigo }}
+                </strong>
+
+            </div>
+
+
+            <div class="informacion-item">
+
+                <span class="etiqueta">
+                    Capacidad
+                </span>
+
+                <strong>
+                    {{ aula.capacidad }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             RESUMEN
+        ====================================================== -->
+
+        <h2>
+            Resumen del inventario
+        </h2>
+
+
+        <div class="resumen">
+
+            <div class="tarjeta-resumen">
+
+                <span class="numero">
+                    {{ cantidad_computadores }}
+                </span>
+
+                <span class="texto">
+                    Computadores
+                </span>
+
+            </div>
+
+
+            <div class="tarjeta-resumen">
+
+                <span class="numero">
+                    {{ cantidad_equipos }}
+                </span>
+
+                <span class="texto">
+                    Equipos tecnológicos
+                </span>
+
+            </div>
+
+
+            <div class="tarjeta-resumen">
+
+                <span class="numero">
+                    {{ cantidad_mesas }}
+                </span>
+
+                <span class="texto">
+                    Mesas
+                </span>
+
+            </div>
+
+
+            <div class="tarjeta-resumen">
+
+                <span class="numero">
+                    {{ cantidad_sillas }}
+                </span>
+
+                <span class="texto">
+                    Sillas
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             COMPUTADORES
+        ====================================================== -->
+
+        <section class="seccion">
+
+            <div class="titulo-seccion">
+
+                <h2>
+                    Computadores
+                </h2>
+
+                <span>
+                    {{ cantidad_computadores }}
+                </span>
+
+            </div>
+
+
+            {% if computadores %}
+
+            <div class="tabla-contenedor">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Código
+                            </th>
+
+                            <th>
+                                Marca
+                            </th>
+
+                            <th>
+                                Modelo
+                            </th>
+
+                            <th>
+                                Estado
+                            </th>
+
+                            <th>
+                                Acción
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for computador in computadores %}
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    {{ computador.codigo_inventario }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ computador.marca|default:"-" }}
+                            </td>
+
+                            <td>
+                                {{ computador.modelo|default:"-" }}
+                            </td>
+
+                            <td>
+
+                                <span class="estado estado-{{ computador.estado|lower }}">
+
+                                    {{ computador.get_estado_display }}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <a href="{% url 'detalle_computador' computador.id %}" class="boton-detalle">
+                                    Ver detalle
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="mensaje-vacio">
+
+                No hay computadores registrados en esta aula.
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =====================================================
+             EQUIPOS TECNOLÓGICOS
+        ====================================================== -->
+
+        <section class="seccion">
+
+            <div class="titulo-seccion">
+
+                <h2>
+                    Equipos tecnológicos
+                </h2>
+
+                <span>
+                    {{ cantidad_equipos }}
+                </span>
+
+            </div>
+
+
+            {% if equipos %}
+
+            <div class="tabla-contenedor">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Código
+                            </th>
+
+                            <th>
+                                Tipo
+                            </th>
+
+                            <th>
+                                Marca
+                            </th>
+
+                            <th>
+                                Modelo
+                            </th>
+
+                            <th>
+                                Estado
+                            </th>
+
+                            <th>
+                                Acción
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for equipo in equipos %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    {{ equipo.codigo_inventario }}
+                                </strong>
+
+                            </td>
+
+                            <td>
+                                {{ equipo.get_tipo_display }}
+                            </td>
+
+                            <td>
+                                {{ equipo.marca|default:"-" }}
+                            </td>
+
+                            <td>
+                                {{ equipo.modelo|default:"-" }}
+                            </td>
+
+                            <td>
+
+                                <span class="estado estado-{{ equipo.estado|lower }}">
+
+                                    {{ equipo.get_estado_display }}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <a href="{% url 'detalle_equipo' equipo.id %}" class="boton-detalle">
+                                    Ver detalle
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="mensaje-vacio">
+
+                No hay equipos tecnológicos registrados en esta aula.
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =====================================================
+             MOBILIARIO
+        ====================================================== -->
+
+        <section class="seccion">
+
+            <div class="titulo-seccion">
+
+                <h2>
+                    Mobiliario
+                </h2>
+
+                <span>
+                    {{ mobiliario|length }}
+                </span>
+
+            </div>
+
+
+            {% if mobiliario %}
+
+            <div class="tabla-contenedor">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Código
+                            </th>
+
+                            <th>
+                                Tipo
+                            </th>
+
+                            <th>
+                                Estado
+                            </th>
+
+                            <th>
+                                Acción
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for elemento in mobiliario %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    {{ elemento.codigo_inventario }}
+                                </strong>
+
+                            </td>
+
+                            <td>
+                                {{ elemento.get_tipo_display }}
+                            </td>
+
+                            <td>
+
+                                <span class="estado estado-{{ elemento.estado|lower }}">
+
+                                    {{ elemento.get_estado_display }}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <a href="{% url 'detalle_mobiliario' elemento.id %}" class="boton-detalle">
+                                    Ver detalle
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="mensaje-vacio">
+
+                No hay mobiliario registrado en esta aula.
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =====================================================
+             PIE
+        ====================================================== -->
+
+        <div class="pie">
+
+            Sistema de Inventario
+            <br>
+            Aulas y servidores
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

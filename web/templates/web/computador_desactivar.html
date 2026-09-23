@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+    Desactivar computador - Inventario
+</title>
+
+<link
+    rel="stylesheet"
+    href="{% static 'web/css/estilos.css' %}"
+>
+</head>
+
+<body>
+
+<header class="encabezado">
+
+    <div class="contenedor">
+
+        <h1>
+            Desactivar computador
+        </h1>
+
+        <p>
+            Inventario de Aulas Informáticas
+            · Bloque María Inmaculada
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="contenedor contenido">
+
+    <section class="introduccion">
+
+        <h2>
+            Confirmar desactivación
+        </h2>
+
+        <p>
+            Está a punto de desactivar el siguiente computador:
+        </p>
+
+    </section>
+
+
+    <section class="formulario-contenedor">
+
+        <p>
+            <strong>Código de inventario:</strong>
+            {{ computador.codigo_inventario }}
+        </p>
+
+        <p>
+            <strong>Aula:</strong>
+            {{ computador.aula }}
+        </p>
+
+        <p>
+            <strong>Marca:</strong>
+            {{ computador.marca }}
+        </p>
+
+        <p>
+            <strong>Modelo:</strong>
+            {{ computador.modelo }}
+        </p>
+
+        <p>
+            El computador no será eliminado de la base de datos.
+            Únicamente será marcado como inactivo.
+        </p>
+
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="acciones-formulario">
+
+                <button
+                    type="submit"
+                    class="boton boton-primario"
+                >
+                    Confirmar desactivación
+                </button>
+
+                <a
+                    href="{% url 'computadores_lista' %}"
+                    class="boton boton-secundario"
+                >
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+
+<footer class="pie">
+
+    <div class="contenedor">
+
+        <p>
+            Sistema de Inventario
+            · Bloque María Inmaculada
+        </p>
+
+    </div>
+
+</footer>
+
+</body>
+
+</html>

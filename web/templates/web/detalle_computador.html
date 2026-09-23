@@ -1,0 +1,225 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Computador {{ computador.codigo_inventario }}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <h1>
+                Detalle del computador
+            </h1>
+
+            <p>
+                Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <main class="contenedor contenido">
+
+        <section class="introduccion">
+
+            <h2>
+                Computador
+                {{ computador.codigo_inventario }}
+            </h2>
+
+            <p>
+                Aula: {{ computador.aula.codigo }}
+            </p>
+
+            <p>
+                Marca: {{ computador.marca }}
+            </p>
+
+            <p>
+                Modelo: {{ computador.modelo }}
+            </p>
+
+            <p>
+                Estado: {{ computador.estado }}
+            </p>
+
+            {% if computador.observaciones %}
+
+            <p>
+                Observaciones:
+                {{ computador.observaciones }}
+            </p>
+
+            {% endif %}
+
+        </section>
+
+
+        <section>
+
+            <h2>
+                Componentes
+            </h2>
+
+
+            <div class="resumen-inventario">
+
+                {% for componente in componentes %}
+
+                <article class="tarjeta-resumen">
+
+                    <h3>
+                        {% if componente.tipo == 'CPU' %}
+                        🖥️
+                        {% elif componente.tipo == 'PANTALLA' %}
+                        🖵
+                        {% elif componente.tipo == 'TECLADO' %}
+                        ⌨️
+                        {% elif componente.tipo == 'MOUSE' %}
+                        🖱️
+                        {% endif %}
+                    </h3>
+
+                    <strong>
+                        {{ componente.get_tipo_display }}
+                    </strong>
+
+                    <span>
+                        {{ componente.marca }}
+                        {{ componente.modelo }}
+                    </span>
+
+                    <span>
+                        Estado:
+                        {{ componente.estado }}
+                    </span>
+
+                    {% if componente.serial %}
+
+                    <span>
+                        Serial:
+                        {{ componente.serial }}
+                    </span>
+
+                    {% endif %}
+
+                </article>
+
+                {% empty %}
+
+                <p>
+                    Este computador no tiene
+                    componentes registrados.
+                </p>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+        <section>
+
+            <h2>
+                Historial de mantenimientos
+            </h2>
+
+            {% if mantenimientos %}
+
+            <div class="historial">
+
+                {% for mantenimiento in mantenimientos %}
+
+                <article class="tarjeta-mantenimiento">
+
+                    <h3>
+                        {{ mantenimiento.get_tipo_display }}
+                    </h3>
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        {{ mantenimiento.fecha|date:"d/m/Y H:i" }}
+                    </p>
+
+                    <p>
+                        <strong>Descripción:</strong>
+                        {{ mantenimiento.descripcion }}
+                    </p>
+
+                    <p>
+                        <strong>Responsable:</strong>
+                        {{ mantenimiento.responsable.get_full_name|default:mantenimiento.responsable.username }}
+                    </p>
+
+                    <p>
+                        <strong>Estado anterior:</strong>
+                        {{ mantenimiento.estado_anterior }}
+                    </p>
+
+                    <p>
+                        <strong>Estado posterior:</strong>
+                        {{ mantenimiento.estado_posterior }}
+                    </p>
+
+                    {% if mantenimiento.observaciones %}
+
+                    <p>
+                        <strong>Observaciones:</strong>
+                        {{ mantenimiento.observaciones }}
+                    </p>
+
+                    {% endif %}
+
+                </article>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <p>
+                Este activo no tiene mantenimientos registrados.
+            </p>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

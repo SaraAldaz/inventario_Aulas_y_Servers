@@ -1,0 +1,207 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {{ titulo }}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <h1>
+                {{ titulo }}
+            </h1>
+
+            <p>
+                Gestión de movimientos de activos
+            </p>
+
+        </div>
+    </header>
+
+    <main class="contenedor contenido">
+        <section class="formulario-contenedor">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
+
+                <div class="error-campo">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+                {% endif %}
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.tipo_activo.id_for_label }}">
+                        Tipo de activo
+                    </label>
+
+                    {{ form.tipo_activo }}
+
+                    {{ form.tipo_activo.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.activo_seleccionado.id_for_label }}">
+                        Activo
+                    </label>
+
+                    {{ form.activo_seleccionado }}
+
+                    {{ form.activo_seleccionado.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.fecha.id_for_label }}">
+                        Fecha y hora
+                    </label>
+
+                    {{ form.fecha }}
+
+                    {{ form.fecha.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.tipo.id_for_label }}">
+                        Tipo de movimiento
+                    </label>
+
+                    {{ form.tipo }}
+
+                    {{ form.tipo.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.aula_origen_mostrada.id_for_label }}">
+                        Aula de origen
+                    </label>
+
+                    {{ form.aula_origen_mostrada }}
+
+                    {{ form.aula_origen_mostrada.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.aula_destino.id_for_label }}">
+                        Aula de destino
+                    </label>
+
+                    {{ form.aula_destino }}
+
+                    {{ form.aula_destino.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.motivo.id_for_label }}">
+                        Motivo
+                    </label>
+
+                    {{ form.motivo }}
+
+                    {{ form.motivo.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.observaciones.id_for_label }}">
+                        Observaciones
+                    </label>
+
+                    {{ form.observaciones }}
+
+                    {{ form.observaciones.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.responsable.id_for_label }}">
+                        Responsable
+                    </label>
+
+                    {{ form.responsable }}
+
+                    {{ form.responsable.errors }}
+
+                </div>
+
+
+                <div class="acciones-formulario">
+
+                    <button type="submit" class="boton boton-primario">
+                        Registrar movimiento
+                    </button>
+
+                    <a href="{% url 'movimientos_lista' %}" class="boton boton-secundario">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </footer>
+
+    <script src="{% static 'web/js/movimiento_activo.js' %}"></script>
+</body>
+
+</html>

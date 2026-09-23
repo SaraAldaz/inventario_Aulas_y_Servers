@@ -1,0 +1,160 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Pisos - Inventario
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <h1>
+                Pisos
+            </h1>
+
+            <p>
+                Administración de pisos · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+
+    </header>
+
+    <main class="contenedor contenido">
+
+        <section class="introduccion">
+
+            <h2>
+                Pisos registrados
+            </h2>
+            <p>
+                Consulte los pisos disponibles en el sistema.
+            </p>
+
+            <a href="{% url 'piso_crear' %}" class="boton boton-primario">
+                + Agregar piso
+            </a>
+
+        </section>
+
+
+        <section class="tabla-contenedor">
+
+            <table class="tabla-inventario">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Número
+                        </th>
+
+                        <th>
+                            Nombre
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th>
+                            Aulas
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for piso in pisos %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                Piso {{ piso.numero }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ piso.nombre|default:"-" }}
+                        </td>
+
+                        <td>
+
+                            {% if piso.activo %}
+
+                            Activo
+
+                            {% else %}
+
+                            Inactivo
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ piso.aulas.count }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="4" class="sin-registros">
+                            No hay pisos registrados.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+    </main>
+
+    <footer class="pie">
+
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

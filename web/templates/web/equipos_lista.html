@@ -1,0 +1,253 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Equipos tecnológicos - Inventario
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <h1>
+                Equipos tecnológicos
+            </h1>
+
+            <p>
+                Inventario de equipos tecnológicos ·
+                Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </header>
+
+    <main class="contenedor contenido">
+        <!-- ======================================================
+     ENCABEZADO
+======================================================= -->
+
+        <section class="introduccion">
+
+            <h2>
+                Listado de equipos tecnológicos
+            </h2>
+
+            <p>
+                Consulte y administre los equipos tecnológicos
+                registrados en el inventario institucional.
+            </p>
+
+            <a href="{% url 'equipo_crear' %}" class="boton boton-primario">
+                + Agregar equipo
+            </a>
+
+        </section>
+
+
+        <!-- ======================================================
+     BÚSQUEDA
+======================================================= -->
+
+        <section class="busqueda">
+
+            <form method="get">
+
+                <input type="text" name="buscar" value="{{ buscar }}"
+                    placeholder="Buscar por código, marca, modelo o serial..." class="campo-busqueda">
+
+                <button type="submit" class="boton boton-primario">
+                    Buscar
+                </button>
+
+
+                {% if buscar %}
+
+                <a href="{% url 'equipos_lista' %}" class="boton boton-secundario">
+                    Limpiar
+                </a>
+
+                {% endif %}
+
+            </form>
+
+        </section>
+
+
+        <!-- ======================================================
+     TABLA
+======================================================= -->
+
+        <section class="tabla-contenedor">
+
+            <table class="tabla-inventario">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Código
+                        </th>
+
+                        <th>
+                            Tipo
+                        </th>
+
+                        <th>
+                            Aula
+                        </th>
+
+                        <th>
+                            Marca
+                        </th>
+
+                        <th>
+                            Modelo
+                        </th>
+
+                        <th>
+                            Serial
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th>
+                            Activo
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for equipo in equipos %}
+
+                    <tr>
+
+                        <td>
+
+                            <strong>
+                                {{ equipo.codigo_inventario }}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+                            {{ equipo.get_tipo_display }}
+                        </td>
+
+
+                        <td>
+                            {{ equipo.aula.codigo }}
+                        </td>
+
+
+                        <td>
+                            {{ equipo.marca|default:"-" }}
+                        </td>
+
+
+                        <td>
+                            {{ equipo.modelo|default:"-" }}
+                        </td>
+
+
+                        <td>
+                            {{ equipo.serial|default:"-" }}
+                        </td>
+
+
+                        <td>
+                            {{ equipo.get_estado_display }}
+                        </td>
+
+
+                        <td>
+
+                            {% if equipo.activo %}
+
+                            Sí
+
+                            {% else %}
+
+                            No
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            <a href="{% url 'detalle_equipo' equipo.id %}" class="boton boton-secundario">
+                                Ver
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="9" class="sin-registros">
+
+                            No hay equipos tecnológicos
+                            registrados.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,240 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {{ mobiliario.get_tipo_display }}
+        {{ mobiliario.codigo_inventario }}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'web/css/estilos.css' %}"
+    >
+
+</head>
+
+<body>
+
+<header class="encabezado">
+
+    <div class="contenedor">
+
+        <h1>
+            Mobiliario
+        </h1>
+
+        <p>
+            Bloque María Inmaculada
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="contenedor contenido">
+
+    <section class="introduccion">
+
+        <h2>
+            {{ mobiliario.get_tipo_display }}
+        </h2>
+
+        <p>
+            Código de inventario:
+            <strong>
+                {{ mobiliario.codigo_inventario }}
+            </strong>
+        </p>
+
+        <p>
+            Aula:
+            {{ mobiliario.aula.codigo }}
+        </p>
+
+    </section>
+
+
+    <section>
+
+        <h2>
+            Información del elemento
+        </h2>
+
+        <div class="resumen-inventario">
+
+            <article class="tarjeta-resumen">
+
+                <h3>
+                    🏷️
+                </h3>
+
+                <strong>
+                    Código
+                </strong>
+
+                <span>
+                    {{ mobiliario.codigo_inventario }}
+                </span>
+
+            </article>
+
+
+            <article class="tarjeta-resumen">
+
+                <h3>
+                    🪑
+                </h3>
+
+                <strong>
+                    Tipo
+                </strong>
+
+                <span>
+                    {{ mobiliario.get_tipo_display }}
+                </span>
+
+            </article>
+
+
+            <article class="tarjeta-resumen">
+
+                <h3>
+                    ⚙️
+                </h3>
+
+                <strong>
+                    Estado
+                </strong>
+
+                <span>
+                    {{ mobiliario.estado }}
+                </span>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <section>
+
+        <h2>
+            Observaciones
+        </h2>
+
+        {% if mobiliario.observaciones %}
+
+            <p>
+                {{ mobiliario.observaciones }}
+            </p>
+
+        {% else %}
+
+            <p>
+                No hay observaciones registradas.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+<section>
+
+    <h2>
+        Historial de mantenimientos
+    </h2>
+
+    {% if mantenimientos %}
+
+        <div class="historial">
+
+            {% for mantenimiento in mantenimientos %}
+
+                <article class="tarjeta-mantenimiento">
+
+                    <h3>
+                        {{ mantenimiento.get_tipo_display }}
+                    </h3>
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        {{ mantenimiento.fecha|date:"d/m/Y H:i" }}
+                    </p>
+
+                    <p>
+                        <strong>Descripción:</strong>
+                        {{ mantenimiento.descripcion }}
+                    </p>
+
+                    <p>
+                        <strong>Responsable:</strong>
+                        {{ mantenimiento.responsable.get_full_name|default:mantenimiento.responsable.username }}
+                    </p>
+
+                    <p>
+                        <strong>Estado anterior:</strong>
+                        {{ mantenimiento.estado_anterior }}
+                    </p>
+
+                    <p>
+                        <strong>Estado posterior:</strong>
+                        {{ mantenimiento.estado_posterior }}
+                    </p>
+
+                    {% if mantenimiento.observaciones %}
+
+                        <p>
+                            <strong>Observaciones:</strong>
+                            {{ mantenimiento.observaciones }}
+                        </p>
+
+                    {% endif %}
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <p>
+            Este activo no tiene mantenimientos registrados.
+        </p>
+
+    {% endif %}
+
+</section>
+
+</main>
+
+
+<footer class="pie">
+
+    <div class="contenedor">
+
+        <p>
+            Sistema de Inventario
+            · Bloque María Inmaculada
+        </p>
+
+    </div>
+
+</footer>
+
+</body>
+
+</html>

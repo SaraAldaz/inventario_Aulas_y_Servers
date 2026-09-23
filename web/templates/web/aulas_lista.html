@@ -1,0 +1,185 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Aulas - Inventario
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <h1>
+                Aulas
+            </h1>
+
+            <p>
+                Administración de aulas · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+
+    </header>
+
+    <main class="contenedor contenido">
+
+        <section class="introduccion">
+
+            <h2>
+                Aulas registradas
+            </h2>
+
+            <p>
+                Consulte y administre las aulas disponibles
+                en el sistema.
+            </p>
+
+
+            <a href="{% url 'aula_crear' %}" class="boton boton-primario">
+                + Agregar aula
+            </a>
+
+        </section>
+
+
+        <section class="tabla-contenedor">
+
+            <table class="tabla-inventario">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Piso
+                        </th>
+
+                        <th>
+                            Código
+                        </th>
+
+                        <th>
+                            Nombre
+                        </th>
+
+                        <th>
+                            Capacidad
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for aula in aulas %}
+
+                    <tr>
+
+                        <td>
+                            Piso {{ aula.piso.numero }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ aula.codigo }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ aula.nombre }}
+                        </td>
+
+                        <td>
+                            {{ aula.capacidad }}
+                        </td>
+
+                        <td>
+
+                            {% if aula.activo %}
+
+                            Activa
+
+                            {% else %}
+
+                            Inactiva
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <a href="{% url 'inventario_aula' aula.id %}" class="boton boton-secundario">
+                                Inventario
+                            </a>
+
+                            <a href="{% url 'aula_editar' aula.id %}" class="boton boton-secundario">
+                                Editar
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="6" class="sin-registros">
+                            No hay aulas registradas.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

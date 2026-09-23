@@ -1,0 +1,209 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {{ titulo }}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <h1>
+                {{ titulo }}
+            </h1>
+
+            <p>
+                Registro de mantenimiento
+            </p>
+
+        </div>
+
+
+    </header>
+
+    <main class="contenedor contenido">
+
+        <section class="formulario-contenedor">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+
+                <div class="error-campo">
+                    {{ form.non_field_errors }}
+                </div>
+
+                {% endif %}
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.tipo_activo.id_for_label }}">
+                        Tipo de activo
+                    </label>
+
+                    {{ form.tipo_activo }}
+
+                    {{ form.tipo_activo.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.activo_seleccionado.id_for_label }}">
+                        Activo
+                    </label>
+
+                    {{ form.activo_seleccionado }}
+
+                    {{ form.activo_seleccionado.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.fecha.id_for_label }}">
+                        Fecha
+                    </label>
+
+                    {{ form.fecha }}
+
+                    {{ form.fecha.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.tipo.id_for_label }}">
+                        Tipo de mantenimiento
+                    </label>
+
+                    {{ form.tipo }}
+
+                    {{ form.tipo.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.descripcion.id_for_label }}">
+                        Descripción
+                    </label>
+
+                    {{ form.descripcion }}
+
+                    {{ form.descripcion.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.responsable.id_for_label }}">
+                        Responsable
+                    </label>
+
+                    {{ form.responsable }}
+
+                    {{ form.responsable.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.estado_anterior.id_for_label }}">
+                        Estado anterior
+                    </label>
+
+                    {{ form.estado_anterior }}
+
+                    {{ form.estado_anterior.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.estado_posterior.id_for_label }}">
+                        Estado posterior
+                    </label>
+
+                    {{ form.estado_posterior }}
+
+                    {{ form.estado_posterior.errors }}
+
+                </div>
+
+
+                <div class="campo-formulario">
+
+                    <label for="{{ form.observaciones.id_for_label }}">
+                        Observaciones
+                    </label>
+
+                    {{ form.observaciones }}
+
+                    {{ form.observaciones.errors }}
+
+                </div>
+
+
+                <div class="acciones-formulario">
+
+                    <button type="submit" class="boton boton-primario">
+                        Guardar mantenimiento
+                    </button>
+
+                    <a href="{% url 'mantenimientos_lista' %}" class="boton boton-secundario">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="pie">
+
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,166 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Personal - Inventario
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+
+        <div class="contenedor">
+
+            <h1>
+                Personal
+            </h1>
+
+            <p>
+                Administración de personal · Sistema de Inventario
+            </p>
+
+        </div>
+
+
+    </header>
+
+    <main class="contenedor contenido">
+
+
+        <section class="introduccion">
+
+            <h2>
+                Personal registrado
+            </h2>
+
+            <p>
+                Consulte y administre las personas autorizadas
+                para registrar operaciones en el sistema.
+            </p>
+
+            <a href="{% url 'personal_crear' %}" class="boton boton-primario">
+                + Agregar personal
+            </a>
+
+        </section>
+
+
+        <section class="tabla-contenedor">
+
+            <table class="tabla-inventario">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Nombre
+                        </th>
+
+                        <th>
+                            Usuario
+                        </th>
+
+                        <th>
+                            Correo
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for persona in personal %}
+
+                    <tr>
+
+                        <td>
+
+                            <strong>
+                                {{ persona.get_full_name|default:persona.username }}
+                            </strong>
+
+                        </td>
+
+                        <td>
+                            {{ persona.username }}
+                        </td>
+
+                        <td>
+                            {{ persona.email|default:"-" }}
+                        </td>
+
+                        <td>
+
+                            {% if persona.is_active %}
+
+                            Activo
+
+                            {% else %}
+
+                            Inactivo
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="4" class="sin-registros">
+                            No hay personal registrado.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+    </main>
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

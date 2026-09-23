@@ -1,0 +1,281 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+    {% if computador %}
+        Editar computador
+    {% else %}
+        Agregar computador
+    {% endif %}
+    - Inventario
+</title>
+
+<link
+    rel="stylesheet"
+    href="{% static 'web/css/estilos.css' %}"
+>
+
+
+</head>
+
+<body>
+
+<header class="encabezado">
+
+    <div class="contenedor">
+
+        <h1>
+            {% if computador %}
+                Editar computador
+            {% else %}
+                Agregar computador
+            {% endif %}
+        </h1>
+
+        <p>
+            Inventario de Aulas Informáticas
+            · Bloque María Inmaculada
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="contenedor contenido">
+
+    <section class="introduccion">
+
+        {% if computador %}
+
+            <h2>
+                Modificar información
+            </h2>
+
+            <p>
+                Actualice la información del computador
+                seleccionado.
+            </p>
+
+        {% else %}
+
+            <h2>
+                Registrar nuevo computador
+            </h2>
+
+            <p>
+                Complete la información del computador
+                que desea registrar en el inventario.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <section class="formulario-contenedor">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            {% if form.non_field_errors %}
+
+                <div class="mensaje-error">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+            <div class="campo-formulario">
+
+                <label for="{{ form.codigo_inventario.id_for_label }}">
+                    Código de inventario
+                </label>
+
+                {{ form.codigo_inventario }}
+
+                {% if form.codigo_inventario.errors %}
+
+                    <div class="error-campo">
+                        {{ form.codigo_inventario.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="{{ form.aula.id_for_label }}">
+                    Aula
+                </label>
+
+                {{ form.aula }}
+
+                {% if form.aula.errors %}
+
+                    <div class="error-campo">
+                        {{ form.aula.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="{{ form.marca.id_for_label }}">
+                    Marca
+                </label>
+
+                {{ form.marca }}
+
+                {% if form.marca.errors %}
+
+                    <div class="error-campo">
+                        {{ form.marca.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="{{ form.modelo.id_for_label }}">
+                    Modelo
+                </label>
+
+                {{ form.modelo }}
+
+                {% if form.modelo.errors %}
+
+                    <div class="error-campo">
+                        {{ form.modelo.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="{{ form.estado.id_for_label }}">
+                    Estado
+                </label>
+
+                {{ form.estado }}
+
+                {% if form.estado.errors %}
+
+                    <div class="error-campo">
+                        {{ form.estado.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="campo-formulario">
+
+                <label for="{{ form.observaciones.id_for_label }}">
+                    Observaciones
+                </label>
+
+                {{ form.observaciones }}
+
+                {% if form.observaciones.errors %}
+
+                    <div class="error-campo">
+                        {{ form.observaciones.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="campo-checkbox">
+
+                {{ form.activo }}
+
+                <label for="{{ form.activo.id_for_label }}">
+                    Computador activo
+                </label>
+
+                {% if form.activo.errors %}
+
+                    <div class="error-campo">
+                        {{ form.activo.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="acciones-formulario">
+
+                <button
+                    type="submit"
+                    class="boton boton-primario"
+                >
+                    {% if computador %}
+                        Guardar cambios
+                    {% else %}
+                        Registrar computador
+                    {% endif %}
+                </button>
+
+
+                <a
+                    href="{% url 'computadores_lista' %}"
+                    class="boton boton-secundario"
+                >
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+
+<footer class="pie">
+
+    <div class="contenedor">
+
+        <p>
+            Sistema de Inventario
+            · Bloque María Inmaculada
+        </p>
+
+    </div>
+
+</footer>
+
+</body>
+
+</html>

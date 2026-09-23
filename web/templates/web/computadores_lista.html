@@ -1,0 +1,246 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Computadores - Inventario
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <h1>
+                Computadores
+            </h1>
+
+            <p>
+                Inventario de computadores · Bloque María Inmaculada
+            </p>
+
+        </div>
+    </header>
+
+    <main class="contenedor contenido">
+
+        <section class="introduccion">
+
+        
+            <h2>
+                Listado de computadores
+            </h2>
+
+            <p>
+                Consulte y administre los computadores registrados
+                en el inventario institucional.
+            </p>
+
+            <a href="{% url 'computador_crear' %}" class="boton boton-primario">
+                + Agregar computador
+            </a>
+            
+
+        </section>
+
+        <section class="busqueda">
+
+            <form method="get">
+
+                <input type="text" name="buscar" value="{{ buscar }}" placeholder="Buscar por código, marca o modelo..."
+                    class="campo-busqueda">
+
+                <button type="submit" class="boton boton-primario">
+                    Buscar
+                </button>
+
+                {% if buscar %}
+
+                <a href="{% url 'computadores_lista' %}" class="boton boton-secundario">
+                    Limpiar
+                </a>
+
+                {% endif %}
+
+            </form>
+            
+
+        </section>
+
+
+
+        <section class="tabla-contenedor">
+
+            <table class="tabla-inventario">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Código
+                        </th>
+
+                        <th>
+                            Aula
+                        </th>
+
+                        <th>
+                            Marca
+                        </th>
+
+                        <th>
+                            Modelo
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th>
+                            Activo
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for computador in computadores %}
+
+                    <tr>
+
+                        <td>
+
+                            <strong>
+                                {{ computador.codigo_inventario }}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+                            {{ computador.aula.codigo }}
+                        </td>
+
+
+                        <td>
+                            {{ computador.marca|default:"-" }}
+                        </td>
+
+
+                        <td>
+                            {{ computador.modelo|default:"-" }}
+                        </td>
+
+
+                        <td>
+                            {{ computador.get_estado_display }}
+                        </td>
+
+
+                        <td>
+
+                            {% if computador.activo %}
+
+                            Sí
+
+                            {% else %}
+
+                            No
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            <!-- VER -->
+
+                            <a href="{% url 'detalle_computador' computador.id %}" class="boton boton-secundario">
+                                Ver
+                            </a>
+
+
+                            <!-- EDITAR -->
+
+                            <a href="{% url 'computador_editar' computador.id %}" class="boton boton-secundario">
+                                Editar
+                            </a>
+
+
+                            <!-- DESACTIVAR -->
+
+                            {% if computador.activo %}
+
+                            <a href="{% url 'computador_desactivar' computador.id %}" class="boton boton-secundario">
+                                Desactivar
+                            </a>
+
+                            {% else %}
+
+                            <a href="{% url 'computador_activar' computador.id %}" class="boton boton-primario">
+                                Activar
+                            </a>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="7" class="sin-registros">
+                            No hay computadores registrados.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+    </main>
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Bloque María Inmaculada
+            </p>
+
+        </div>
+    </footer>
+
+</body>
+
+</html>

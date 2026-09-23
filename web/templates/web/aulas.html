@@ -1,0 +1,115 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Aulas - Piso {{ piso.numero }}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'web/css/estilos.css' %}"
+    >
+
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <h1>
+                Inventario de Aulas Informáticas
+            </h1>
+
+            <p>
+                Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <main class="contenedor contenido">
+
+        <section class="introduccion">
+
+            <h2>
+                Aulas del Piso {{ piso.numero }}
+            </h2>
+
+            <p>
+                Seleccione un aula para consultar
+                su inventario.
+            </p>
+
+        </section>
+
+
+        <section class="pisos">
+
+            {% for aula in aulas %}
+
+                <article class="tarjeta-piso">
+
+                    <div class="icono-piso">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        Aula {{ aula.numero }}
+                    </h3>
+
+                    <p>
+                        Consulte el inventario
+                        tecnológico y mobiliario.
+                    </p>
+
+                    <a href="{% url 'inventario_aula' aula.id %}">
+                        Ver inventario →
+                    </a>
+
+                </article>
+
+            {% empty %}
+
+                <p>
+                    No hay aulas registradas
+                    para este piso.
+                </p>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

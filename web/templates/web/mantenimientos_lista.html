@@ -1,0 +1,173 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Mantenimientos - Inventario
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <h1>
+                Mantenimientos
+            </h1>
+
+            <p>
+                Registro de mantenimiento de activos
+            </p>
+
+        </div>
+
+
+    </header>
+
+    <main class="contenedor contenido">
+
+
+        <section class="introduccion">
+
+            <h2>
+                Historial de mantenimientos
+            </h2>
+
+            <p>
+                Consulte los mantenimientos registrados
+                en el sistema de inventario.
+            </p>
+
+            <a href="{% url 'mantenimiento_crear' %}" class="boton boton-primario">
+                + Registrar mantenimiento
+            </a>
+
+        </section>
+
+
+        <section class="tabla-contenedor">
+
+            <table class="tabla-inventario">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Fecha
+                        </th>
+
+                        <th>
+                            Activo
+                        </th>
+
+                        <th>
+                            Tipo
+                        </th>
+
+                        <th>
+                            Descripción
+                        </th>
+
+                        <th>
+                            Responsable
+                        </th>
+
+                        <th>
+                            Estado anterior
+                        </th>
+
+                        <th>
+                            Estado posterior
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for mantenimiento in mantenimientos %}
+
+                    <tr>
+
+                        <td>
+                            {{ mantenimiento.fecha|date:"d/m/Y H:i" }}
+                        </td>
+
+                        <td>
+                            {{ mantenimiento.activo }}
+                        </td>
+
+                        <td>
+                            {{ mantenimiento.get_tipo_display }}
+                        </td>
+
+                        <td>
+                            {{ mantenimiento.descripcion }}
+                        </td>
+
+                        <td>
+                            {{ mantenimiento.responsable.get_full_name|default:mantenimiento.responsable.username }}
+                        </td>
+
+                        <td>
+                            {{ mantenimiento.get_estado_anterior_display }}
+                        </td>
+
+                        <td>
+                            {{ mantenimiento.get_estado_posterior_display }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="7" class="sin-registros">
+                            No hay mantenimientos registrados.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+    <footer class="pie">
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Bloque María Inmaculada
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

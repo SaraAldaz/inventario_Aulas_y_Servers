@@ -1,0 +1,245 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Inventario - Aulas y servidores
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+</head>
+
+<body>
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <h1>
+                Inventario de Aulas Informáticas
+            </h1>
+
+            <p>
+                Aulas y Servidores
+            </p>
+
+        </div>
+
+    </header>
+    <section class="seccion">
+
+        <div class="titulo-seccion">
+
+            <h2>
+                Accesos rápidos
+            </h2>
+
+        </div>
+
+        <div class="accesos-rapidos">
+
+            <a href="{% url 'computadores_lista' %}" class="acceso-rapido">
+
+                <div class="acceso-icono">
+                    🖥
+                </div>
+
+                <div class="acceso-contenido">
+
+                    <strong>
+                        Computadores
+                    </strong>
+
+                    <span>
+                        Administrar equipos de cómputo
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a href="{% url 'equipos_lista' %}" class="acceso-rapido">
+
+                <div class="acceso-icono">
+                    ⚙
+                </div>
+
+                <div class="acceso-contenido">
+
+                    <strong>
+                        Equipos tecnológicos
+                    </strong>
+
+                    <span>
+                        Gestionar equipos tecnológicos
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a href="{% url 'aulas_lista' %}" class="acceso-rapido">
+
+                <div class="acceso-icono">
+                    🪑
+                </div>
+
+                <div class="acceso-contenido">
+
+                    <strong>
+                        Mobiliario
+                    </strong>
+
+                    <span>
+                        Administrar mesas, sillas y mobiliario
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a href="{% url 'mantenimientos_lista' %}" class="acceso-rapido">
+
+                <div class="acceso-icono">
+                    🔧
+                </div>
+
+                <div class="acceso-contenido">
+
+                    <strong>
+                        Mantenimientos
+                    </strong>
+
+                    <span>
+                        Consultar y registrar mantenimientos
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a href="{% url 'movimientos_lista' %}" class="acceso-rapido">
+
+                <div class="acceso-icono">
+                    ↔
+                </div>
+
+                <div class="acceso-contenido">
+
+                    <strong>
+                        Movimientos
+                    </strong>
+
+                    <span>
+                        Controlar traslados y movimientos
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a href="{% url 'personal_lista' %}" class="acceso-rapido">
+
+                <div class="acceso-icono">
+                    👤
+                </div>
+
+                <div class="acceso-contenido">
+
+                    <strong>
+                        Personal
+                    </strong>
+
+                    <span>
+                        Administrar responsables
+                    </span>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <main class="contenedor contenido">
+
+        <section class="introduccion">
+
+            <h2>
+                Seleccione un piso
+            </h2>
+
+            <p>
+                Seleccione el piso que desea consultar
+                para visualizar las aulas disponibles.
+            </p>
+
+        </section>
+
+
+        <section class="pisos">
+
+            {% for piso in pisos %}
+
+            <article class="tarjeta-piso">
+
+                <div class="icono-piso">
+                    🏢
+                </div>
+
+                <h3>
+                    Piso {{ piso.numero }}
+                </h3>
+
+                <p>
+                    Consulte las aulas de este piso.
+                </p>
+
+                <a href="{% url 'aulas_por_piso' piso.id %}">
+                    Ver aulas →
+                </a>
+
+            </article>
+
+            {% empty %}
+
+            <p>
+                No hay pisos registrados.
+            </p>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario | Aulas y Servidores
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>
