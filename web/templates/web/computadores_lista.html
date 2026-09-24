@@ -1,10 +1,10 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,28 +17,46 @@
 
 </head>
 
+
 <body>
+
 
     <header class="encabezado">
 
         <div class="contenedor">
 
-            <h1>
-                Computadores
-            </h1>
+            <div>
 
-            <p>
-                Inventario de computadores · Bloque María Inmaculada
-            </p>
+                <h1>
+                    Computadores
+                </h1>
+
+                <p>
+                    Inventario de computadores · Aulas y Servidores
+                </p>
+
+            </div>
+
+
+            <a href="{% url 'inicio' %}" class="boton-volver">
+                ← Volver al inicio
+            </a>
 
         </div>
+
     </header>
+
+
 
     <main class="contenedor contenido">
 
+
+        <!-- =====================================================
+         ENCABEZADO
+    ====================================================== -->
+
         <section class="introduccion">
 
-        
             <h2>
                 Listado de computadores
             </h2>
@@ -48,38 +66,40 @@
                 en el inventario institucional.
             </p>
 
+
             <a href="{% url 'computador_crear' %}" class="boton boton-primario">
                 + Agregar computador
             </a>
-            
 
         </section>
 
+
+
+        <!-- =====================================================
+         BUSCADOR
+    ====================================================== -->
+
         <section class="busqueda">
 
-            <form method="get">
+            <form method="get" class="formulario-busqueda">
 
-                <input type="text" name="buscar" value="{{ buscar }}" placeholder="Buscar por código, marca o modelo..."
+                <input type="text" name="buscar" placeholder="Buscar por código, marca o modelo" value="{{ buscar }}"
                     class="campo-busqueda">
+
 
                 <button type="submit" class="boton boton-primario">
                     Buscar
                 </button>
 
-                {% if buscar %}
-
-                <a href="{% url 'computadores_lista' %}" class="boton boton-secundario">
-                    Limpiar
-                </a>
-
-                {% endif %}
-
             </form>
-            
 
         </section>
 
 
+
+        <!-- =====================================================
+         TABLA
+    ====================================================== -->
 
         <section class="tabla-contenedor">
 
@@ -128,6 +148,9 @@
 
                     <tr>
 
+
+                        <!-- CÓDIGO -->
+
                         <td>
 
                             <strong>
@@ -137,25 +160,35 @@
                         </td>
 
 
+                        <!-- AULA -->
+
                         <td>
                             {{ computador.aula.codigo }}
                         </td>
 
+
+                        <!-- MARCA -->
 
                         <td>
                             {{ computador.marca|default:"-" }}
                         </td>
 
 
+                        <!-- MODELO -->
+
                         <td>
                             {{ computador.modelo|default:"-" }}
                         </td>
 
 
+                        <!-- ESTADO -->
+
                         <td>
                             {{ computador.get_estado_display }}
                         </td>
 
+
+                        <!-- ACTIVO -->
 
                         <td>
 
@@ -172,23 +205,19 @@
                         </td>
 
 
-                        <td>
+                        <!-- ACCIONES -->
 
-                            <!-- VER -->
+                        <td>
 
                             <a href="{% url 'detalle_computador' computador.id %}" class="boton boton-secundario">
                                 Ver
                             </a>
 
 
-                            <!-- EDITAR -->
-
                             <a href="{% url 'computador_editar' computador.id %}" class="boton boton-secundario">
                                 Editar
                             </a>
 
-
-                            <!-- DESACTIVAR -->
 
                             {% if computador.activo %}
 
@@ -207,6 +236,7 @@
                         </td>
 
                     </tr>
+
 
                     {% empty %}
 
@@ -229,17 +259,21 @@
 
     </main>
 
+
+
     <footer class="pie">
 
         <div class="contenedor">
 
             <p>
                 Sistema de Inventario
-                · Bloque María Inmaculada
+                · Aulas y Servidores
             </p>
 
         </div>
+
     </footer>
+
 
 </body>
 

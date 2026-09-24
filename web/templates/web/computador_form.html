@@ -1,59 +1,91 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>
-    {% if computador %}
-        Editar computador
-    {% else %}
-        Agregar computador
-    {% endif %}
-    - Inventario
-</title>
+    <title>
 
-<link
-    rel="stylesheet"
-    href="{% static 'web/css/estilos.css' %}"
->
+        {% if computador %}
+            Editar computador
+        {% else %}
+            Agregar computador
+        {% endif %}
 
+        - Inventario
+
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="{% static 'web/css/estilos.css' %}"
+    >
 
 </head>
 
+
 <body>
+
 
 <header class="encabezado">
 
     <div class="contenedor">
 
-        <h1>
-            {% if computador %}
-                Editar computador
-            {% else %}
-                Agregar computador
-            {% endif %}
-        </h1>
+        <div>
 
-        <p>
-            Inventario de Aulas Informáticas
-            · Bloque María Inmaculada
-        </p>
+            <h1>
+
+                {% if computador %}
+
+                    Editar computador
+
+                {% else %}
+
+                    Agregar computador
+
+                {% endif %}
+
+            </h1>
+
+
+            <p>
+                Administración de computadores · Aulas y Servidores
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'computadores_lista' %}"
+            class="boton-volver"
+        >
+            ← Volver a computadores
+        </a>
 
     </div>
 
 </header>
 
 
+
 <main class="contenedor contenido">
 
+
+    <!-- =====================================================
+         INTRODUCCIÓN
+    ====================================================== -->
+
     <section class="introduccion">
+
 
         {% if computador %}
 
@@ -65,6 +97,7 @@
                 Actualice la información del computador
                 seleccionado.
             </p>
+
 
         {% else %}
 
@@ -79,15 +112,24 @@
 
         {% endif %}
 
+
     </section>
 
 
+
+    <!-- =====================================================
+         FORMULARIO
+    ====================================================== -->
+
     <section class="formulario-contenedor">
+
 
         <form method="post">
 
             {% csrf_token %}
 
+
+            <!-- ERRORES GENERALES -->
 
             {% if form.non_field_errors %}
 
@@ -100,18 +142,27 @@
             {% endif %}
 
 
+
+            <!-- CÓDIGO DE INVENTARIO -->
+
             <div class="campo-formulario">
 
-                <label for="{{ form.codigo_inventario.id_for_label }}">
+                <label
+                    for="{{ form.codigo_inventario.id_for_label }}"
+                >
                     Código de inventario
                 </label>
 
+
                 {{ form.codigo_inventario }}
+
 
                 {% if form.codigo_inventario.errors %}
 
                     <div class="error-campo">
+
                         {{ form.codigo_inventario.errors }}
+
                     </div>
 
                 {% endif %}
@@ -119,18 +170,27 @@
             </div>
 
 
+
+            <!-- AULA -->
+
             <div class="campo-formulario">
 
-                <label for="{{ form.aula.id_for_label }}">
+                <label
+                    for="{{ form.aula.id_for_label }}"
+                >
                     Aula
                 </label>
 
+
                 {{ form.aula }}
+
 
                 {% if form.aula.errors %}
 
                     <div class="error-campo">
+
                         {{ form.aula.errors }}
+
                     </div>
 
                 {% endif %}
@@ -138,18 +198,27 @@
             </div>
 
 
+
+            <!-- MARCA -->
+
             <div class="campo-formulario">
 
-                <label for="{{ form.marca.id_for_label }}">
+                <label
+                    for="{{ form.marca.id_for_label }}"
+                >
                     Marca
                 </label>
 
+
                 {{ form.marca }}
+
 
                 {% if form.marca.errors %}
 
                     <div class="error-campo">
+
                         {{ form.marca.errors }}
+
                     </div>
 
                 {% endif %}
@@ -157,18 +226,27 @@
             </div>
 
 
+
+            <!-- MODELO -->
+
             <div class="campo-formulario">
 
-                <label for="{{ form.modelo.id_for_label }}">
+                <label
+                    for="{{ form.modelo.id_for_label }}"
+                >
                     Modelo
                 </label>
 
+
                 {{ form.modelo }}
+
 
                 {% if form.modelo.errors %}
 
                     <div class="error-campo">
+
                         {{ form.modelo.errors }}
+
                     </div>
 
                 {% endif %}
@@ -176,18 +254,27 @@
             </div>
 
 
+
+            <!-- ESTADO -->
+
             <div class="campo-formulario">
 
-                <label for="{{ form.estado.id_for_label }}">
+                <label
+                    for="{{ form.estado.id_for_label }}"
+                >
                     Estado
                 </label>
 
+
                 {{ form.estado }}
+
 
                 {% if form.estado.errors %}
 
                     <div class="error-campo">
+
                         {{ form.estado.errors }}
+
                     </div>
 
                 {% endif %}
@@ -195,37 +282,55 @@
             </div>
 
 
+
+            <!-- OBSERVACIONES -->
+
             <div class="campo-formulario">
 
-                <label for="{{ form.observaciones.id_for_label }}">
+                <label
+                    for="{{ form.observaciones.id_for_label }}"
+                >
                     Observaciones
                 </label>
 
+
                 {{ form.observaciones }}
+
 
                 {% if form.observaciones.errors %}
 
                     <div class="error-campo">
+
                         {{ form.observaciones.errors }}
+
                     </div>
 
                 {% endif %}
 
             </div>
 
+
+
+            <!-- COMPUTADOR ACTIVO -->
 
             <div class="campo-checkbox">
 
                 {{ form.activo }}
 
-                <label for="{{ form.activo.id_for_label }}">
+
+                <label
+                    for="{{ form.activo.id_for_label }}"
+                >
                     Computador activo
                 </label>
+
 
                 {% if form.activo.errors %}
 
                     <div class="error-campo">
+
                         {{ form.activo.errors }}
+
                     </div>
 
                 {% endif %}
@@ -233,17 +338,29 @@
             </div>
 
 
+
+            <!-- =================================================
+                 ACCIONES
+            ================================================== -->
+
             <div class="acciones-formulario">
+
 
                 <button
                     type="submit"
                     class="boton boton-primario"
                 >
+
                     {% if computador %}
+
                         Guardar cambios
+
                     {% else %}
+
                         Registrar computador
+
                     {% endif %}
+
                 </button>
 
 
@@ -254,13 +371,18 @@
                     Cancelar
                 </a>
 
+
             </div>
+
 
         </form>
 
+
     </section>
 
+
 </main>
+
 
 
 <footer class="pie">
@@ -269,12 +391,13 @@
 
         <p>
             Sistema de Inventario
-            · Bloque María Inmaculada
+            · Aulas y Servidores
         </p>
 
     </div>
 
 </footer>
+
 
 </body>
 

@@ -8,23 +8,35 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>
         Movimientos - Inventario
     </title>
 
-    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
-
+    <link
+        rel="stylesheet"
+        href="{% static 'web/css/estilos.css' %}"
+    >
 
 </head>
 
+
 <body>
 
-    <header class="encabezado">
 
+<!-- =====================================================
+     ENCABEZADO
+====================================================== -->
 
-        <div class="contenedor">
+<header class="encabezado">
+
+    <div class="contenedor">
+
+        <div>
 
             <h1>
                 Movimientos de activos
@@ -37,73 +49,166 @@
         </div>
 
 
-    </header>
+        <a
+            href="{% url 'inicio' %}"
+            class="boton-volver"
+        >
+            ← Volver al inicio
+        </a>
 
-    <main class="contenedor contenido">
+    </div>
 
-
-        <section class="introduccion">
-
-            <h2>
-                Historial de movimientos
-            </h2>
-
-            <p>
-                Consulte los movimientos registrados
-                para los activos del inventario.
-            </p>
-
-            <a href="{% url 'movimiento_crear' %}" class="boton boton-primario">
-                + Registrar movimiento
-            </a>
-
-        </section>
+</header>
 
 
-        <section class="tabla-contenedor">
 
-            <table class="tabla-inventario">
+<!-- =====================================================
+     CONTENIDO
+====================================================== -->
 
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Fecha
-                        </th>
-
-                        <th>
-                            Activo
-                        </th>
-
-                        <th>
-                            Movimiento
-                        </th>
-
-                        <th>
-                            Aula origen
-                        </th>
-
-                        <th>
-                            Aula destino
-                        </th>
-
-                        <th>
-                            Motivo
-                        </th>
-
-                        <th>
-                            Responsable
-                        </th>
-
-                    </tr>
-
-                </thead>
+<main class="contenedor contenido">
 
 
-                <tbody>
+    <!-- =================================================
+         INTRODUCCIÓN
+    ================================================== -->
 
-                    {% for movimiento in movimientos %}
+    <section class="introduccion">
+
+        <h2>
+            Historial de movimientos
+        </h2>
+
+        <p>
+            Consulte y administre los movimientos registrados
+            para los activos del inventario.
+        </p>
+
+
+        <a
+            href="{% url 'movimiento_crear' %}"
+            class="boton boton-primario"
+        >
+            + Registrar movimiento
+        </a>
+
+    </section>
+
+
+
+    <!-- =================================================
+         BUSCADOR
+    ================================================== -->
+
+    <section class="busqueda">
+
+        <form
+            method="get"
+            class="formulario-busqueda"
+        >
+
+            <input
+                type="text"
+                name="buscar"
+                value="{{ buscar }}"
+                placeholder="Buscar por código de activo o responsable"
+                class="campo-busqueda"
+            >
+
+
+            <button
+                type="submit"
+                class="boton boton-primario"
+            >
+                Buscar
+            </button>
+
+
+            {% if buscar %}
+
+                <a
+                    href="{% url 'movimientos_lista' %}"
+                    class="boton boton-secundario"
+                >
+                    Limpiar
+                </a>
+
+            {% endif %}
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =================================================
+         MENSAJE DE BÚSQUEDA
+    ================================================== -->
+
+    {% if buscar %}
+
+        <div class="mensaje-busqueda">
+
+            Resultados para:
+
+            <strong>
+                "{{ buscar }}"
+            </strong>
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- =================================================
+         TABLA
+    ================================================== -->
+
+    <section class="tabla-contenedor">
+
+        <table class="tabla-inventario">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Fecha
+                    </th>
+
+                    <th>
+                        Activo
+                    </th>
+
+                    <th>
+                        Movimiento
+                    </th>
+
+                    <th>
+                        Aula origen
+                    </th>
+
+                    <th>
+                        Aula destino
+                    </th>
+
+                    <th>
+                        Motivo
+                    </th>
+
+                    <th>
+                        Responsable
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for movimiento in movimientos %}
 
                     <tr>
 
@@ -126,11 +231,11 @@
 
                             {% if movimiento.aula_origen %}
 
-                            {{ movimiento.aula_origen.codigo }}
+                                {{ movimiento.aula_origen.codigo }}
 
                             {% else %}
 
-                            -
+                                -
 
                             {% endif %}
 
@@ -141,11 +246,11 @@
 
                             {% if movimiento.aula_destino %}
 
-                            {{ movimiento.aula_destino.codigo }}
+                                {{ movimiento.aula_destino.codigo }}
 
                             {% else %}
 
-                            -
+                                -
 
                             {% endif %}
 
@@ -158,44 +263,76 @@
 
 
                         <td>
-                            {{ movimiento.responsable.get_full_name|default:movimiento.responsable.username }}
+
+                            {% if movimiento.responsable.get_full_name %}
+
+                                {{ movimiento.responsable.get_full_name }}
+
+                            {% else %}
+
+                                {{ movimiento.responsable.username }}
+
+                            {% endif %}
+
                         </td>
 
                     </tr>
 
-                    {% empty %}
+
+                {% empty %}
 
                     <tr>
 
-                        <td colspan="7" class="sin-registros">
-                            No hay movimientos registrados.
+                        <td
+                            colspan="7"
+                            class="sin-registros"
+                        >
+
+                            {% if buscar %}
+
+                                No se encontraron movimientos
+                                para "{{ buscar }}".
+
+                            {% else %}
+
+                                No hay movimientos registrados.
+
+                            {% endif %}
+
                         </td>
 
                     </tr>
 
-                    {% endfor %}
+                {% endfor %}
 
-                </tbody>
+            </tbody>
 
-            </table>
+        </table>
 
-        </section>
+    </section>
 
 
-    </main>
+</main>
 
-    <footer class="pie">
 
-        <div class="contenedor">
 
-            <p>
-                Sistema de Inventario
-                · Bloque María Inmaculada
-            </p>
+<!-- =====================================================
+     PIE DE PÁGINA
+====================================================== -->
 
-        </div>
+<footer class="pie">
 
-    </footer>
+    <div class="contenedor">
+
+        <p>
+            Sistema de Inventario
+            · Aulas y Servidores
+        </p>
+
+    </div>
+
+</footer>
+
 
 </body>
 

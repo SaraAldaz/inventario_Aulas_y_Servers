@@ -1,7 +1,6 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
@@ -11,34 +10,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        {{ titulo }}
+        {{ titulo }} - Aulas y Servidores
     </title>
 
-    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
-
+    <link rel="stylesheet"
+          href="{% static 'web/css/estilos.css' %}">
 
 </head>
 
+
 <body>
+
+
+    <!-- =========================================================
+         ENCABEZADO
+    ========================================================== -->
 
     <header class="encabezado">
 
         <div class="contenedor">
 
-            <h1>
-                {{ titulo }}
-            </h1>
+            <div>
 
-            <p>
-                Administración de aulas
-            </p>
+                <h1>
+                    {{ titulo }}
+                </h1>
+
+                <p>
+                    Administración de aulas · Aulas y Servidores
+                </p>
+
+            </div>
+
+
+            <a href="{% url 'aulas_lista' %}"
+               class="boton-volver">
+
+                ← Volver a aulas
+
+            </a>
 
         </div>
-    
 
     </header>
 
+
+    <!-- =========================================================
+         CONTENIDO
+    ========================================================== -->
+
     <main class="contenedor contenido">
+
+
+        <!-- =====================================================
+             FORMULARIO
+        ====================================================== -->
 
         <section class="formulario-contenedor">
 
@@ -46,139 +72,213 @@
 
                 {% csrf_token %}
 
+
+                <!-- ERRORES GENERALES -->
+
                 {% if form.non_field_errors %}
 
-                <div class="error-campo">
-                    {{ form.non_field_errors }}
-                </div>
+                    <div class="error-campo">
+
+                        {{ form.non_field_errors }}
+
+                    </div>
 
                 {% endif %}
 
 
+                <!-- =================================================
+                     PISO
+                ================================================== -->
+
                 <div class="campo-formulario">
 
                     <label for="{{ form.piso.id_for_label }}">
+
                         Piso
+
                     </label>
 
                     {{ form.piso }}
 
+
                     {% if form.piso.errors %}
 
-                    <div class="error-campo">
-                        {{ form.piso.errors }}
-                    </div>
+                        <div class="error-campo">
+
+                            {{ form.piso.errors }}
+
+                        </div>
 
                     {% endif %}
 
                 </div>
 
+
+                <!-- =================================================
+                     CÓDIGO
+                ================================================== -->
 
                 <div class="campo-formulario">
 
                     <label for="{{ form.codigo.id_for_label }}">
+
                         Código del aula
+
                     </label>
 
                     {{ form.codigo }}
 
+
                     {% if form.codigo.errors %}
 
-                    <div class="error-campo">
-                        {{ form.codigo.errors }}
-                    </div>
+                        <div class="error-campo">
+
+                            {{ form.codigo.errors }}
+
+                        </div>
 
                     {% endif %}
 
                 </div>
 
+
+                <!-- =================================================
+                     NOMBRE
+                ================================================== -->
 
                 <div class="campo-formulario">
 
                     <label for="{{ form.nombre.id_for_label }}">
+
                         Nombre del aula
+
                     </label>
 
                     {{ form.nombre }}
 
+
                     {% if form.nombre.errors %}
 
-                    <div class="error-campo">
-                        {{ form.nombre.errors }}
-                    </div>
+                        <div class="error-campo">
+
+                            {{ form.nombre.errors }}
+
+                        </div>
 
                     {% endif %}
 
                 </div>
 
+
+                <!-- =================================================
+                     CAPACIDAD
+                ================================================== -->
 
                 <div class="campo-formulario">
 
                     <label for="{{ form.capacidad.id_for_label }}">
+
                         Capacidad
+
                     </label>
 
                     {{ form.capacidad }}
 
+
                     {% if form.capacidad.errors %}
 
-                    <div class="error-campo">
-                        {{ form.capacidad.errors }}
-                    </div>
+                        <div class="error-campo">
+
+                            {{ form.capacidad.errors }}
+
+                        </div>
 
                     {% endif %}
 
                 </div>
 
+
+                <!-- =================================================
+                     ESTADO
+                ================================================== -->
 
                 <div class="campo-formulario">
 
                     <label>
+
                         {{ form.activo }}
+
                         Aula activa
+
                     </label>
+
 
                     {% if form.activo.errors %}
 
-                    <div class="error-campo">
-                        {{ form.activo.errors }}
-                    </div>
+                        <div class="error-campo">
+
+                            {{ form.activo.errors }}
+
+                        </div>
 
                     {% endif %}
 
                 </div>
 
+
+                <!-- =================================================
+                     DESCRIPCIÓN
+                ================================================== -->
 
                 <div class="campo-formulario">
 
                     <label for="{{ form.descripcion.id_for_label }}">
+
                         Descripción
+
                     </label>
 
                     {{ form.descripcion }}
 
+
                     {% if form.descripcion.errors %}
 
-                    <div class="error-campo">
-                        {{ form.descripcion.errors }}
-                    </div>
+                        <div class="error-campo">
+
+                            {{ form.descripcion.errors }}
+
+                        </div>
 
                     {% endif %}
 
                 </div>
 
 
+                <!-- =================================================
+                     ACCIONES
+                ================================================== -->
+
                 <div class="acciones-formulario">
 
-                    <button type="submit" class="boton boton-primario">
+
+                    <button type="submit"
+                            class="boton boton-primario">
+
                         Guardar aula
+
                     </button>
 
-                    <a href="{% url 'aulas_lista' %}" class="boton boton-secundario">
+
+                    <a href="{% url 'aulas_lista' %}"
+                       class="boton boton-secundario">
+
                         Cancelar
+
                     </a>
 
+
                 </div>
+
 
             </form>
 
@@ -187,19 +287,26 @@
 
     </main>
 
+
+    <!-- =========================================================
+         PIE
+    ========================================================== -->
+
     <footer class="pie">
 
         <div class="contenedor">
 
             <p>
+
                 Sistema de Inventario
-                · Bloque María Inmaculada
+                · Aulas y Servidores
+
             </p>
 
         </div>
-    
 
     </footer>
+
 
 </body>
 

@@ -7,261 +7,542 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
         {{ equipo.get_tipo_display }}
         {{ equipo.codigo_inventario }}
     </title>
 
-    <link
-        rel="stylesheet"
-        href="{% static 'web/css/estilos.css' %}"
-    >
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
 
 </head>
 
+
 <body>
 
-<header class="encabezado">
 
-    <div class="contenedor">
+    <!-- =========================================================
+     ENCABEZADO
+========================================================= -->
 
-        <h1>
-            Equipo tecnológico
-        </h1>
+    <header class="encabezado">
 
-        <p>
-            Bloque María Inmaculada
-        </p>
+        <div class="contenedor">
 
-    </div>
+            <div>
 
-</header>
+                <h1>
+                    Equipo tecnológico
+                </h1>
 
+                <p>
+                    Aulas y Servidores
+                </p>
 
-<main class="contenedor contenido">
-
-    <section class="introduccion">
-
-        <h2>
-            {{ equipo.get_tipo_display }}
-        </h2>
-
-        <p>
-            Código de inventario:
-            <strong>
-                {{ equipo.codigo_inventario }}
-            </strong>
-        </p>
-
-        <p>
-            Aula:
-            {{ equipo.aula.codigo }}
-        </p>
-
-    </section>
+            </div>
 
 
-    <section>
-
-        <h2>
-            Información del equipo
-        </h2>
-
-        <div class="resumen-inventario">
-
-            <article class="tarjeta-resumen">
-
-                <h3>
-                    🏷️
-                </h3>
-
-                <strong>
-                    Código
-                </strong>
-
-                <span>
-                    {{ equipo.codigo_inventario }}
-                </span>
-
-            </article>
-
-
-            <article class="tarjeta-resumen">
-
-                <h3>
-                    🏭
-                </h3>
-
-                <strong>
-                    Marca
-                </strong>
-
-                <span>
-                    {{ equipo.marca|default:"No registrada" }}
-                </span>
-
-            </article>
-
-
-            <article class="tarjeta-resumen">
-
-                <h3>
-                    📦
-                </h3>
-
-                <strong>
-                    Modelo
-                </strong>
-
-                <span>
-                    {{ equipo.modelo|default:"No registrado" }}
-                </span>
-
-            </article>
-
-
-            <article class="tarjeta-resumen">
-
-                <h3>
-                    ⚙️
-                </h3>
-
-                <strong>
-                    Estado
-                </strong>
-
-                <span>
-                    {{ equipo.estado }}
-                </span>
-
-            </article>
+            <a href="{% url 'equipos_lista' %}" class="boton-volver">
+                ← Volver a equipos
+            </a>
 
         </div>
 
-    </section>
+    </header>
 
 
-    <section>
 
-        <h2>
-            Información adicional
-        </h2>
+    <!-- =========================================================
+     CONTENIDO PRINCIPAL
+========================================================= -->
 
-        {% if equipo.serial %}
+    <main class="contenedor contenido">
+
+
+        <!-- =====================================================
+         INFORMACIÓN PRINCIPAL
+    ====================================================== -->
+
+        <section class="introduccion">
+
+            <h2>
+                {{ equipo.get_tipo_display }}
+            </h2>
 
             <p>
-                <strong>Serial:</strong>
+
+                Código de inventario:
+
+                <strong>
+                    {{ equipo.codigo_inventario }}
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Aula:
+
+                <strong>
+                    {{ equipo.aula.codigo }}
+                </strong>
+
+            </p>
+
+        </section>
+
+
+
+        <!-- =====================================================
+         INFORMACIÓN DEL EQUIPO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Información del equipo
+            </h2>
+
+
+            <div class="resumen-inventario">
+
+
+                <!-- CÓDIGO -->
+
+                <article class="tarjeta-resumen">
+
+                    <h3>
+                        🏷️
+                    </h3>
+
+                    <strong>
+                        Código
+                    </strong>
+
+                    <span>
+                        {{ equipo.codigo_inventario }}
+                    </span>
+
+                </article>
+
+
+
+                <!-- MARCA -->
+
+                <article class="tarjeta-resumen">
+
+                    <h3>
+                        🏭
+                    </h3>
+
+                    <strong>
+                        Marca
+                    </strong>
+
+                    <span>
+                        {{ equipo.marca|default:"No registrada" }}
+                    </span>
+
+                </article>
+
+
+
+                <!-- MODELO -->
+
+                <article class="tarjeta-resumen">
+
+                    <h3>
+                        📦
+                    </h3>
+
+                    <strong>
+                        Modelo
+                    </strong>
+
+                    <span>
+                        {{ equipo.modelo|default:"No registrado" }}
+                    </span>
+
+                </article>
+
+
+
+                <!-- ESTADO -->
+
+                <article class="tarjeta-resumen">
+
+                    <h3>
+                        ⚙️
+                    </h3>
+
+                    <strong>
+                        Estado
+                    </strong>
+
+                    <span>
+                        {{ equipo.get_estado_display }}
+                    </span>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+         INFORMACIÓN ADICIONAL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Información adicional
+            </h2>
+
+
+            <p>
+
+                <strong>
+                    Aula:
+                </strong>
+
+                {{ equipo.aula.codigo }}
+
+            </p>
+
+
+            {% if equipo.serial %}
+
+            <p>
+
+                <strong>
+                    Serial:
+                </strong>
+
                 {{ equipo.serial }}
+
             </p>
 
-        {% endif %}
+            {% endif %}
 
 
-        {% if equipo.observaciones %}
+            {% if equipo.observaciones %}
 
             <p>
-                <strong>Observaciones:</strong>
+
+                <strong>
+                    Observaciones:
+                </strong>
+
                 {{ equipo.observaciones }}
+
             </p>
 
-        {% else %}
+            {% else %}
 
             <p>
                 No hay observaciones registradas.
             </p>
 
-        {% endif %}
+            {% endif %}
 
-    </section>
+        </section>
 
-<section>
 
-    <h2>
-        Historial de mantenimientos
-    </h2>
 
-    {% if mantenimientos %}
+        <!-- =====================================================
+         HISTORIAL DE MANTENIMIENTOS
+    ====================================================== -->
 
-        <div class="historial">
+        <section>
 
-            {% for mantenimiento in mantenimientos %}
+            <h2>
+                Historial de mantenimientos
+            </h2>
+
+
+            {% if mantenimientos %}
+
+            <div class="historial">
+
+
+                {% for mantenimiento in mantenimientos %}
 
                 <article class="tarjeta-mantenimiento">
+
 
                     <h3>
                         {{ mantenimiento.get_tipo_display }}
                     </h3>
 
+
                     <p>
-                        <strong>Fecha:</strong>
+
+                        <strong>
+                            Fecha:
+                        </strong>
+
                         {{ mantenimiento.fecha|date:"d/m/Y H:i" }}
+
                     </p>
 
+
                     <p>
-                        <strong>Descripción:</strong>
+
+                        <strong>
+                            Descripción:
+                        </strong>
+
                         {{ mantenimiento.descripcion }}
+
                     </p>
 
+
                     <p>
-                        <strong>Responsable:</strong>
+
+                        <strong>
+                            Responsable:
+                        </strong>
+
                         {{ mantenimiento.responsable.get_full_name|default:mantenimiento.responsable.username }}
+
                     </p>
 
+
                     <p>
-                        <strong>Estado anterior:</strong>
+
+                        <strong>
+                            Estado anterior:
+                        </strong>
+
                         {{ mantenimiento.estado_anterior }}
+
                     </p>
 
+
                     <p>
-                        <strong>Estado posterior:</strong>
+
+                        <strong>
+                            Estado posterior:
+                        </strong>
+
                         {{ mantenimiento.estado_posterior }}
+
                     </p>
+
 
                     {% if mantenimiento.observaciones %}
 
-                        <p>
-                            <strong>Observaciones:</strong>
-                            {{ mantenimiento.observaciones }}
-                        </p>
+                    <p>
+
+                        <strong>
+                            Observaciones:
+                        </strong>
+
+                        {{ mantenimiento.observaciones }}
+
+                    </p>
 
                     {% endif %}
 
+
                 </article>
 
-            {% endfor %}
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+            <div class="mensaje-vacio">
+
+                Este equipo no tiene mantenimientos registrados.
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- =====================================================
+         HISTORIAL DE MOVIMIENTOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Historial de movimientos
+            </h2>
+
+
+            {% if movimientos %}
+
+            <div class="historial">
+
+
+                {% for movimiento in movimientos %}
+
+                <article class="tarjeta-mantenimiento">
+
+
+                    <h3>
+                        Movimiento
+                    </h3>
+
+
+                    <p>
+
+                        <strong>
+                            Fecha:
+                        </strong>
+
+                        {{ movimiento.fecha|date:"d/m/Y H:i" }}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Aula origen:
+                        </strong>
+
+                        {% if movimiento.aula_origen %}
+
+                        {{ movimiento.aula_origen.codigo }}
+
+                        {% else %}
+
+                        No registrada
+
+                        {% endif %}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Aula destino:
+                        </strong>
+
+                        {% if movimiento.aula_destino %}
+
+                        {{ movimiento.aula_destino.codigo }}
+
+                        {% else %}
+
+                        No registrada
+
+                        {% endif %}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Responsable:
+                        </strong>
+
+                        {% if movimiento.responsable %}
+
+                        {{ movimiento.responsable.get_full_name|default:movimiento.responsable.username }}
+
+                        {% else %}
+
+                        No registrado
+
+                        {% endif %}
+
+                    </p>
+
+
+                    {% if movimiento.observaciones %}
+
+                    <p>
+
+                        <strong>
+                            Observaciones:
+                        </strong>
+
+                        {{ movimiento.observaciones }}
+
+                    </p>
+
+                    {% endif %}
+
+
+                </article>
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+            <div class="mensaje-vacio">
+
+                Este equipo no tiene movimientos registrados.
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+
+        <!-- =====================================================
+         BOTONES INFERIORES
+    ====================================================== -->
+
+        <section class="acciones-formulario">
+
+            <a href="{% url 'equipos_lista' %}" class="boton boton-secundario">
+                ← Volver a equipos
+            </a>
+
+
+            <a href="{% url 'inventario_aula' equipo.aula.id %}" class="boton boton-primario">
+                Ver inventario del aula
+            </a>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================================
+     PIE DE PÁGINA
+========================================================= -->
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Aulas y Servidores
+            </p>
 
         </div>
 
-    {% else %}
+    </footer>
 
-        <p>
-            Este activo no tiene mantenimientos registrados.
-        </p>
-
-    {% endif %}
-
-</section>
-
-</main>
-
-
-<footer class="pie">
-
-    <div class="contenedor">
-
-        <p>
-            Sistema de Inventario
-            · Bloque María Inmaculada
-        </p>
-
-    </div>
-
-</footer>
 
 </body>
 

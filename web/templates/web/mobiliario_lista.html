@@ -1,0 +1,243 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Mobiliario - Inventario
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+</head>
+
+
+<body>
+
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <div>
+
+                <h1>
+                    Mobiliario
+                </h1>
+
+                <p>
+                    Inventario de mobiliario · Aulas y Servidores
+                </p>
+
+            </div>
+
+
+            <a href="{% url 'inicio' %}" class="boton-volver">
+                ← Volver al inicio
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <main class="contenedor contenido">
+
+
+        <section class="introduccion">
+
+            <h2>
+                Listado de mobiliario
+            </h2>
+
+            <p>
+                Consulte los elementos de mobiliario
+                registrados en las aulas.
+            </p>
+
+        </section>
+
+
+
+        <!-- =====================================================
+         BUSCADOR
+    ====================================================== -->
+
+        <section class="busqueda">
+
+            <form method="get" class="formulario-busqueda">
+
+                <input type="text" name="buscar" placeholder="Buscar por código o aula" value="{{ buscar }}"
+                    class="campo-busqueda">
+
+
+                <button type="submit" class="boton boton-primario">
+                    Buscar
+                </button>
+
+
+                {% if buscar %}
+
+                <a href="{% url 'mobiliario_lista' %}" class="boton boton-secundario">
+                    Limpiar
+                </a>
+
+                {% endif %}
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =====================================================
+         TABLA
+    ====================================================== -->
+
+        <section class="tabla-contenedor">
+
+            <table class="tabla-inventario">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Código
+                        </th>
+
+                        <th>
+                            Tipo
+                        </th>
+
+                        <th>
+                            Aula
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for elemento in mobiliario %}
+
+                    <tr>
+
+
+                        <td>
+
+                            <strong>
+                                {{ elemento.codigo_inventario }}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            {{ elemento.get_tipo_display }}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ elemento.aula.codigo }}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ elemento.get_estado_display }}
+
+                        </td>
+
+
+                        <td>
+
+                            <a href="{% url 'detalle_mobiliario' elemento.id %}" class="boton boton-secundario">
+                                Ver
+                            </a>
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% empty %}
+
+
+                    <tr>
+
+                        <td colspan="5" class="sin-registros">
+
+                            {% if buscar %}
+
+                            No se encontraron elementos
+                            de mobiliario para
+                            "{{ buscar }}".
+
+                            {% else %}
+
+                            No hay mobiliario
+                            registrado.
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+    </main>
+
+
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Aulas y Servidores
+            </p>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>

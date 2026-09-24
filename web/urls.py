@@ -18,10 +18,11 @@ urlpatterns = [
     ),
     path("equipo/<int:equipo_id>", views.detalle_equipo, name="detalle_equipo"),
     path(
-        "mobiliario/<int:mobiliario_int>",
+        "mobiliario/<int:mobiliario_id>/",
         views.detalle_mobiliario,
         name="detalle_mobiliario",
     ),
+    path("mobiliario/", views.mobiliario_lista, name="mobiliario_lista"),
     path(
         "api/aula-activo/<str:tipo>/<int:activo_id>/",
         views.aula_activo,

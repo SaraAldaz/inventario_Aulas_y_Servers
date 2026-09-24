@@ -11,214 +11,343 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        {{ titulo }}
+        {{ titulo }} - Aulas y Servidores
     </title>
 
-    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
-
+    <link
+        rel="stylesheet"
+        href="{% static 'web/css/estilos.css' %}"
+    >
 
 </head>
 
+
 <body>
 
-    <header class="encabezado">
 
-        <div class="contenedor">
+<header class="encabezado">
 
-            <h1>
-                {{ titulo }}
-            </h1>
+    <div class="contenedor">
 
-            <p>
-                Administración de personal
-            </p>
+        <h1>
+            {{ titulo }}
+        </h1>
 
-        </div>
+        <p>
+            Administración de personal
+            · Aulas y Servidores
+        </p>
+
+    </div>
+
+</header>
 
 
-    </header>
 
-    <main class="contenedor contenido">
-        <section class="formulario-contenedor">
+<main class="contenedor contenido">
 
-            <form method="post">
 
-                {% csrf_token %}
+    <section class="introduccion">
 
-                {% if form.non_field_errors %}
+        <h2>
+            Información del personal
+        </h2>
 
-                <div class="error-campo">
+        <p>
+            {% if titulo == "Editar personal" %}
+
+                Modifique la información del usuario
+                seleccionado.
+
+            {% else %}
+
+                Registre un nuevo usuario para la
+                administración del sistema.
+
+            {% endif %}
+        </p>
+
+    </section>
+
+
+
+    <section class="formulario-contenedor">
+
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            {% if form.non_field_errors %}
+
+                <div class="mensaje-error">
+
                     {{ form.non_field_errors }}
+
                 </div>
+
+            {% endif %}
+
+
+
+            <!-- ==================================================
+                 NOMBRES
+            =================================================== -->
+
+            <div class="campo-formulario">
+
+                <label for="{{ form.first_name.id_for_label }}">
+
+                    Nombres
+
+                </label>
+
+                {{ form.first_name }}
+
+                {% if form.first_name.errors %}
+
+                    <div class="error-campo">
+
+                        {{ form.first_name.errors }}
+
+                    </div>
 
                 {% endif %}
 
-
-                <div class="campo-formulario">
-
-                    <label for="{{ form.first_name.id_for_label }}">
-                        Nombres
-                    </label>
-
-                    {{ form.first_name }}
-
-                    {% if form.first_name.errors %}
-
-                    <div class="error-campo">
-                        {{ form.first_name.errors }}
-                    </div>
-
-                    {% endif %}
-
-                </div>
+            </div>
 
 
-                <div class="campo-formulario">
 
-                    <label for="{{ form.last_name.id_for_label }}">
-                        Apellidos
-                    </label>
+            <!-- ==================================================
+                 APELLIDOS
+            =================================================== -->
 
-                    {{ form.last_name }}
+            <div class="campo-formulario">
 
-                    {% if form.last_name.errors %}
+                <label for="{{ form.last_name.id_for_label }}">
+
+                    Apellidos
+
+                </label>
+
+                {{ form.last_name }}
+
+                {% if form.last_name.errors %}
 
                     <div class="error-campo">
+
                         {{ form.last_name.errors }}
+
                     </div>
 
-                    {% endif %}
+                {% endif %}
 
-                </div>
+            </div>
 
 
-                <div class="campo-formulario">
 
-                    <label for="{{ form.username.id_for_label }}">
-                        Usuario
-                    </label>
+            <!-- ==================================================
+                 USUARIO
+            =================================================== -->
 
-                    {{ form.username }}
+            <div class="campo-formulario">
 
-                    {% if form.username.errors %}
+                <label for="{{ form.username.id_for_label }}">
+
+                    Usuario
+
+                </label>
+
+                {{ form.username }}
+
+                {% if form.username.errors %}
 
                     <div class="error-campo">
+
                         {{ form.username.errors }}
+
                     </div>
 
-                    {% endif %}
+                {% endif %}
 
-                </div>
+            </div>
 
 
-                <div class="campo-formulario">
 
-                    <label for="{{ form.email.id_for_label }}">
-                        Correo electrónico
-                    </label>
+            <!-- ==================================================
+                 CORREO
+            =================================================== -->
 
-                    {{ form.email }}
+            <div class="campo-formulario">
 
-                    {% if form.email.errors %}
+                <label for="{{ form.email.id_for_label }}">
+
+                    Correo electrónico
+
+                </label>
+
+                {{ form.email }}
+
+                {% if form.email.errors %}
 
                     <div class="error-campo">
+
                         {{ form.email.errors }}
+
                     </div>
 
-                    {% endif %}
+                {% endif %}
 
-                </div>
+            </div>
 
 
-                <div class="campo-formulario">
 
-                    <label for="{{ form.password.id_for_label }}">
-                        Contraseña
-                    </label>
+            <!-- ==================================================
+                 CONTRASEÑA
+            =================================================== -->
 
-                    {{ form.password }}
+            <div class="campo-formulario">
 
-                    {% if form.password.errors %}
+                <label for="{{ form.password.id_for_label }}">
+
+                    Contraseña
+
+                </label>
+
+                {{ form.password }}
+
+                {% if form.password.errors %}
 
                     <div class="error-campo">
+
                         {{ form.password.errors }}
+
                     </div>
 
-                    {% endif %}
+                {% endif %}
 
-                </div>
+            </div>
 
 
-                <div class="campo-formulario">
 
-                    <label for="{{ form.password_confirmacion.id_for_label }}">
-                        Confirmar contraseña
-                    </label>
+            <!-- ==================================================
+                 CONFIRMAR CONTRASEÑA
+            =================================================== -->
 
-                    {{ form.password_confirmacion }}
+            <div class="campo-formulario">
 
-                    {% if form.password_confirmacion.errors %}
+                <label for="{{ form.password_confirmacion.id_for_label }}">
+
+                    Confirmar contraseña
+
+                </label>
+
+                {{ form.password_confirmacion }}
+
+                {% if form.password_confirmacion.errors %}
 
                     <div class="error-campo">
+
                         {{ form.password_confirmacion.errors }}
+
                     </div>
 
-                    {% endif %}
+                {% endif %}
 
-                </div>
+            </div>
 
 
-                <div class="campo-formulario">
 
-                    <label>
+            <!-- ==================================================
+                 ESTADO
+            =================================================== -->
 
-                        {{ form.is_active }}
+            <div class="campo-formulario campo-checkbox">
 
-                        Personal activo
+                {{ form.is_active }}
 
-                    </label>
+                <label for="{{ form.is_active.id_for_label }}">
 
-                    {% if form.is_active.errors %}
+                    Personal activo
+
+                </label>
+
+                {% if form.is_active.errors %}
 
                     <div class="error-campo">
+
                         {{ form.is_active.errors }}
+
                     </div>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 BOTONES
+            =================================================== -->
+
+            <div class="acciones-formulario">
+
+                <button
+                    type="submit"
+                    class="boton boton-primario"
+                >
+
+                    {% if titulo == "Editar personal" %}
+
+                        Guardar cambios
+
+                    {% else %}
+
+                        Registrar personal
 
                     {% endif %}
 
-                </div>
+                </button>
 
 
-                <div class="acciones-formulario">
+                <a
+                    href="{% url 'personal_lista' %}"
+                    class="boton boton-secundario"
+                >
 
-                    <button type="submit" class="boton boton-primario">
-                        Guardar personal
-                    </button>
+                    Cancelar
 
-                    <a href="{% url 'personal_lista' %}" class="boton boton-secundario">
-                        Cancelar
-                    </a>
+                </a>
 
-                </div>
+            </div>
 
-            </form>
 
-        </section>
+        </form>
 
-    </main>
 
-    <footer class="pie">
+    </section>
 
-        <div class="contenedor">
 
-            <p>
-                Sistema de Inventario
-                · Bloque María Inmaculada
-            </p>
+</main>
 
-        </div>
 
-    </footer>
+
+<footer class="pie">
+
+    <div class="contenedor">
+
+        <p>
+
+            Sistema de Inventario
+            · Aulas y Servidores
+
+        </p>
+
+    </div>
+
+</footer>
+
 
 </body>
 

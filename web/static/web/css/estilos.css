@@ -1572,3 +1572,86 @@ body {
     padding: 22px;
     font-size: 13px;
 }
+
+/* =========================================================
+   BUSCADOR
+========================================================= */
+
+.formulario-busqueda {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 25px 0 15px 0;
+    width: 100%;
+    max-width: 650px;
+}
+
+.campo-busqueda {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    padding: 0 14px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+
+    color: #1e293b;
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.campo-busqueda::placeholder {
+    color: #94a3b8;
+}
+
+.campo-busqueda:hover {
+    border-color: #94a3b8;
+}
+
+.campo-busqueda:focus {
+    border-color: #2b638f;
+
+    box-shadow:
+        0 0 0 3px rgba(43, 99, 143, 0.12);
+}
+
+
+/* Botón del buscador */
+
+.formulario-busqueda .boton {
+    height: 44px;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .formulario-busqueda {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 100%;
+    }
+
+    .campo-busqueda {
+        width: 100%;
+    }
+
+    .formulario-busqueda .boton {
+        width: 100%;
+    }
+
+}

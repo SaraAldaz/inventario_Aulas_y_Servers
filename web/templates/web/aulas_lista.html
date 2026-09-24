@@ -1,7 +1,6 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
@@ -11,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        Aulas - Inventario
+        Aulas - Aulas y Servidores
     </title>
 
     <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
@@ -20,24 +19,43 @@
 
 <body>
 
+    <!-- =========================================================
+         ENCABEZADO
+    ========================================================== -->
+
     <header class="encabezado">
 
         <div class="contenedor">
 
-            <h1>
-                Aulas
-            </h1>
+            <div>
 
-            <p>
-                Administración de aulas · Bloque María Inmaculada
-            </p>
+                <h1>
+                    Aulas
+                </h1>
+
+                <p>
+                    Administración y gestión de aulas · Aulas y Servidores
+                </p>
+
+            </div>
+
+            <a href="{% url 'inicio' %}" class="boton-volver">
+                ← Volver al inicio
+            </a>
 
         </div>
 
-
     </header>
 
+
+    <!-- =========================================================
+         CONTENIDO
+    ========================================================== -->
+
     <main class="contenedor contenido">
+
+
+        <!-- INTRODUCCIÓN -->
 
         <section class="introduccion">
 
@@ -47,20 +65,23 @@
 
             <p>
                 Consulte y administre las aulas disponibles
-                en el sistema.
+                en el sistema de Aulas y Servidores.
             </p>
 
+            <div style="margin-top: 18px;">
 
-            <a href="{% url 'aula_crear' %}" class="boton boton-primario">
-                + Agregar aula
-            </a>
+            </div>
 
         </section>
 
 
+        <!-- =====================================================
+             TABLA DE AULAS
+        ====================================================== -->
+
         <section class="tabla-contenedor">
 
-            <table class="tabla-inventario">
+            <table>
 
                 <thead>
 
@@ -71,7 +92,7 @@
                         </th>
 
                         <th>
-                            Código
+                            Aula
                         </th>
 
                         <th>
@@ -101,58 +122,107 @@
 
                     <tr>
 
+                        <!-- PISO -->
+
                         <td>
+
                             Piso {{ aula.piso.numero }}
+
                         </td>
 
+
+                        <!-- AULA -->
+
                         <td>
+
                             <strong>
-                                {{ aula.codigo }}
+                                Aula {{ aula.codigo }}
                             </strong>
+
                         </td>
 
+
+                        <!-- NOMBRE -->
+
                         <td>
+
                             {{ aula.nombre }}
+
                         </td>
 
+
+                        <!-- CAPACIDAD -->
+
                         <td>
+
                             {{ aula.capacidad }}
+
                         </td>
+
+
+                        <!-- ESTADO -->
 
                         <td>
 
                             {% if aula.activo %}
 
-                            Activa
+                            <span class="estado estado-operativo">
+                                Activa
+                            </span>
 
                             {% else %}
 
-                            Inactiva
+                            <span class="estado estado-baja">
+                                Inactiva
+                            </span>
 
                             {% endif %}
 
                         </td>
 
+
+                        <!-- ACCIONES -->
+
                         <td>
 
-                            <a href="{% url 'inventario_aula' aula.id %}" class="boton boton-secundario">
-                                Inventario
-                            </a>
+                            <div style="
+                                display: flex;
+                                gap: 8px;
+                                flex-wrap: wrap;
+                            ">
 
-                            <a href="{% url 'aula_editar' aula.id %}" class="boton boton-secundario">
-                                Editar
-                            </a>
+                                <a href="{% url 'inventario_aula' aula.id %}" class="boton-detalle">
+
+                                    Ver inventario
+
+                                </a>
+
+
+                                <a href="{% url 'aula_editar' aula.id %}" class="boton-detalle">
+
+                                    Editar
+
+                                </a>
+
+                            </div>
 
                         </td>
 
                     </tr>
 
+
                     {% empty %}
 
                     <tr>
 
-                        <td colspan="6" class="sin-registros">
-                            No hay aulas registradas.
+                        <td colspan="6">
+
+                            <div class="mensaje-vacio">
+
+                                No hay aulas registradas.
+
+                            </div>
+
                         </td>
 
                     </tr>
@@ -165,15 +235,23 @@
 
         </section>
 
+
     </main>
+
+
+    <!-- =========================================================
+         PIE
+    ========================================================== -->
 
     <footer class="pie">
 
         <div class="contenedor">
 
             <p>
+
                 Sistema de Inventario
-                · Bloque María Inmaculada
+                · Aulas y Servidores
+
             </p>
 
         </div>

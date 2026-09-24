@@ -213,6 +213,29 @@ def detalle_mobiliario(request, mobiliario_id):
     return render(request, "web/detalle_mobiliario.html", contexto)
 
 
+def mobiliario_lista(request):
+
+    buscar = request.GET.get("buscar", "").strip()
+
+    mobiliario = Mobiliario.objects.select_related("aula").all()
+
+    if buscar:
+
+        mobiliario = mobiliario.filter(
+            models.Q(codigo_inventario__icontains=buscar)
+            | models.Q(aula__codigo__icontains=buscar)
+        )
+
+    mobiliario = mobiliario.order_by("tipo", "codigo_inventario")
+
+    contexto = {
+        "mobiliario": mobiliario,
+        "buscar": buscar,
+    }
+
+    return render(request, "web/mobiliario_lista.html", contexto)
+
+
 def aula_activo(request, tipo, activo_id):
 
     modelos = {
@@ -466,7 +489,9 @@ def piso_editar(request, piso_id):
 
     return render(request, "web/piso_form.html", contexto)
 
-#Crud Aulas
+
+# Crud Aulas
+
 
 def aulas_lista(request):
 
@@ -502,33 +527,24 @@ def aula_crear(request):
 
     return render(request, "web/aula_form.html", contexto)
 
-def aula_editar(request, aula_id):                  
 
-    aula = get_object_or_404(
-        Aula,
-        id=aula_id
-    )
+def aula_editar(request, aula_id):
+
+    aula = get_object_or_404(Aula, id=aula_id)
 
     if request.method == "POST":
 
-        form = AulaForm(
-            request.POST,
-            instance=aula
-        )
+        form = AulaForm(request.POST, instance=aula)
 
         if form.is_valid():
 
             form.save()
 
-            return redirect(
-                "aulas_lista"
-            )
+            return redirect("aulas_lista")
 
     else:
 
-        form = AulaForm(
-            instance=aula
-        )
+        form = AulaForm(instance=aula)
 
     contexto = {
         "form": form,
@@ -536,34 +552,22 @@ def aula_editar(request, aula_id):
         "titulo": "Editar aula",
     }
 
-    return render(
-        request,
-        "web/aula_form.html",
-        contexto
-    )
+    return render(request, "web/aula_form.html", contexto)
 
-#Crud personal
+
+# Crud personal
+
 
 def personal_lista(request):
 
-    personal = (
-        User.objects
-        .all()
-        .order_by(
-            "first_name",
-            "last_name"
-        )
-    )
+    personal = User.objects.all().order_by("first_name", "last_name")
 
     contexto = {
         "personal": personal,
     }
 
-    return render(
-        request,
-        "web/personal_lista.html",
-        contexto
-    )
+    return render(request, "web/personal_lista.html", contexto)
+
 
 def personal_crear(request):
 
@@ -575,9 +579,7 @@ def personal_crear(request):
 
             form.save()
 
-            return redirect(
-                "personal_lista"
-            )
+            return redirect("personal_lista")
 
     else:
 
@@ -588,48 +590,55 @@ def personal_crear(request):
         "titulo": "Agregar personal",
     }
 
-    return render(
-        request,
-        "web/personal_form.html",
-        contexto
-    )
+    return render(request, "web/personal_form.html", contexto)
 
-#Crud Mantenimiento
+
+# Crud Mantenimiento
+
 
 def mantenimientos_lista(request):
 
+    buscar = request.GET.get("buscar", "").strip()
+
     mantenimientos = (
-        Mantenimiento.objects
-        .select_related("responsable")
+        Mantenimiento.objects.select_related("responsable", "content_type")
         .all()
         .order_by("-fecha")
     )
 
+    if buscar:
+
+        mantenimientos = mantenimientos.filter(
+            models.Q(responsable__username__icontains=buscar)
+            | models.Q(responsable__first_name__icontains=buscar)
+            | models.Q(responsable__last_name__icontains=buscar)
+            | models.Q(
+                content_type=ContentType.objects.get_for_model(Computador),
+                object_id__in=Computador.objects.filter(
+                    codigo_inventario__icontains=buscar
+                ).values("id"),
+            )
+        )
+
     contexto = {
         "mantenimientos": mantenimientos,
+        "buscar": buscar,
     }
 
-    return render(
-        request,
-        "web/mantenimientos_lista.html",
-        contexto
-    )
+    return render(request, "web/mantenimientos_lista.html", contexto)
+
 
 def mantenimiento_crear(request):
 
     if request.method == "POST":
 
-        form = MantenimientoForm(
-            request.POST
-        )
+        form = MantenimientoForm(request.POST)
 
         if form.is_valid():
 
             form.save()
 
-            return redirect(
-                "mantenimientos_lista"
-            )
+            return redirect("mantenimientos_lista")
 
     else:
 
@@ -640,30 +649,23 @@ def mantenimiento_crear(request):
         "titulo": "Registrar mantenimiento",
     }
 
-    return render(
-        request,
-        "web/mantenimiento_form.html",
-        contexto
-    )
+    return render(request, "web/mantenimiento_form.html", contexto)
 
 
-#Crud Movimientos
+# Crud Movimientos
+
 
 def movimiento_crear(request):
 
     if request.method == "POST":
 
-        form = MovimientoActivoForm(
-            request.POST
-        )
+        form = MovimientoActivoForm(request.POST)
 
         if form.is_valid():
 
             form.save()
 
-            return redirect(
-                "movimientos_lista"
-            )
+            return redirect("movimientos_lista")
 
     else:
 
@@ -674,32 +676,53 @@ def movimiento_crear(request):
         "titulo": "Registrar movimiento",
     }
 
-    return render(
-        request,
-        "web/movimiento_form.html",
-        contexto
-    )
+    return render(request, "web/movimiento_form.html", contexto)
 
 
 def movimientos_lista(request):
 
+    buscar = request.GET.get("buscar", "").strip()
+
     movimientos = (
-        MovimientoActivo.objects
-        .select_related(
+        MovimientoActivo.objects.select_related(
             "aula_origen",
             "aula_destino",
             "responsable",
+            "content_type",
         )
         .all()
         .order_by("-fecha")
     )
 
+    if buscar:
+
+        movimientos = movimientos.filter(
+            models.Q(responsable__username__icontains=buscar)
+            | models.Q(responsable__first_name__icontains=buscar)
+            | models.Q(responsable__last_name__icontains=buscar)
+            | models.Q(
+                content_type=ContentType.objects.get_for_model(Computador),
+                object_id__in=Computador.objects.filter(
+                    codigo_inventario__icontains=buscar
+                ).values("id"),
+            )
+            | models.Q(
+                content_type=ContentType.objects.get_for_model(EquipoTecnologico),
+                object_id__in=EquipoTecnologico.objects.filter(
+                    codigo_inventario__icontains=buscar
+                ).values("id"),
+            )
+            | models.Q(
+                content_type=ContentType.objects.get_for_model(Mobiliario),
+                object_id__in=Mobiliario.objects.filter(
+                    codigo_inventario__icontains=buscar
+                ).values("id"),
+            )
+        )
+
     contexto = {
         "movimientos": movimientos,
+        "buscar": buscar,
     }
 
-    return render(
-        request,
-        "web/movimientos_lista.html",
-        contexto
-    )
+    return render(request, "web/movimientos_lista.html", contexto)

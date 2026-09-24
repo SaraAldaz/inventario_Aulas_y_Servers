@@ -11,155 +11,221 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        Personal - Inventario
+        Personal - Aulas y Servidores
     </title>
 
-    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
-
+    <link
+        rel="stylesheet"
+        href="{% static 'web/css/estilos.css' %}"
+    >
 
 </head>
 
+
 <body>
 
-    <header class="encabezado">
 
+<header class="encabezado">
 
-        <div class="contenedor">
+    <div class="contenedor">
+
+        <div>
 
             <h1>
                 Personal
             </h1>
 
             <p>
-                Administración de personal · Sistema de Inventario
+                Administración de personal · Aulas y Servidores
             </p>
 
         </div>
 
 
-    </header>
+        <a
+            href="{% url 'inicio' %}"
+            class="boton-volver"
+        >
+            ← Volver al inicio
+        </a>
 
-    <main class="contenedor contenido">
+    </div>
 
-
-        <section class="introduccion">
-
-            <h2>
-                Personal registrado
-            </h2>
-
-            <p>
-                Consulte y administre las personas autorizadas
-                para registrar operaciones en el sistema.
-            </p>
-
-            <a href="{% url 'personal_crear' %}" class="boton boton-primario">
-                + Agregar personal
-            </a>
-
-        </section>
+</header>
 
 
-        <section class="tabla-contenedor">
 
-            <table class="tabla-inventario">
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Nombre
-                        </th>
-
-                        <th>
-                            Usuario
-                        </th>
-
-                        <th>
-                            Correo
-                        </th>
-
-                        <th>
-                            Estado
-                        </th>
-
-                    </tr>
-
-                </thead>
+<main class="contenedor contenido">
 
 
-                <tbody>
+    <!-- =====================================================
+         ENCABEZADO DE LA SECCIÓN
+    ====================================================== -->
 
-                    {% for persona in personal %}
+    <section class="introduccion">
 
-                    <tr>
+        <h2>
+            Personal registrado
+        </h2>
 
-                        <td>
-
-                            <strong>
-                                {{ persona.get_full_name|default:persona.username }}
-                            </strong>
-
-                        </td>
-
-                        <td>
-                            {{ persona.username }}
-                        </td>
-
-                        <td>
-                            {{ persona.email|default:"-" }}
-                        </td>
-
-                        <td>
-
-                            {% if persona.is_active %}
-
-                            Activo
-
-                            {% else %}
-
-                            Inactivo
-
-                            {% endif %}
-
-                        </td>
-
-                    </tr>
-
-                    {% empty %}
-
-                    <tr>
-
-                        <td colspan="4" class="sin-registros">
-                            No hay personal registrado.
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </section>
+        <p>
+            Consulte y administre las personas autorizadas
+            para registrar operaciones en el sistema.
+        </p>
 
 
-    </main>
+        <a
+            href="{% url 'personal_crear' %}"
+            class="boton boton-primario"
+        >
+            + Agregar personal
+        </a>
 
-    <footer class="pie">
+    </section>
 
-        <div class="contenedor">
 
-            <p>
-                Sistema de Inventario
-                · Bloque María Inmaculada
-            </p>
 
-        </div>
+    <!-- =====================================================
+         LISTADO DE PERSONAL
+    ====================================================== -->
 
-    </footer>
+    <section class="tabla-contenedor">
+
+        <table class="tabla-inventario">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Nombre
+                    </th>
+
+                    <th>
+                        Usuario
+                    </th>
+
+                    <th>
+                        Correo electrónico
+                    </th>
+
+                    <th>
+                        Estado
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for persona in personal %}
+
+                <tr>
+
+
+                    <!-- NOMBRE -->
+
+                    <td>
+
+                        <strong>
+
+                            {{ persona.get_full_name|default:persona.username }}
+
+                        </strong>
+
+                    </td>
+
+
+
+                    <!-- USUARIO -->
+
+                    <td>
+
+                        {{ persona.username }}
+
+                    </td>
+
+
+
+                    <!-- CORREO -->
+
+                    <td>
+
+                        {{ persona.email|default:"-" }}
+
+                    </td>
+
+
+
+                    <!-- ESTADO -->
+
+                    <td>
+
+                        {% if persona.is_active %}
+
+                            <span class="estado estado-operativo">
+                                Activo
+                            </span>
+
+                        {% else %}
+
+                            <span class="estado estado-inactivo">
+                                Inactivo
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                </tr>
+
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="sin-registros"
+                    >
+
+                        No hay personal registrado.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+</main>
+
+
+
+<footer class="pie">
+
+    <div class="contenedor">
+
+        <p>
+
+            Sistema de Inventario
+            · Aulas y Servidores
+
+        </p>
+
+    </div>
+
+</footer>
+
 
 </body>
 

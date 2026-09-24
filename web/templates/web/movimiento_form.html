@@ -8,200 +8,376 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>
-        {{ titulo }}
+        {{ titulo }} - Inventario
     </title>
 
-    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+    <link
+        rel="stylesheet"
+        href="{% static 'web/css/estilos.css' %}"
+    >
+
 </head>
+
 
 <body>
 
-    <header class="encabezado">
 
-        <div class="contenedor">
+<!-- =====================================================
+     ENCABEZADO
+====================================================== -->
 
-            <h1>
-                {{ titulo }}
-            </h1>
+<header class="encabezado">
 
-            <p>
-                Gestión de movimientos de activos
-            </p>
+    <div class="contenedor">
 
-        </div>
-    </header>
+        <h1>
+            {{ titulo }}
+        </h1>
 
-    <main class="contenedor contenido">
-        <section class="formulario-contenedor">
+        <p>
+            Gestión de movimientos de activos · Aulas y Servidores
+        </p>
 
-            <form method="post">
+    </div>
 
-                {% csrf_token %}
+</header>
 
 
-                {% if form.non_field_errors %}
 
-                <div class="error-campo">
+<!-- =====================================================
+     CONTENIDO
+====================================================== -->
+
+<main class="contenedor contenido">
+
+
+    <!-- =================================================
+         INTRODUCCIÓN
+    ================================================== -->
+
+    <section class="introduccion">
+
+        <h2>
+            Registrar movimiento
+        </h2>
+
+        <p>
+            Registre el traslado o movimiento de un activo
+            entre las aulas de la institución.
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================================
+         FORMULARIO
+    ================================================== -->
+
+    <section class="formulario-contenedor">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            <!-- =========================================
+                 ERRORES GENERALES
+            ========================================== -->
+
+            {% if form.non_field_errors %}
+
+                <div class="mensaje-error">
 
                     {{ form.non_field_errors }}
 
                 </div>
 
+            {% endif %}
+
+
+
+            <!-- =========================================
+                 TIPO DE ACTIVO
+            ========================================== -->
+
+            <div class="campo-formulario">
+
+                <label for="{{ form.tipo_activo.id_for_label }}">
+                    Tipo de activo
+                </label>
+
+                {{ form.tipo_activo }}
+
+                {% if form.tipo_activo.errors %}
+
+                    <div class="error-campo">
+                        {{ form.tipo_activo.errors }}
+                    </div>
+
                 {% endif %}
 
+            </div>
 
-                <div class="campo-formulario">
 
-                    <label for="{{ form.tipo_activo.id_for_label }}">
-                        Tipo de activo
-                    </label>
 
-                    {{ form.tipo_activo }}
+            <!-- =========================================
+                 ACTIVO
+            ========================================== -->
 
-                    {{ form.tipo_activo.errors }}
+            <div class="campo-formulario">
 
-                </div>
+                <label for="{{ form.activo_seleccionado.id_for_label }}">
+                    Activo
+                </label>
 
+                {{ form.activo_seleccionado }}
 
-                <div class="campo-formulario">
+                {% if form.activo_seleccionado.errors %}
 
-                    <label for="{{ form.activo_seleccionado.id_for_label }}">
-                        Activo
-                    </label>
+                    <div class="error-campo">
+                        {{ form.activo_seleccionado.errors }}
+                    </div>
 
-                    {{ form.activo_seleccionado }}
+                {% endif %}
 
-                    {{ form.activo_seleccionado.errors }}
+            </div>
 
-                </div>
 
 
-                <div class="campo-formulario">
+            <!-- =========================================
+                 FECHA Y HORA
+            ========================================== -->
 
-                    <label for="{{ form.fecha.id_for_label }}">
-                        Fecha y hora
-                    </label>
+            <div class="campo-formulario">
 
-                    {{ form.fecha }}
+                <label for="{{ form.fecha.id_for_label }}">
+                    Fecha y hora
+                </label>
 
-                    {{ form.fecha.errors }}
+                {{ form.fecha }}
 
-                </div>
+                {% if form.fecha.errors %}
 
+                    <div class="error-campo">
+                        {{ form.fecha.errors }}
+                    </div>
 
-                <div class="campo-formulario">
+                {% endif %}
 
-                    <label for="{{ form.tipo.id_for_label }}">
-                        Tipo de movimiento
-                    </label>
+            </div>
 
-                    {{ form.tipo }}
 
-                    {{ form.tipo.errors }}
 
-                </div>
+            <!-- =========================================
+                 TIPO DE MOVIMIENTO
+            ========================================== -->
 
+            <div class="campo-formulario">
 
-                <div class="campo-formulario">
+                <label for="{{ form.tipo.id_for_label }}">
+                    Tipo de movimiento
+                </label>
 
-                    <label for="{{ form.aula_origen_mostrada.id_for_label }}">
-                        Aula de origen
-                    </label>
+                {{ form.tipo }}
 
-                    {{ form.aula_origen_mostrada }}
+                {% if form.tipo.errors %}
 
-                    {{ form.aula_origen_mostrada.errors }}
+                    <div class="error-campo">
+                        {{ form.tipo.errors }}
+                    </div>
 
-                </div>
+                {% endif %}
 
+            </div>
 
-                <div class="campo-formulario">
 
-                    <label for="{{ form.aula_destino.id_for_label }}">
-                        Aula de destino
-                    </label>
 
-                    {{ form.aula_destino }}
+            <!-- =========================================
+                 AULA DE ORIGEN
+            ========================================== -->
 
-                    {{ form.aula_destino.errors }}
+            <div class="campo-formulario">
 
-                </div>
+                <label for="{{ form.aula_origen_mostrada.id_for_label }}">
+                    Aula de origen
+                </label>
 
+                {{ form.aula_origen_mostrada }}
 
-                <div class="campo-formulario">
+                {% if form.aula_origen_mostrada.errors %}
 
-                    <label for="{{ form.motivo.id_for_label }}">
-                        Motivo
-                    </label>
+                    <div class="error-campo">
+                        {{ form.aula_origen_mostrada.errors }}
+                    </div>
 
-                    {{ form.motivo }}
+                {% endif %}
 
-                    {{ form.motivo.errors }}
+            </div>
 
-                </div>
 
 
-                <div class="campo-formulario">
+            <!-- =========================================
+                 AULA DE DESTINO
+            ========================================== -->
 
-                    <label for="{{ form.observaciones.id_for_label }}">
-                        Observaciones
-                    </label>
+            <div class="campo-formulario">
 
-                    {{ form.observaciones }}
+                <label for="{{ form.aula_destino.id_for_label }}">
+                    Aula de destino
+                </label>
 
-                    {{ form.observaciones.errors }}
+                {{ form.aula_destino }}
 
-                </div>
+                {% if form.aula_destino.errors %}
 
+                    <div class="error-campo">
+                        {{ form.aula_destino.errors }}
+                    </div>
 
-                <div class="campo-formulario">
+                {% endif %}
 
-                    <label for="{{ form.responsable.id_for_label }}">
-                        Responsable
-                    </label>
+            </div>
 
-                    {{ form.responsable }}
 
-                    {{ form.responsable.errors }}
 
-                </div>
+            <!-- =========================================
+                 MOTIVO
+            ========================================== -->
 
+            <div class="campo-formulario">
 
-                <div class="acciones-formulario">
+                <label for="{{ form.motivo.id_for_label }}">
+                    Motivo
+                </label>
 
-                    <button type="submit" class="boton boton-primario">
-                        Registrar movimiento
-                    </button>
+                {{ form.motivo }}
 
-                    <a href="{% url 'movimientos_lista' %}" class="boton boton-secundario">
-                        Cancelar
-                    </a>
+                {% if form.motivo.errors %}
 
-                </div>
+                    <div class="error-campo">
+                        {{ form.motivo.errors }}
+                    </div>
 
-            </form>
+                {% endif %}
 
-        </section>
+            </div>
 
-    </main>
 
-    <footer class="pie">
 
-        <div class="contenedor">
+            <!-- =========================================
+                 OBSERVACIONES
+            ========================================== -->
 
-            <p>
-                Sistema de Inventario
-                · Bloque María Inmaculada
-            </p>
+            <div class="campo-formulario">
 
-        </div>
+                <label for="{{ form.observaciones.id_for_label }}">
+                    Observaciones
+                </label>
 
-    </footer>
+                {{ form.observaciones }}
 
-    <script src="{% static 'web/js/movimiento_activo.js' %}"></script>
+                {% if form.observaciones.errors %}
+
+                    <div class="error-campo">
+                        {{ form.observaciones.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- =========================================
+                 RESPONSABLE
+            ========================================== -->
+
+            <div class="campo-formulario">
+
+                <label for="{{ form.responsable.id_for_label }}">
+                    Responsable
+                </label>
+
+                {{ form.responsable }}
+
+                {% if form.responsable.errors %}
+
+                    <div class="error-campo">
+                        {{ form.responsable.errors }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- =========================================
+                 BOTONES
+            ========================================== -->
+
+            <div class="acciones-formulario">
+
+                <button
+                    type="submit"
+                    class="boton boton-primario"
+                >
+                    Registrar movimiento
+                </button>
+
+
+                <a
+                    href="{% url 'movimientos_lista' %}"
+                    class="boton boton-secundario"
+                >
+                    Cancelar
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     PIE DE PÁGINA
+====================================================== -->
+
+<footer class="pie">
+
+    <div class="contenedor">
+
+        <p>
+            Sistema de Inventario
+            · Aulas y Servidores
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script src="{% static 'web/js/movimiento_activo.js' %}"></script>
+
+
 </body>
 
 </html>

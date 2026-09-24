@@ -16,30 +16,53 @@
 
     <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
 
-
 </head>
 
+
 <body>
+
+
+    <!-- =====================================================
+     ENCABEZADO
+====================================================== -->
 
     <header class="encabezado">
 
         <div class="contenedor">
 
-            <h1>
-                Mantenimientos
-            </h1>
+            <div>
 
-            <p>
-                Registro de mantenimiento de activos
-            </p>
+                <h1>
+                    Mantenimientos
+                </h1>
+
+                <p>
+                    Gestión y seguimiento de mantenimientos registrados
+                </p>
+
+            </div>
+
+
+            <a href="{% url 'inicio' %}" class="boton-volver">
+                ← Volver al inicio
+            </a>
 
         </div>
 
-
     </header>
+
+
+
+    <!-- =====================================================
+     CONTENIDO
+====================================================== -->
 
     <main class="contenedor contenido">
 
+
+        <!-- =================================================
+         INTRODUCCIÓN
+    ================================================== -->
 
         <section class="introduccion">
 
@@ -48,9 +71,10 @@
             </h2>
 
             <p>
-                Consulte los mantenimientos registrados
-                en el sistema de inventario.
+                Consulte y administre los mantenimientos
+                registrados en el sistema de inventario.
             </p>
+
 
             <a href="{% url 'mantenimiento_crear' %}" class="boton boton-primario">
                 + Registrar mantenimiento
@@ -58,6 +82,62 @@
 
         </section>
 
+
+
+        <!-- =================================================
+         BUSCADOR
+    ================================================== -->
+
+        <section class="busqueda">
+
+            <form method="get" class="formulario-busqueda">
+
+                <input type="text" name="buscar" value="{{ buscar }}"
+                    placeholder="Buscar por código de computador o responsable" class="campo-busqueda">
+
+
+                <button type="submit" class="boton boton-primario">
+                    Buscar
+                </button>
+
+
+                {% if buscar %}
+
+                <a href="{% url 'mantenimientos_lista' %}" class="boton boton-secundario">
+                    Limpiar
+                </a>
+
+                {% endif %}
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================================
+         INFORMACIÓN DE BÚSQUEDA
+    ================================================== -->
+
+        {% if buscar %}
+
+        <div class="mensaje-busqueda">
+
+            Resultados para:
+
+            <strong>
+                "{{ buscar }}"
+            </strong>
+
+        </div>
+
+        {% endif %}
+
+
+
+        <!-- =================================================
+         TABLA
+    ================================================== -->
 
         <section class="tabla-contenedor">
 
@@ -110,25 +190,41 @@
                             {{ mantenimiento.fecha|date:"d/m/Y H:i" }}
                         </td>
 
+
                         <td>
                             {{ mantenimiento.activo }}
                         </td>
+
 
                         <td>
                             {{ mantenimiento.get_tipo_display }}
                         </td>
 
+
                         <td>
                             {{ mantenimiento.descripcion }}
                         </td>
 
+
                         <td>
-                            {{ mantenimiento.responsable.get_full_name|default:mantenimiento.responsable.username }}
+
+                            {% if mantenimiento.responsable.get_full_name %}
+
+                            {{ mantenimiento.responsable.get_full_name }}
+
+                            {% else %}
+
+                            {{ mantenimiento.responsable.username }}
+
+                            {% endif %}
+
                         </td>
+
 
                         <td>
                             {{ mantenimiento.get_estado_anterior_display }}
                         </td>
+
 
                         <td>
                             {{ mantenimiento.get_estado_posterior_display }}
@@ -136,12 +232,24 @@
 
                     </tr>
 
+
                     {% empty %}
 
                     <tr>
 
                         <td colspan="7" class="sin-registros">
+
+                            {% if buscar %}
+
+                            No se encontraron mantenimientos
+                            para "{{ buscar }}".
+
+                            {% else %}
+
                             No hay mantenimientos registrados.
+
+                            {% endif %}
+
                         </td>
 
                     </tr>
@@ -154,19 +262,28 @@
 
         </section>
 
+
     </main>
 
+
+
+    <!-- =====================================================
+     PIE DE PÁGINA
+====================================================== -->
+
     <footer class="pie">
+
         <div class="contenedor">
 
             <p>
                 Sistema de Inventario
-                · Bloque María Inmaculada
+                · Aulas y Servidores
             </p>
 
         </div>
 
     </footer>
+
 
 </body>
 

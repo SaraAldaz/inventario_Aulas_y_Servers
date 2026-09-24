@@ -11,14 +11,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        {{ titulo }}
+        {{ titulo }} - Inventario
     </title>
 
     <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
 
 </head>
 
+
 <body>
+
+
+    <!-- =====================================================
+     ENCABEZADO
+====================================================== -->
 
     <header class="encabezado">
 
@@ -29,15 +35,40 @@
             </h1>
 
             <p>
-                Registro de mantenimiento
+                Gestión de mantenimiento · Aulas y Servidores
             </p>
 
         </div>
 
-
     </header>
 
+
+
+    <!-- =====================================================
+     CONTENIDO
+====================================================== -->
+
     <main class="contenedor contenido">
+
+
+        <section class="introduccion">
+
+            <h2>
+                Registrar mantenimiento
+            </h2>
+
+            <p>
+                Complete la información correspondiente al
+                mantenimiento realizado sobre el activo.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+         FORMULARIO
+    ================================================== -->
 
         <section class="formulario-contenedor">
 
@@ -45,14 +76,26 @@
 
                 {% csrf_token %}
 
+
+                <!-- =========================================
+                 ERRORES GENERALES
+            ========================================== -->
+
                 {% if form.non_field_errors %}
 
-                <div class="error-campo">
+                <div class="mensaje-error">
+
                     {{ form.non_field_errors }}
+
                 </div>
 
                 {% endif %}
 
+
+
+                <!-- =========================================
+                 TIPO DE ACTIVO
+            ========================================== -->
 
                 <div class="campo-formulario">
 
@@ -62,10 +105,21 @@
 
                     {{ form.tipo_activo }}
 
-                    {{ form.tipo_activo.errors }}
+                    {% if form.tipo_activo.errors %}
+
+                    <div class="error-campo">
+                        {{ form.tipo_activo.errors }}
+                    </div>
+
+                    {% endif %}
 
                 </div>
 
+
+
+                <!-- =========================================
+                 ACTIVO
+            ========================================== -->
 
                 <div class="campo-formulario">
 
@@ -75,10 +129,21 @@
 
                     {{ form.activo_seleccionado }}
 
-                    {{ form.activo_seleccionado.errors }}
+                    {% if form.activo_seleccionado.errors %}
+
+                    <div class="error-campo">
+                        {{ form.activo_seleccionado.errors }}
+                    </div>
+
+                    {% endif %}
 
                 </div>
 
+
+
+                <!-- =========================================
+                 FECHA
+            ========================================== -->
 
                 <div class="campo-formulario">
 
@@ -88,10 +153,21 @@
 
                     {{ form.fecha }}
 
-                    {{ form.fecha.errors }}
+                    {% if form.fecha.errors %}
+
+                    <div class="error-campo">
+                        {{ form.fecha.errors }}
+                    </div>
+
+                    {% endif %}
 
                 </div>
 
+
+
+                <!-- =========================================
+                 TIPO DE MANTENIMIENTO
+            ========================================== -->
 
                 <div class="campo-formulario">
 
@@ -101,10 +177,21 @@
 
                     {{ form.tipo }}
 
-                    {{ form.tipo.errors }}
+                    {% if form.tipo.errors %}
+
+                    <div class="error-campo">
+                        {{ form.tipo.errors }}
+                    </div>
+
+                    {% endif %}
 
                 </div>
 
+
+
+                <!-- =========================================
+                 DESCRIPCIÓN
+            ========================================== -->
 
                 <div class="campo-formulario">
 
@@ -114,10 +201,21 @@
 
                     {{ form.descripcion }}
 
-                    {{ form.descripcion.errors }}
+                    {% if form.descripcion.errors %}
+
+                    <div class="error-campo">
+                        {{ form.descripcion.errors }}
+                    </div>
+
+                    {% endif %}
 
                 </div>
 
+
+
+                <!-- =========================================
+                 RESPONSABLE
+            ========================================== -->
 
                 <div class="campo-formulario">
 
@@ -127,10 +225,21 @@
 
                     {{ form.responsable }}
 
-                    {{ form.responsable.errors }}
+                    {% if form.responsable.errors %}
+
+                    <div class="error-campo">
+                        {{ form.responsable.errors }}
+                    </div>
+
+                    {% endif %}
 
                 </div>
 
+
+
+                <!-- =========================================
+                 ESTADO ANTERIOR
+            ========================================== -->
 
                 <div class="campo-formulario">
 
@@ -140,10 +249,21 @@
 
                     {{ form.estado_anterior }}
 
-                    {{ form.estado_anterior.errors }}
+                    {% if form.estado_anterior.errors %}
+
+                    <div class="error-campo">
+                        {{ form.estado_anterior.errors }}
+                    </div>
+
+                    {% endif %}
 
                 </div>
 
+
+
+                <!-- =========================================
+                 ESTADO POSTERIOR
+            ========================================== -->
 
                 <div class="campo-formulario">
 
@@ -153,10 +273,21 @@
 
                     {{ form.estado_posterior }}
 
-                    {{ form.estado_posterior.errors }}
+                    {% if form.estado_posterior.errors %}
+
+                    <div class="error-campo">
+                        {{ form.estado_posterior.errors }}
+                    </div>
+
+                    {% endif %}
 
                 </div>
 
+
+
+                <!-- =========================================
+                 OBSERVACIONES
+            ========================================== -->
 
                 <div class="campo-formulario">
 
@@ -166,10 +297,21 @@
 
                     {{ form.observaciones }}
 
-                    {{ form.observaciones.errors }}
+                    {% if form.observaciones.errors %}
+
+                    <div class="error-campo">
+                        {{ form.observaciones.errors }}
+                    </div>
+
+                    {% endif %}
 
                 </div>
 
+
+
+                <!-- =========================================
+                 BOTONES
+            ========================================== -->
 
                 <div class="acciones-formulario">
 
@@ -177,32 +319,40 @@
                         Guardar mantenimiento
                     </button>
 
+
                     <a href="{% url 'mantenimientos_lista' %}" class="boton boton-secundario">
                         Cancelar
                     </a>
 
                 </div>
 
+
             </form>
 
         </section>
 
+
     </main>
 
-    <footer class="pie">
 
+
+    <!-- =====================================================
+     PIE DE PÁGINA
+====================================================== -->
+
+    <footer class="pie">
 
         <div class="contenedor">
 
             <p>
                 Sistema de Inventario
-                · Bloque María Inmaculada
+                · Aulas y Servidores
             </p>
 
         </div>
 
-
     </footer>
+
 
 </body>
 

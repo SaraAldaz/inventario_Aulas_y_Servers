@@ -61,13 +61,29 @@
 
     <section class="introduccion">
 
-        <h2>
-            Aulas del Piso {{ piso.numero }}
-        </h2>
+        <div>
 
-        <p>
-            Seleccione un aula para consultar su inventario.
-        </p>
+            <h2>
+                Aulas del Piso {{ piso.numero }}
+            </h2>
+
+            <p>
+                Seleccione un aula para consultar su inventario.
+            </p>
+
+        </div>
+
+
+        <div class="acciones-seccion">
+
+            <a
+                href="{% url 'aula_crear' %}"
+                class="boton boton-primario"
+            >
+                + Agregar aula
+            </a>
+
+        </div>
 
     </section>
 
@@ -119,11 +135,23 @@
                     </p>
 
 
-                    <a
-                        href="{% url 'inventario_aula' aula.id %}"
-                    >
-                        Ver inventario →
-                    </a>
+                    <div class="acciones-tarjeta">
+
+                        <a
+                            href="{% url 'inventario_aula' aula.id %}"
+                            class="boton boton-secundario"
+                        >
+                            Ver inventario →
+                        </a>
+
+                        <a
+                            href="{% url 'aula_editar' aula.id %}"
+                            class="boton boton-secundario"
+                        >
+                            Editar
+                        </a>
+
+                    </div>
 
                 </article>
 
@@ -135,7 +163,16 @@
 
         <div class="mensaje-vacio">
 
-            No hay aulas activas registradas en el Piso {{ piso.numero }}.
+            <p>
+                No hay aulas activas registradas en el Piso {{ piso.numero }}.
+            </p>
+
+            <a
+                href="{% url 'aula_crear' %}"
+                class="boton boton-primario"
+            >
+                + Agregar primera aula
+            </a>
 
         </div>
 
@@ -149,12 +186,8 @@
 <footer class="pie">
 
     <strong>
-        Sistema de Inventario
+        Aulas y Servidores
     </strong>
-
-    <br>
-
-    Bloque María Inmaculada
 
 </footer>
 

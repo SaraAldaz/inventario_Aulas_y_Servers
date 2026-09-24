@@ -1,7 +1,6 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
@@ -18,7 +17,9 @@
 
 </head>
 
+
 <body>
+
 
     <header class="encabezado">
 
@@ -29,21 +30,35 @@
             </h1>
 
             <p>
-                Inventario de equipos tecnológicos ·
-                Bloque María Inmaculada
+                Administración de equipos tecnológicos
+                · Aulas y Servidores
             </p>
 
         </div>
 
     </header>
 
+
+
     <main class="contenedor contenido">
 
-        <section class="formulario-contenedor">
+
+        <section class="introduccion">
 
             <h2>
                 Información del equipo
             </h2>
+
+            <p>
+                Complete la información correspondiente
+                al equipo tecnológico.
+            </p>
+
+        </section>
+
+
+
+        <section class="formulario-contenedor">
 
 
             {% if form.non_field_errors %}
@@ -57,14 +72,16 @@
             {% endif %}
 
 
+
             <form method="post">
 
                 {% csrf_token %}
 
 
+
                 <!-- ==================================================
-             CÓDIGO DE INVENTARIO
-        =================================================== -->
+                 CÓDIGO DE INVENTARIO
+            =================================================== -->
 
                 <div class="campo-formulario">
 
@@ -84,9 +101,11 @@
 
                 </div>
 
+
+
                 <!-- ==================================================
-     PISO
-=================================================== -->
+                 PISO
+            =================================================== -->
 
                 <div class="campo-formulario">
 
@@ -107,9 +126,10 @@
                 </div>
 
 
+
                 <!-- ==================================================
-     AULA
-=================================================== -->
+                 AULA
+            =================================================== -->
 
                 <div class="campo-formulario">
 
@@ -130,9 +150,10 @@
                 </div>
 
 
+
                 <!-- ==================================================
-             TIPO DE EQUIPO
-        =================================================== -->
+                 TIPO DE EQUIPO
+            =================================================== -->
 
                 <div class="campo-formulario">
 
@@ -153,9 +174,10 @@
                 </div>
 
 
+
                 <!-- ==================================================
-             MARCA
-        =================================================== -->
+                 MARCA
+            =================================================== -->
 
                 <div class="campo-formulario">
 
@@ -176,9 +198,10 @@
                 </div>
 
 
+
                 <!-- ==================================================
-             MODELO
-        =================================================== -->
+                 MODELO
+            =================================================== -->
 
                 <div class="campo-formulario">
 
@@ -199,9 +222,10 @@
                 </div>
 
 
+
                 <!-- ==================================================
-             SERIAL
-        =================================================== -->
+                 SERIAL
+            =================================================== -->
 
                 <div class="campo-formulario">
 
@@ -222,9 +246,10 @@
                 </div>
 
 
+
                 <!-- ==================================================
-             ESTADO
-        =================================================== -->
+                 ESTADO
+            =================================================== -->
 
                 <div class="campo-formulario">
 
@@ -245,9 +270,10 @@
                 </div>
 
 
+
                 <!-- ==================================================
-             OBSERVACIONES
-        =================================================== -->
+                 OBSERVACIONES
+            =================================================== -->
 
                 <div class="campo-formulario">
 
@@ -268,16 +294,17 @@
                 </div>
 
 
-                <!-- ==================================================
-             ACTIVO
-        =================================================== -->
 
-                <div class="campo-formulario campo-checkbox">
+                <!-- ==================================================
+                 ACTIVO
+            =================================================== -->
+
+                <div class="campo-checkbox">
 
                     {{ form.activo }}
 
                     <label for="{{ form.activo.id_for_label }}">
-                        Activo
+                        Equipo activo
                     </label>
 
                     {% if form.activo.errors %}
@@ -291,9 +318,10 @@
                 </div>
 
 
+
                 <!-- ==================================================
-             BOTONES
-        =================================================== -->
+                 BOTONES
+            =================================================== -->
 
                 <div class="acciones-formulario">
 
@@ -311,9 +339,13 @@
 
             </form>
 
+
         </section>
 
+
     </main>
+
+
 
     <footer class="pie">
 
@@ -321,14 +353,17 @@
 
             <p>
                 Sistema de Inventario
-                · Bloque María Inmaculada
+                · Aulas y Servidores
             </p>
 
         </div>
 
     </footer>
 
+
+
     <script src="{% static 'web/js/equipo_form.js' %}"></script>
+
 
 </body>
 
