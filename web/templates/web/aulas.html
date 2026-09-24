@@ -7,58 +7,79 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
         Aulas - Piso {{ piso.numero }}
     </title>
 
-    <link
-        rel="stylesheet"
-        href="{% static 'web/css/estilos.css' %}"
-    >
+    <link rel="stylesheet"
+          href="{% static 'web/css/estilos.css' %}">
 
 </head>
 
+
 <body>
 
-    <header class="encabezado">
 
-        <div class="contenedor">
+<header class="encabezado">
+
+    <div class="contenedor">
+
+        <div>
 
             <h1>
-                Inventario de Aulas Informáticas
+                Piso {{ piso.numero }}
             </h1>
 
             <p>
-                Bloque María Inmaculada
+                Aulas disponibles en este piso
             </p>
 
         </div>
 
-    </header>
+
+        <a
+            href="{% url 'inicio' %}"
+            class="boton-volver"
+        >
+            ← Volver a pisos
+        </a>
+
+    </div>
+
+</header>
 
 
-    <main class="contenedor contenido">
 
-        <section class="introduccion">
-
-            <h2>
-                Aulas del Piso {{ piso.numero }}
-            </h2>
-
-            <p>
-                Seleccione un aula para consultar
-                su inventario.
-            </p>
-
-        </section>
+<main class="contenedor contenido">
 
 
-        <section class="pisos">
+    <!-- =====================================================
+         ENCABEZADO DE LA SECCIÓN
+    ====================================================== -->
+
+    <section class="introduccion">
+
+        <h2>
+            Aulas del Piso {{ piso.numero }}
+        </h2>
+
+        <p>
+            Seleccione un aula para consultar su inventario.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         AULAS
+    ====================================================== -->
+
+    {% if aulas %}
+
+        <div class="pisos">
 
             {% for aula in aulas %}
 
@@ -68,47 +89,75 @@
                         🖥️
                     </div>
 
+
                     <h3>
-                        Aula {{ aula.numero }}
+                        Aula {{ aula.codigo }}
                     </h3>
 
+
+                    {% if aula.nombre %}
+
+                        <p>
+                            {{ aula.nombre }}
+                        </p>
+
+                    {% else %}
+
+                        <p>
+                            Aula de informática
+                        </p>
+
+                    {% endif %}
+
+
                     <p>
-                        Consulte el inventario
-                        tecnológico y mobiliario.
+                        Capacidad:
+                        <strong>
+                            {{ aula.capacidad }}
+                        </strong>
+                        estudiantes
                     </p>
 
-                    <a href="{% url 'inventario_aula' aula.id %}">
+
+                    <a
+                        href="{% url 'inventario_aula' aula.id %}"
+                    >
                         Ver inventario →
                     </a>
 
                 </article>
 
-            {% empty %}
-
-                <p>
-                    No hay aulas registradas
-                    para este piso.
-                </p>
-
             {% endfor %}
-
-        </section>
-
-    </main>
-
-
-    <footer class="pie">
-
-        <div class="contenedor">
-
-            <p>
-                Sistema de Inventario
-                · Bloque María Inmaculada
-            </p>
 
         </div>
 
-    </footer>
+    {% else %}
+
+        <div class="mensaje-vacio">
+
+            No hay aulas activas registradas en el Piso {{ piso.numero }}.
+
+        </div>
+
+    {% endif %}
+
+
+</main>
+
+
+
+<footer class="pie">
+
+    <strong>
+        Sistema de Inventario
+    </strong>
+
+    <br>
+
+    Bloque María Inmaculada
+
+</footer>
+
 
 </body>
 
