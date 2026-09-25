@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
@@ -24,6 +26,37 @@ from inventario.forms import (
 )
 
 
+def login_usuario(request):
+
+    if request.user.is_authenticated:
+        return redirect("inicio")
+
+    if request.method == "POST":
+
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        usuario = authenticate(request, username=username, password=password)
+
+        if usuario is not None:
+
+            login(request, usuario)
+
+            return redirect("inicio")
+
+        contexto = {"error": "Usuario o contraseña incorrectos."}
+
+        return render(request, "web/login.html", contexto)
+
+    return render(request, "web/login.html")
+
+
+def logout_usuario(request):
+    logout(request)
+    return redirect("login")
+
+
+@login_required
 def inicio(request):
 
     pisos = Piso.objects.all().order_by("numero")
