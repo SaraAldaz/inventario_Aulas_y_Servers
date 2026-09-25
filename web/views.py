@@ -61,8 +61,18 @@ def inicio(request):
 
     pisos = Piso.objects.all().order_by("numero")
 
+    es_admin = request.user.groups.filter(
+        name="Administradores"
+    ).exists()
+
+    es_personal = request.user.groups.filter(
+        name="Personal"
+    ).exists()
+
     contexto = {
         "pisos": pisos,
+        "es_admin": es_admin,
+        "es_personal": es_personal,
     }
 
     return render(request, "web/inicio.html", contexto)
