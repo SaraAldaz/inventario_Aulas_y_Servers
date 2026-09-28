@@ -1,0 +1,236 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Panel de personal - Inventario
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+</head>
+
+<body>
+
+    <!-- ========================================================= -->
+    <!-- ENCABEZADO -->
+    <!-- ========================================================= -->
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <div>
+
+                <h1>
+                    Panel de personal
+                </h1>
+
+                <p>
+                    Sistema de Inventario · Bloque María Inmaculada
+                </p>
+
+            </div>
+
+            <div>
+
+                <p>
+                    Usuario:
+                    <strong>
+                        {{ usuario.get_full_name|default:usuario.username }}
+                    </strong>
+                </p>
+
+                <a href="{% url 'logout' %}" class="boton boton-secundario">
+                    Cerrar sesión
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ========================================================= -->
+    <!-- CONTENIDO -->
+    <!-- ========================================================= -->
+
+    <main class="contenedor contenido">
+
+
+        <!-- ===================================================== -->
+        <!-- BIENVENIDA -->
+        <!-- ===================================================== -->
+
+        <section class="introduccion">
+
+            <h2>
+                Bienvenido al sistema
+            </h2>
+
+            <p>
+                Desde este panel puede consultar el inventario de las
+                aulas y registrar movimientos y mantenimientos de los
+                activos institucionales.
+            </p>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- INVENTARIO POR PISO -->
+        <!-- ===================================================== -->
+
+        <section class="introduccion">
+
+            <h2>
+                Inventario por piso
+            </h2>
+
+            <p>
+                Seleccione un piso para consultar las aulas y los activos
+                disponibles.
+            </p>
+
+        </section>
+
+
+        <section class="tarjetas">
+
+            {% for piso in pisos %}
+
+            <a href="{% url 'personal_aulas_por_piso' piso.id %}" class="tarjeta">
+
+                <h3>
+                    Piso {{ piso.numero }}
+                </h3>
+
+                {% if piso.nombre %}
+
+                <p>
+                    {{ piso.nombre }}
+                </p>
+
+                {% else %}
+
+                <p>
+                    Consultar aulas
+                </p>
+
+                {% endif %}
+
+                <span class="boton boton-primario">
+                    Ver inventario →
+                </span>
+
+            </a>
+
+            {% empty %}
+
+            <div class="sin-registros">
+
+                No hay pisos registrados.
+
+            </div>
+
+            {% endfor %}
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- OPERACIONES -->
+        <!-- ===================================================== -->
+
+        <section class="introduccion">
+
+            <h2>
+                Operaciones
+            </h2>
+
+            <p>
+                Registre las actividades realizadas sobre los activos
+                del inventario.
+            </p>
+
+        </section>
+
+
+        <section class="tarjetas">
+
+
+            <!-- MANTENIMIENTOS -->
+
+            <a href="{% url 'personal_mantenimientos_lista' %}" class="tarjeta">
+
+                <h3>
+                    Mantenimientos
+                </h3>
+
+                <p>
+                    Consulte los mantenimientos registrados y registre
+                    nuevos mantenimientos de activos.
+                </p>
+
+                <span class="boton boton-primario">
+                    Ver mantenimientos →
+                </span>
+
+            </a>
+
+
+            <!-- MOVIMIENTOS -->
+
+            <a href="{% url 'personal_movimientos_lista' %}" class="tarjeta">
+
+                <h3>
+                    Movimientos
+                </h3>
+
+                <p>
+                    Consulte los movimientos de activos y registre
+                    nuevos traslados, salidas o reingresos.
+                </p>
+
+                <span class="boton boton-primario">
+                    Ver movimientos →
+                </span>
+
+            </a>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ========================================================= -->
+    <!-- PIE -->
+    <!-- ========================================================= -->
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+            </p>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>

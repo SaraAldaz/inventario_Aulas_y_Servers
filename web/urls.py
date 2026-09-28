@@ -3,65 +3,36 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.inicio, name="inicio"),
-    path("login/", views.login_usuario, name="login"),
-    path("logout/", views.logout_usuario, name="logout"),
-    path("piso/<int:piso_id>/", views.aulas_por_piso, name="aulas_por_piso"),
-    path("aula/<int:aula_id>/", views.inventario_aula, name="inventario_aula"),
+    # ============================================================
+    # AUTENTICACIÓN
+    # ============================================================
     path(
-        "api/aulas-por-piso/<int:piso_id>/",
-        views.aulas_por_piso_api,
-        name="aulas_por_piso_api",
+        "login/",
+        views.login_usuario,
+        name="login",
     ),
     path(
-        "computadores/<int:computador_id>",
-        views.detalle_computador,
-        name="detalle_computador",
+        "logout/",
+        views.logout_usuario,
+        name="logout",
     ),
-    path("equipo/<int:equipo_id>", views.detalle_equipo, name="detalle_equipo"),
+    # ============================================================
+    # PANELES PRINCIPALES
+    # ============================================================
     path(
-        "mobiliario/<int:mobiliario_id>/",
-        views.detalle_mobiliario,
-        name="detalle_mobiliario",
-    ),
-    path("mobiliario/", views.mobiliario_lista, name="mobiliario_lista"),
-    path(
-        "api/aula-activo/<str:tipo>/<int:activo_id>/",
-        views.aula_activo,
-        name="aula_activo",
+        "",
+        views.inicio,
+        name="inicio",
     ),
     path(
-        "inventario/api/aula-activo/<str:tipo>/<int:activo_id>/",
-        views.aula_activo,
-        name="aula_activo",
+        "panel-personal/",
+        views.panel_personal,
+        name="panel_personal",
     ),
-    path("computadores/", views.computadores_lista, name="computadores_lista"),
-    path("computadores/nuevo/", views.computador_crear, name="computador_crear"),
-    path(
-        "computadores/<int:computador_id>/editar/",
-        views.computador_editar,
-        name="computador_editar",
-    ),
-    path(
-        "computadores/<int:computador_id>/desactivar/",
-        views.computador_desactivar,
-        name="computador_desactivar",
-    ),
-    path(
-        "computadores/<int:computador_id>/activar/",
-        views.computador_activar,
-        name="computador_activar",
-    ),
-    path(
-        "equipos/",
-        views.equipos_lista,
-        name="equipos_lista",
-    ),
-    path(
-        "equipos/nuevo/",
-        views.equipo_crear,
-        name="equipo_crear",
-    ),
+    # ============================================================
+    # INFRAESTRUCTURA
+    # ============================================================
+    # Pisos
     path(
         "pisos/",
         views.pisos_lista,
@@ -77,6 +48,7 @@ urlpatterns = [
         views.piso_editar,
         name="piso_editar",
     ),
+    # Aulas
     path(
         "aulas/",
         views.aulas_lista,
@@ -93,6 +65,83 @@ urlpatterns = [
         name="aula_editar",
     ),
     path(
+        "piso/<int:piso_id>/",
+        views.aulas_por_piso,
+        name="aulas_por_piso",
+    ),
+    path(
+        "aula/<int:aula_id>/",
+        views.inventario_aula,
+        name="inventario_aula",
+    ),
+    # ============================================================
+    # COMPUTADORES
+    # ============================================================
+    path(
+        "computadores/",
+        views.computadores_lista,
+        name="computadores_lista",
+    ),
+    path(
+        "computadores/nuevo/",
+        views.computador_crear,
+        name="computador_crear",
+    ),
+    path(
+        "computadores/<int:computador_id>/editar/",
+        views.computador_editar,
+        name="computador_editar",
+    ),
+    path(
+        "computadores/<int:computador_id>/desactivar/",
+        views.computador_desactivar,
+        name="computador_desactivar",
+    ),
+    path(
+        "computadores/<int:computador_id>/activar/",
+        views.computador_activar,
+        name="computador_activar",
+    ),
+    path(
+        "computadores/<int:computador_id>/",
+        views.detalle_computador,
+        name="detalle_computador",
+    ),
+    # ============================================================
+    # EQUIPOS TECNOLÓGICOS
+    # ============================================================
+    path(
+        "equipos/",
+        views.equipos_lista,
+        name="equipos_lista",
+    ),
+    path(
+        "equipos/nuevo/",
+        views.equipo_crear,
+        name="equipo_crear",
+    ),
+    path(
+        "equipo/<int:equipo_id>/",
+        views.detalle_equipo,
+        name="detalle_equipo",
+    ),
+    # ============================================================
+    # MOBILIARIO
+    # ============================================================
+    path(
+        "mobiliario/",
+        views.mobiliario_lista,
+        name="mobiliario_lista",
+    ),
+    path(
+        "mobiliario/<int:mobiliario_id>/",
+        views.detalle_mobiliario,
+        name="detalle_mobiliario",
+    ),
+    # ============================================================
+    # PERSONAL
+    # ============================================================
+    path(
         "personal/",
         views.personal_lista,
         name="personal_lista",
@@ -103,6 +152,34 @@ urlpatterns = [
         name="personal_crear",
     ),
     path(
+        "panel-personal/",
+        views.panel_personal,
+        name="panel_personal",
+    ),
+    path(
+        "panel-personal/piso/<int:piso_id>/",
+        views.personal_aulas_por_piso,
+        name="personal_aulas_por_piso",
+    ),
+    path(
+        "panel-personal/aula/<int:aula_id>/",
+        views.personal_inventario_aula,
+        name="personal_inventario_aula",
+    ),
+    path(
+        "panel-personal/mantenimientos/",
+        views.personal_mantenimientos_lista,
+        name="personal_mantenimientos_lista",
+    ),
+    path(
+        "panel-personal/movimientos/",
+        views.personal_movimientos_lista,
+        name="personal_movimientos_lista",
+    ),
+    # ============================================================
+    # MANTENIMIENTOS
+    # ============================================================
+    path(
         "mantenimientos/",
         views.mantenimientos_lista,
         name="mantenimientos_lista",
@@ -112,14 +189,52 @@ urlpatterns = [
         views.mantenimiento_crear,
         name="mantenimiento_crear",
     ),
-    path(
-        "movimientos/nuevo/",
-        views.movimiento_crear,
-        name="movimiento_crear",
-    ),
+    # ============================================================
+    # MOVIMIENTOS
+    # ============================================================
     path(
         "movimientos/",
         views.movimientos_lista,
         name="movimientos_lista",
     ),
+    path(
+        "movimientos/nuevo/",
+        views.movimiento_crear,
+        name="movimiento_crear",
+    ),
+    # ============================================================
+    # API
+    # ============================================================
+    path(
+        "api/aulas-por-piso/<int:piso_id>/",
+        views.aulas_por_piso_api,
+        name="aulas_por_piso_api",
+    ),
+    path(
+        "api/aula-activo/<str:tipo>/<int:activo_id>/",
+        views.aula_activo,
+        name="aula_activo",
+    ),
+    # Esta ruta la mantengo porque actualmente la tienes
+    # y podría estar siendo utilizada por JavaScript.
+    path(
+        "inventario/api/aula-activo/<str:tipo>/<int:activo_id>/",
+        views.aula_activo,
+        name="aula_activo",
+    ),
 ]
+
+
+# MANTENIMIENTOS Y MOVIMIENTOS PERSONAL
+
+path(
+    "personal/mantenimientos/",
+    views.mantenimientos_personal,
+    name="mantenimientos_personal",
+),
+
+path(
+    "personal/movimientos/",
+    views.movimientos_personal,
+    name="movimientos_personal",
+),

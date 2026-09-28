@@ -1,0 +1,163 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {{ piso }} - Inventario
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+
+</head>
+
+<body>
+
+<header class="encabezado">
+
+    <div class="contenedor">
+
+        <h1>
+            {{ piso }}
+        </h1>
+
+        <p>
+            Inventario por aulas
+        </p>
+
+    </div>
+
+</header>
+
+
+<main class="contenedor contenido">
+
+
+    <section class="introduccion">
+
+        <h2>
+            Aulas del {{ piso }}
+        </h2>
+
+        <p>
+            Seleccione un aula para consultar su inventario.
+        </p>
+
+        <a
+            href="{% url 'panel_personal' %}"
+            class="boton boton-secundario"
+        >
+            ← Volver al panel
+        </a>
+
+    </section>
+
+
+    <section class="tabla-contenedor">
+
+        <table class="tabla-inventario">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Aula
+                    </th>
+
+                    <th>
+                        Nombre
+                    </th>
+
+                    <th>
+                        Capacidad
+                    </th>
+
+                    <th>
+                        Acción
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for aula in aulas %}
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ aula.codigo }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ aula.nombre }}
+                    </td>
+
+                    <td>
+                        {{ aula.capacidad }}
+                    </td>
+
+                    <td>
+
+                        <a
+                            href="{% url 'personal_inventario_aula' aula.id %}"
+                            class="boton boton-primario"
+                        >
+                            Ver inventario
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="sin-registros"
+                    >
+                        No hay aulas activas en este piso.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+</main>
+
+
+<footer class="pie">
+
+    <div class="contenedor">
+
+        <p>
+            Sistema de Inventario
+        </p>
+
+    </div>
+
+</footer>
+
+</body>
+
+</html>
