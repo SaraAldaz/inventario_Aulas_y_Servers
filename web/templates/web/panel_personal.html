@@ -1,55 +1,457 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
 
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>
-        Panel de personal - Inventario
-    </title>
+    <title>Panel de personal | Sistema de Inventario</title>
 
-    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+            background: linear-gradient(135deg,
+                    #0f4c81,
+                    #1f6b9e);
+
+            color: white;
+            padding: 22px 0;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .header-container {
+            width: min(1180px, 92%);
+            margin: auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .brand h1 {
+            font-size: 25px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .brand p {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-label {
+            font-size: 12px;
+            opacity: 0.75;
+        }
+
+        .username {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            display: inline-block;
+
+            background: white;
+            color: #0f4c81;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: #eaf1f7;
+            transform: translateY(-1px);
+        }
+
+
+        /* =====================================================
+           CONTENEDOR
+        ===================================================== */
+
+        .container {
+            width: min(1180px, 92%);
+            margin: 35px auto 60px;
+        }
+
+
+        /* =====================================================
+           BIENVENIDA
+        ===================================================== */
+
+        .welcome {
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 28px 30px;
+
+            margin-bottom: 32px;
+
+            border: 1px solid #e3e8ee;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .welcome h2 {
+            font-size: 24px;
+            color: #12395b;
+
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #64748b;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           TITULOS DE SECCION
+        ===================================================== */
+
+        .section {
+            margin-bottom: 38px;
+        }
+
+        .section-header {
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-size: 21px;
+            color: #12395b;
+            font-weight: 700;
+
+            margin-bottom: 5px;
+        }
+
+        .section-description {
+            color: #718096;
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           PISOS
+        ===================================================== */
+
+        .floors-grid {
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit,
+                    minmax(210px, 1fr));
+
+            gap: 18px;
+        }
+
+        .floor-card {
+            background: white;
+
+            border: 1px solid #e1e7ee;
+
+            border-radius: 13px;
+
+            padding: 24px;
+
+            text-decoration: none;
+            color: inherit;
+
+            display: flex;
+            flex-direction: column;
+
+            min-height: 145px;
+
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .floor-card:hover {
+            transform: translateY(-4px);
+
+            border-color: #2875a8;
+
+            box-shadow:
+                0 10px 25px rgba(15, 76, 129, 0.13);
+        }
+
+        .floor-icon {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 10px;
+
+            background: #eaf3f9;
+
+            color: #17608e;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+
+            margin-bottom: 16px;
+        }
+
+        .floor-name {
+            font-size: 17px;
+            font-weight: 700;
+
+            color: #1e3a56;
+
+            margin-bottom: 6px;
+        }
+
+        .floor-action {
+            margin-top: auto;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            color: #2670a0;
+        }
+
+
+        /* =====================================================
+           OPERACIONES
+        ===================================================== */
+
+        .operations-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit,
+                    minmax(280px, 1fr));
+
+            gap: 20px;
+        }
+
+        .operation-card {
+            background: white;
+
+            border: 1px solid #e1e7ee;
+
+            border-radius: 14px;
+
+            padding: 25px;
+
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+        }
+
+        .operation-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #edf5fa;
+
+            color: #17608e;
+
+            font-size: 22px;
+
+            margin-bottom: 17px;
+        }
+
+        .operation-card h3 {
+            color: #1e3a56;
+
+            font-size: 18px;
+
+            margin-bottom: 8px;
+        }
+
+        .operation-card p {
+            color: #718096;
+
+            font-size: 14px;
+
+            line-height: 1.55;
+
+            margin-bottom: 20px;
+        }
+
+        .operation-buttons {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+
+            padding: 10px 15px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #17608e;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #124d75;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #edf2f6;
+            color: #31516c;
+        }
+
+        .btn-secondary:hover {
+            background: #dfe8ef;
+        }
+
+
+        /* =====================================================
+           PIE
+        ===================================================== */
+
+        .footer {
+            text-align: center;
+
+            color: #8a98a8;
+
+            font-size: 13px;
+
+            padding-top: 10px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .user-area {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .user-info {
+                text-align: left;
+            }
+
+            .container {
+                width: 94%;
+                margin-top: 25px;
+            }
+
+            .welcome {
+                padding: 22px;
+            }
+
+        }
+    </style>
 
 </head>
 
+
 <body>
 
-    <!-- ========================================================= -->
-    <!-- ENCABEZADO -->
-    <!-- ========================================================= -->
 
-    <header class="encabezado">
+    <!-- =========================================================
+     HEADER
+========================================================= -->
 
-        <div class="contenedor">
+    <header class="header">
 
-            <div>
+        <div class="header-container">
+
+            <div class="brand">
 
                 <h1>
-                    Panel de personal
+                    Sistema de Inventario
                 </h1>
 
                 <p>
-                    Sistema de Inventario · Bloque María Inmaculada
+                    Bloque María Inmaculada · Universidad Mariana
                 </p>
 
             </div>
 
-            <div>
 
-                <p>
-                    Usuario:
-                    <strong>
+            <div class="user-area">
+
+                <div class="user-info">
+
+                    <div class="user-label">
+                        Usuario
+                    </div>
+
+                    <div class="username">
                         {{ usuario.get_full_name|default:usuario.username }}
-                    </strong>
-                </p>
+                    </div>
 
-                <a href="{% url 'logout' %}" class="boton boton-secundario">
+                </div>
+
+
+                <a href="{% url 'logout' %}" class="logout-btn">
                     Cerrar sesión
                 </a>
 
@@ -60,175 +462,205 @@
     </header>
 
 
-    <!-- ========================================================= -->
-    <!-- CONTENIDO -->
-    <!-- ========================================================= -->
 
-    <main class="contenedor contenido">
+    <!-- =========================================================
+     CONTENIDO
+========================================================= -->
+
+    <main class="container">
 
 
-        <!-- ===================================================== -->
         <!-- BIENVENIDA -->
-        <!-- ===================================================== -->
 
-        <section class="introduccion">
+        <section class="welcome">
 
             <h2>
                 Bienvenido al sistema
             </h2>
 
             <p>
-                Desde este panel puede consultar el inventario de las
-                aulas y registrar movimientos y mantenimientos de los
-                activos institucionales.
+                Desde este panel puede consultar el inventario
+                de las aulas y registrar movimientos y mantenimientos
+                de los activos institucionales.
             </p>
 
         </section>
 
 
-        <!-- ===================================================== -->
-        <!-- INVENTARIO POR PISO -->
-        <!-- ===================================================== -->
 
-        <section class="introduccion">
+        <!-- =====================================================
+         INVENTARIO POR PISO
+    ====================================================== -->
 
-            <h2>
-                Inventario por piso
-            </h2>
+        <section class="section">
 
-            <p>
-                Seleccione un piso para consultar las aulas y los activos
-                disponibles.
-            </p>
+            <div class="section-header">
 
-        </section>
+                <h2 class="section-title">
+                    Inventario por piso
+                </h2>
 
-
-        <section class="tarjetas">
-
-            {% for piso in pisos %}
-
-            <a href="{% url 'personal_aulas_por_piso' piso.id %}" class="tarjeta">
-
-                <h3>
-                    Piso {{ piso.numero }}
-                </h3>
-
-                {% if piso.nombre %}
-
-                <p>
-                    {{ piso.nombre }}
+                <p class="section-description">
+                    Seleccione un piso para consultar las aulas
+                    y los activos disponibles.
                 </p>
-
-                {% else %}
-
-                <p>
-                    Consultar aulas
-                </p>
-
-                {% endif %}
-
-                <span class="boton boton-primario">
-                    Ver inventario →
-                </span>
-
-            </a>
-
-            {% empty %}
-
-            <div class="sin-registros">
-
-                No hay pisos registrados.
 
             </div>
 
-            {% endfor %}
 
-        </section>
+            {% if pisos %}
 
+            <div class="floors-grid">
 
-        <!-- ===================================================== -->
-        <!-- OPERACIONES -->
-        <!-- ===================================================== -->
+                {% for piso in pisos %}
 
-        <section class="introduccion">
+                <a href="{% url 'personal_aulas_por_piso' piso.id %}" class="floor-card">
 
-            <h2>
-                Operaciones
-            </h2>
+                    <div class="floor-icon">
+                        🏢
+                    </div>
 
-            <p>
-                Registre las actividades realizadas sobre los activos
-                del inventario.
-            </p>
+                    <div class="floor-name">
 
-        </section>
+                        {{ piso }}
 
+                    </div>
 
-        <section class="tarjetas">
+                    <div class="floor-action">
 
+                        Consultar aulas →
 
-            <!-- MANTENIMIENTOS -->
+                    </div>
 
-            <a href="{% url 'personal_mantenimientos_lista' %}" class="tarjeta">
+                </a>
 
-                <h3>
-                    Mantenimientos
-                </h3>
+                {% endfor %}
 
-                <p>
-                    Consulte los mantenimientos registrados y registre
-                    nuevos mantenimientos de activos.
-                </p>
+            </div>
 
-                <span class="boton boton-primario">
-                    Ver mantenimientos →
-                </span>
+            {% else %}
 
-            </a>
-
-
-            <!-- MOVIMIENTOS -->
-
-            <a href="{% url 'personal_movimientos_lista' %}" class="tarjeta">
-
-                <h3>
-                    Movimientos
-                </h3>
+            <div class="welcome">
 
                 <p>
-                    Consulte los movimientos de activos y registre
-                    nuevos traslados, salidas o reingresos.
+                    No hay pisos activos registrados.
                 </p>
 
-                <span class="boton boton-primario">
-                    Ver movimientos →
-                </span>
+            </div>
 
-            </a>
-
+            {% endif %}
 
         </section>
 
 
-    </main>
+
+        <!-- =====================================================
+         OPERACIONES
+    ====================================================== -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+                    Operaciones
+                </h2>
+
+                <p class="section-description">
+                    Consulte y registre actividades relacionadas
+                    con los activos del inventario.
+                </p>
+
+            </div>
 
 
-    <!-- ========================================================= -->
-    <!-- PIE -->
-    <!-- ========================================================= -->
+            <div class="operations-grid">
 
-    <footer class="pie">
 
-        <div class="contenedor">
+                <!-- MANTENIMIENTOS -->
 
-            <p>
-                Sistema de Inventario
-            </p>
+                <article class="operation-card">
+
+                    <div class="operation-icon">
+                        🔧
+                    </div>
+
+                    <h3>
+                        Mantenimientos
+                    </h3>
+
+                    <p>
+                        Consulte los mantenimientos registrados
+                        y registre nuevos mantenimientos realizados
+                        sobre los activos institucionales.
+                    </p>
+
+                    <div class="operation-buttons">
+
+                        <a href="{% url 'mantenimientos_lista' %}" class="btn btn-secondary">
+                            Ver mantenimientos
+                        </a>
+
+                        <a href="{% url 'mantenimiento_crear' %}" class="btn btn-primary">
+                            Registrar
+                        </a>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- MOVIMIENTOS -->
+
+                <article class="operation-card">
+
+                    <div class="operation-icon">
+                        ↔
+                    </div>
+
+                    <h3>
+                        Movimientos
+                    </h3>
+
+                    <p>
+                        Consulte los movimientos de activos y registre
+                        traslados, salidas o reingresos.
+                    </p>
+
+                    <div class="operation-buttons">
+
+                        <a href="{% url 'movimientos_lista' %}" class="btn btn-secondary">
+                            Ver movimientos
+                        </a>
+
+                        <a href="{% url 'movimiento_crear' %}" class="btn btn-primary">
+                            Registrar
+                        </a>
+
+                    </div>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+        <div class="footer">
+
+            Sistema de Inventario
 
         </div>
 
-    </footer>
+
+    </main>
 
 
 </body>

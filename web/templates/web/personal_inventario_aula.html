@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inventario del aula | Sistema de Inventario</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg,
+                    #0f4c81,
+                    #1f6b9e);
+
+            color: white;
+            padding: 22px 0;
+
+            box-shadow:
+                0 3px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .header-container {
+            width: min(1180px, 92%);
+            margin: auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .brand p {
+            font-size: 14px;
+            opacity: .85;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .username {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #0f4c81;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* CONTENIDO */
+
+        .container {
+            width: min(1180px, 92%);
+            margin: 35px auto 60px;
+        }
+
+        .back {
+            display: inline-block;
+
+            margin-bottom: 20px;
+
+            color: #17608e;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        /* CABECERA DEL AULA */
+
+        .aula-header {
+            background: white;
+
+            border: 1px solid #e1e7ee;
+
+            border-radius: 14px;
+
+            padding: 28px;
+
+            margin-bottom: 28px;
+
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, .04);
+        }
+
+        .aula-header h2 {
+            color: #12395b;
+
+            font-size: 26px;
+
+            margin-bottom: 7px;
+        }
+
+        .aula-header p {
+            color: #718096;
+
+            font-size: 14px;
+        }
+
+        /* RESUMEN */
+
+        .summary-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit,
+                    minmax(180px, 1fr));
+
+            gap: 16px;
+
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+
+            border: 1px solid #e1e7ee;
+
+            border-radius: 12px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, .04);
+        }
+
+        .summary-title {
+            color: #718096;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+        .summary-number {
+            color: #12395b;
+
+            font-size: 28px;
+
+            font-weight: 700;
+        }
+
+        /* SECCIONES */
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #12395b;
+
+            font-size: 21px;
+
+            margin-bottom: 15px;
+        }
+
+        .card {
+            background: white;
+
+            border: 1px solid #e1e7ee;
+
+            border-radius: 13px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, .04);
+        }
+
+        /* TABLAS */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f1f5f8;
+
+            color: #334e68;
+
+            font-size: 13px;
+
+            text-align: left;
+
+            padding: 14px 16px;
+
+            border-bottom: 1px solid #dfe6ec;
+        }
+
+        td {
+            padding: 14px 16px;
+
+            font-size: 14px;
+
+            color: #4a5568;
+
+            border-bottom: 1px solid #edf1f4;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 6px;
+
+            background: #eaf3f9;
+
+            color: #17608e;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+        .empty {
+            padding: 25px;
+
+            color: #718096;
+
+            text-align: center;
+
+            font-size: 14px;
+        }
+
+        /* BOTONES */
+
+        .actions {
+            margin-top: 25px;
+
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #17608e;
+
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e9eef3;
+
+            color: #31516c;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 700px) {
+
+            .header-container {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .user-area {
+                width: 100%;
+
+                justify-content: space-between;
+            }
+
+            .container {
+                width: 94%;
+
+                margin-top: 25px;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <header class="header">
+
+        <div class="header-container">
+
+            <div class="brand">
+
+                <h1>
+                    Sistema de Inventario
+                </h1>
+            </div>
+
+
+            <div class="user-area">
+
+                <span class="username">
+                    {{ request.user.get_full_name|default:request.user.username }}
+                </span>
+
+                <a href="{% url 'logout' %}" class="logout-btn">
+                    Cerrar sesión
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+
+        <a href="{% url 'personal_aulas_por_piso' aula.piso.id %}" class="back">
+            ← Volver a las aulas
+        </a>
+
+
+        <!-- CABECERA DEL AULA -->
+
+        <section class="aula-header">
+
+            <h2>
+                {{ aula }}
+            </h2>
+
+            <p>
+                Inventario de activos asignados al aula.
+            </p>
+
+        </section>
+
+
+        <!-- RESUMEN -->
+
+        <section class="summary-grid">
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    Computadores
+                </div>
+
+                <div class="summary-number">
+                    {{ cantidad_computadores }}
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    Equipos tecnológicos
+                </div>
+
+                <div class="summary-number">
+                    {{ cantidad_equipos }}
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    Mesas
+                </div>
+
+                <div class="summary-number">
+                    {{ cantidad_mesas }}
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    Sillas
+                </div>
+
+                <div class="summary-number">
+                    {{ cantidad_sillas }}
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- COMPUTADORES -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                Computadores
+            </h2>
+
+
+            <div class="card">
+
+                {% if computadores %}
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Código
+                                </th>
+
+                                <th>
+                                    Marca
+                                </th>
+
+                                <th>
+                                    Modelo
+                                </th>
+
+                                <th>
+                                    Estado
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for computador in computadores %}
+
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        {{ computador.codigo_inventario }}
+                                    </strong>
+
+                                </td>
+
+                                <td>
+                                    {{ computador.marca|default:"-" }}
+                                </td>
+
+                                <td>
+                                    {{ computador.modelo|default:"-" }}
+                                </td>
+
+                                <td>
+
+                                    <span class="badge">
+                                        {{ computador.get_estado_display }}
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty">
+                    No hay computadores registrados en esta aula.
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- EQUIPOS TECNOLÓGICOS -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                Equipos tecnológicos
+            </h2>
+
+
+            <div class="card">
+
+                {% if equipos %}
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Código
+                                </th>
+
+                                <th>
+                                    Tipo
+                                </th>
+
+                                <th>
+                                    Marca
+                                </th>
+
+                                <th>
+                                    Modelo
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for equipo in equipos %}
+
+                            <tr>
+
+                                <td>
+                                    {{ equipo.codigo_inventario }}
+                                </td>
+
+                                <td>
+                                    {{ equipo.get_tipo_display }}
+                                </td>
+
+                                <td>
+                                    {{ equipo.marca|default:"-" }}
+                                </td>
+
+                                <td>
+                                    {{ equipo.modelo|default:"-" }}
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty">
+                    No hay equipos tecnológicos registrados.
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- MOBILIARIO -->
+
+        <section class="section">
+
+            <h2 class="section-title">
+                Mobiliario
+            </h2>
+
+
+            <div class="card">
+
+                {% if mobiliario %}
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Código
+                                </th>
+
+                                <th>
+                                    Tipo
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for item in mobiliario %}
+
+                            <tr>
+
+                                <td>
+                                    {{ item.codigo_inventario }}
+                                </td>
+
+                                <td>
+                                    {{ item.get_tipo_display }}
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty">
+                    No hay mobiliario registrado en esta aula.
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <div class="actions">
+
+            <a href="{% url 'mantenimiento_crear' %}" class="btn btn-primary">
+                Registrar mantenimiento
+            </a>
+
+            <a href="{% url 'movimiento_crear' %}" class="btn btn-primary">
+                Registrar movimiento
+            </a>
+
+        </div>
+
+
+    </main>
+
+
+</body>
+
+</html>

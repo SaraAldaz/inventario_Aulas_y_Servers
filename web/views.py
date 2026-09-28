@@ -138,14 +138,15 @@ def inicio(request):
 @login_required
 @solo_personal
 def panel_personal(request):
+
     pisos = Piso.objects.filter(activo=True).order_by("numero")
 
     contexto = {
         "usuario": request.user,
+        "pisos": pisos,
     }
 
     return render(request, "web/panel_personal.html", contexto)
-
 
 @login_required
 @solo_personal
@@ -174,37 +175,24 @@ def personal_aulas_por_piso(request, piso_id):
 @solo_personal
 def personal_inventario_aula(request, aula_id):
 
-    aula = get_object_or_404(
-        Aula,
-        id=aula_id,
-        activo=True
-    )
+    aula = get_object_or_404(Aula, id=aula_id)
 
-    computadores = aula.computadores.filter(
-        activo=True
-    )
+    computadores = aula.computadores.all()
+    equipos = aula.equipos_tecnologicos.all()
+    mobiliario = aula.mobiliario.all()
 
-    equipos = aula.equipos_tecnologicos.filter(
-        activo=True
-    )
-
-    mobiliario = aula.mobiliario.filter(
-        activo=True
-    )
-
-    cantidad_mesas = mobiliario.filter(
-        tipo="MESA"
-    ).count()
-
-    cantidad_sillas = mobiliario.filter(
-        tipo="SILLA"
-    ).count()
+    cantidad_mesas = mobiliario.filter(tipo="MESA").count()
+    cantidad_sillas = mobiliario.filter(tipo="SILLA").count()
 
     contexto = {
+        "usuario": request.user,
+
         "aula": aula,
+
         "computadores": computadores,
         "equipos": equipos,
         "mobiliario": mobiliario,
+
         "cantidad_computadores": computadores.count(),
         "cantidad_equipos": equipos.count(),
         "cantidad_mesas": cantidad_mesas,
@@ -216,6 +204,7 @@ def personal_inventario_aula(request, aula_id):
         "web/personal_inventario_aula.html",
         contexto
     )
+
 
 @login_required
 @solo_personal
