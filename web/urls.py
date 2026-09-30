@@ -16,6 +16,7 @@ urlpatterns = [
         views.logout_usuario,
         name="logout",
     ),
+
     # ============================================================
     # PANELES PRINCIPALES
     # ============================================================
@@ -29,9 +30,11 @@ urlpatterns = [
         views.panel_personal,
         name="panel_personal",
     ),
+
     # ============================================================
     # INFRAESTRUCTURA
     # ============================================================
+
     # Pisos
     path(
         "pisos/",
@@ -48,6 +51,7 @@ urlpatterns = [
         views.piso_editar,
         name="piso_editar",
     ),
+
     # Aulas
     path(
         "aulas/",
@@ -74,6 +78,7 @@ urlpatterns = [
         views.inventario_aula,
         name="inventario_aula",
     ),
+
     # ============================================================
     # COMPUTADORES
     # ============================================================
@@ -107,6 +112,7 @@ urlpatterns = [
         views.detalle_computador,
         name="detalle_computador",
     ),
+
     # ============================================================
     # EQUIPOS TECNOLÓGICOS
     # ============================================================
@@ -125,6 +131,7 @@ urlpatterns = [
         views.detalle_equipo,
         name="detalle_equipo",
     ),
+
     # ============================================================
     # MOBILIARIO
     # ============================================================
@@ -138,6 +145,7 @@ urlpatterns = [
         views.detalle_mobiliario,
         name="detalle_mobiliario",
     ),
+
     # ============================================================
     # PERSONAL
     # ============================================================
@@ -151,11 +159,10 @@ urlpatterns = [
         views.personal_crear,
         name="personal_crear",
     ),
-    path(
-        "panel-personal/",
-        views.panel_personal,
-        name="panel_personal",
-    ),
+
+    # ============================================================
+    # PANEL PERSONAL
+    # ============================================================
     path(
         "panel-personal/piso/<int:piso_id>/",
         views.personal_aulas_por_piso,
@@ -176,6 +183,7 @@ urlpatterns = [
         views.personal_movimientos_lista,
         name="personal_movimientos_lista",
     ),
+
     # ============================================================
     # MANTENIMIENTOS
     # ============================================================
@@ -189,6 +197,7 @@ urlpatterns = [
         views.mantenimiento_crear,
         name="mantenimiento_crear",
     ),
+
     # ============================================================
     # MOVIMIENTOS
     # ============================================================
@@ -202,6 +211,7 @@ urlpatterns = [
         views.movimiento_crear,
         name="movimiento_crear",
     ),
+
     # ============================================================
     # API
     # ============================================================
@@ -215,26 +225,37 @@ urlpatterns = [
         views.aula_activo,
         name="aula_activo",
     ),
-    # Esta ruta la mantengo porque actualmente la tienes
-    # y podría estar siendo utilizada por JavaScript.
     path(
         "inventario/api/aula-activo/<str:tipo>/<int:activo_id>/",
         views.aula_activo,
         name="aula_activo",
     ),
+
+    # ============================================================
+    # MANTENIMIENTOS Y MOVIMIENTOS - PERSONAL
+    # ============================================================
+    path(
+        "personal/mantenimientos/",
+        views.mantenimientos_personal,
+        name="mantenimientos_personal",
+    ),
+    path(
+        "personal/movimientos/",
+        views.movimientos_personal,
+        name="movimientos_personal",
+    ),
 ]
 
 
-# MANTENIMIENTOS Y MOVIMIENTOS PERSONAL
+# ============================================================
+# ARCHIVOS ESTÁTICOS EN DESARROLLO
+# ============================================================
 
-path(
-    "personal/mantenimientos/",
-    views.mantenimientos_personal,
-    name="mantenimientos_personal",
-),
+from django.conf import settings
+from django.conf.urls.static import static
 
-path(
-    "personal/movimientos/",
-    views.movimientos_personal,
-    name="movimientos_personal",
-),
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.STATIC_URL,
+        document_root=settings.STATIC_ROOT,
+    )
