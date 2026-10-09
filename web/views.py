@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.views.decorators.http import require_POST
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
@@ -14,6 +16,7 @@ from inventario.models import (
     Mobiliario,
     Mantenimiento,
     MovimientoActivo,
+    SoftwareInstalado,
 )
 
 from inventario.forms import (
@@ -24,6 +27,7 @@ from inventario.forms import (
     PisoForm,
     AulaForm,
     PersonalForm,
+    SoftwareInstaladoForm,
 )
 
 from .decorators import solo_admin, solo_personal
@@ -148,27 +152,21 @@ def panel_personal(request):
 
     return render(request, "web/panel_personal.html", contexto)
 
+
 @login_required
 @solo_personal
 def personal_aulas_por_piso(request, piso_id):
 
     piso = get_object_or_404(Piso, id=piso_id)
 
-    aulas = Aula.objects.filter(
-        piso=piso,
-        activo=True
-    ).order_by("codigo")
+    aulas = Aula.objects.filter(piso=piso, activo=True).order_by("codigo")
 
     contexto = {
         "piso": piso,
         "aulas": aulas,
     }
 
-    return render(
-        request,
-        "web/personal_aulas.html",
-        contexto
-    )
+    return render(request, "web/personal_aulas.html", contexto)
 
 
 @login_required
@@ -186,24 +184,17 @@ def personal_inventario_aula(request, aula_id):
 
     contexto = {
         "usuario": request.user,
-
         "aula": aula,
-
         "computadores": computadores,
         "equipos": equipos,
         "mobiliario": mobiliario,
-
         "cantidad_computadores": computadores.count(),
         "cantidad_equipos": equipos.count(),
         "cantidad_mesas": cantidad_mesas,
         "cantidad_sillas": cantidad_sillas,
     }
 
-    return render(
-        request,
-        "web/personal_inventario_aula.html",
-        contexto
-    )
+    return render(request, "web/personal_inventario_aula.html", contexto)
 
 
 @login_required
@@ -333,15 +324,11 @@ def inventario_aula(request, aula_id):
         return HttpResponseForbidden("No tiene permisos para acceder a esta sección.")
 
     aula = get_object_or_404(Aula, id=aula_id, activo=True)
-
     computadores = aula.computadores.filter(activo=True)
-
     equipos = aula.equipos_tecnologicos.filter(activo=True)
-
     mobiliario = aula.mobiliario.filter(activo=True)
-
+    software_aula = aula.software_instalado.filter(activo=True).order_by("nombre")
     cantidad_mesas = mobiliario.filter(tipo="MESA").count()
-
     cantidad_sillas = mobiliario.filter(tipo="SILLA").count()
 
     contexto = {
@@ -349,6 +336,7 @@ def inventario_aula(request, aula_id):
         "computadores": computadores,
         "equipos": equipos,
         "mobiliario": mobiliario,
+        "software_aula": software_aula,
         "cantidad_computadores": computadores.count(),
         "cantidad_equipos": equipos.count(),
         "cantidad_mesas": cantidad_mesas,
@@ -374,6 +362,8 @@ def detalle_computador(request, computador_id):
 
     componentes = computador.componentes.all().order_by("tipo")
 
+    software_instalado = computador.software_instalado.all().order_by("nombre")
+
     mantenimientos = (
         Mantenimiento.objects.filter(
             content_type=ContentType.objects.get_for_model(Computador),
@@ -397,9 +387,44 @@ def detalle_computador(request, computador_id):
         "componentes": componentes,
         "mantenimientos": mantenimientos,
         "movimientos": movimientos,
+        "software_instalado": software_instalado,
     }
 
     return render(request, "web/detalle_computador.html", contexto)
+
+
+@login_required
+def software_crear(request, aula_id):
+    if not verificar_admin_o_personal(request):
+        return HttpResponseForbidden("No tiene permisos para acceder a esta sección.")
+
+    aula = get_object_or_404(Aula, id=aula_id, activo=True)
+
+    if request.method == "POST":
+        form = SoftwareInstaladoForm(request.POST)
+
+        if form.is_valid():
+            software = form.save(commit=False)
+            software.aula = aula
+            software.save()
+
+            messages.success(
+                request,
+                f"Software {software.nombre} registrado en el aula {aula.codigo}.",
+            )
+            return redirect("inventario_aula", aula_id=aula.id)
+    else:
+        form = SoftwareInstaladoForm(initial={"activo": True})
+
+    return render(
+        request,
+        "web/software_form.html",
+        {
+            "form": form,
+            "aula": aula,
+            "titulo": "Registrar software en el aula",
+        },
+    )
 
 
 # ============================================================
@@ -973,6 +998,37 @@ def personal_crear(request):
     return render(request, "web/personal_form.html", contexto)
 
 
+@login_required
+@solo_admin
+@require_POST
+def personal_eliminar(request, usuario_id):
+    usuario = get_object_or_404(User, pk=usuario_id)
+
+    # Impedir que el administrador elimine su propia cuenta.
+    if usuario.pk == request.user.pk:
+        messages.error(request, "No puedes eliminar tu propia cuenta.")
+        return redirect("personal_lista")
+
+    # Evitar eliminar cuentas de superusuario desde esta vista.
+    if usuario.is_superuser:
+        messages.error(
+            request, "No puedes eliminar una cuenta de superusuario desde esta vista."
+        )
+        return redirect("personal_lista")
+
+    try:
+        usuario.delete()
+        messages.success(request, "El usuario fue eliminado correctamente.")
+    except Exception:
+        messages.error(
+            request,
+            "No fue posible eliminar el usuario. "
+            "Puede tener registros históricos relacionados.",
+        )
+
+    return redirect("personal_lista")
+
+
 # ============================================================
 # MANTENIMIENTOS
 # ADMIN
@@ -1020,7 +1076,6 @@ def mantenimientos_lista(request):
 
 
 @login_required
-@solo_personal
 def mantenimiento_crear(request):
 
     if request.method == "POST":
@@ -1155,7 +1210,6 @@ def movimientos_lista(request):
 
 
 @login_required
-@solo_personal
 def movimiento_crear(request):
 
     if request.method == "POST":

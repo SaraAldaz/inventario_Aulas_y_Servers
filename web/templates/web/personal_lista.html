@@ -14,10 +14,7 @@
         Personal - Aulas y Servidores
     </title>
 
-    <link
-        rel="stylesheet"
-        href="{% static 'web/css/estilos.css' %}"
-    >
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
 
 </head>
 
@@ -25,206 +22,209 @@
 <body>
 
 
-<header class="encabezado">
+    <header class="encabezado">
 
-    <div class="contenedor">
+        <div class="contenedor">
 
-        <div>
+            <div>
 
-            <h1>
-                Personal
-            </h1>
+                <h1>
+                    Personal
+                </h1>
+
+                <p>
+                    Administración de personal · Aulas y Servidores
+                </p>
+
+            </div>
+
+
+            <a href="{% url 'inicio' %}" class="boton-volver">
+                ← Volver al inicio
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <main class="contenedor contenido">
+
+
+        <!-- =====================================================
+         ENCABEZADO DE LA SECCIÓN
+    ====================================================== -->
+
+        <section class="introduccion">
+
+            <h2>
+                Personal registrado
+            </h2>
 
             <p>
-                Administración de personal · Aulas y Servidores
+                Consulte y administre las personas autorizadas
+                para registrar operaciones en el sistema.
+            </p>
+
+
+            <a href="{% url 'personal_crear' %}" class="boton boton-primario">
+                + Agregar personal
+            </a>
+
+        </section>
+
+
+
+        <!-- =====================================================
+         LISTADO DE PERSONAL
+    ====================================================== -->
+
+        <section class="tabla-contenedor">
+
+            <table class="tabla-inventario">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Nombre
+                        </th>
+
+                        <th>
+                            Usuario
+                        </th>
+
+                        <th>
+                            Correo electrónico
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for persona in personal %}
+
+                    <tr>
+
+
+                        <!-- NOMBRE -->
+
+                        <td>
+
+                            <strong>
+
+                                {{ persona.get_full_name|default:persona.username }}
+
+                            </strong>
+
+                        </td>
+
+
+
+                        <!-- USUARIO -->
+
+                        <td>
+
+                            {{ persona.username }}
+
+                        </td>
+
+
+
+                        <!-- CORREO -->
+
+                        <td>
+
+                            {{ persona.email|default:"-" }}
+
+                        </td>
+
+
+
+                        <!-- ESTADO -->
+
+                        <td>
+                            {% if persona.is_active %}
+                            <span class="estado estado-operativo">
+                                Activo
+                            </span>
+                            {% else %}
+                            <span class="estado estado-inactivo">
+                                Inactivo
+                            </span>
+                            {% endif %}
+                        </td>
+
+
+                        <td>
+                            {% if persona.pk != request.user.pk and not persona.is_superuser %}
+                            <form method="post" action="{% url 'personal_eliminar' persona.pk %}"
+                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar al usuario {{ persona.username|escapejs }}? Esta acción no se puede deshacer.');">
+                                {% csrf_token %}
+                                <button type="submit" class="boton boton-peligro">
+                                    Eliminar
+                                </button>
+                            </form>
+                            {% else %}
+                            <span>-</span>
+                            {% endif %}
+                        </td>
+
+
+                    </tr>
+
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="5" class="sin-registros">
+
+                            No hay personal registrado.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+    </main>
+
+
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+
+                Sistema de Inventario
+                · Aulas y Servidores
+
             </p>
 
         </div>
 
-
-        <a
-            href="{% url 'inicio' %}"
-            class="boton-volver"
-        >
-            ← Volver al inicio
-        </a>
-
-    </div>
-
-</header>
-
-
-
-<main class="contenedor contenido">
-
-
-    <!-- =====================================================
-         ENCABEZADO DE LA SECCIÓN
-    ====================================================== -->
-
-    <section class="introduccion">
-
-        <h2>
-            Personal registrado
-        </h2>
-
-        <p>
-            Consulte y administre las personas autorizadas
-            para registrar operaciones en el sistema.
-        </p>
-
-
-        <a
-            href="{% url 'personal_crear' %}"
-            class="boton boton-primario"
-        >
-            + Agregar personal
-        </a>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         LISTADO DE PERSONAL
-    ====================================================== -->
-
-    <section class="tabla-contenedor">
-
-        <table class="tabla-inventario">
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        Nombre
-                    </th>
-
-                    <th>
-                        Usuario
-                    </th>
-
-                    <th>
-                        Correo electrónico
-                    </th>
-
-                    <th>
-                        Estado
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                {% for persona in personal %}
-
-                <tr>
-
-
-                    <!-- NOMBRE -->
-
-                    <td>
-
-                        <strong>
-
-                            {{ persona.get_full_name|default:persona.username }}
-
-                        </strong>
-
-                    </td>
-
-
-
-                    <!-- USUARIO -->
-
-                    <td>
-
-                        {{ persona.username }}
-
-                    </td>
-
-
-
-                    <!-- CORREO -->
-
-                    <td>
-
-                        {{ persona.email|default:"-" }}
-
-                    </td>
-
-
-
-                    <!-- ESTADO -->
-
-                    <td>
-
-                        {% if persona.is_active %}
-
-                            <span class="estado estado-operativo">
-                                Activo
-                            </span>
-
-                        {% else %}
-
-                            <span class="estado estado-inactivo">
-                                Inactivo
-                            </span>
-
-                        {% endif %}
-
-                    </td>
-
-
-                </tr>
-
-
-                {% empty %}
-
-                <tr>
-
-                    <td
-                        colspan="4"
-                        class="sin-registros"
-                    >
-
-                        No hay personal registrado.
-
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </section>
-
-
-</main>
-
-
-
-<footer class="pie">
-
-    <div class="contenedor">
-
-        <p>
-
-            Sistema de Inventario
-            · Aulas y Servidores
-
-        </p>
-
-    </div>
-
-</footer>
+    </footer>
 
 
 </body>

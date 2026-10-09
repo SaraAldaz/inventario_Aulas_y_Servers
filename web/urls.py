@@ -16,7 +16,6 @@ urlpatterns = [
         views.logout_usuario,
         name="logout",
     ),
-
     # ============================================================
     # PANELES PRINCIPALES
     # ============================================================
@@ -30,11 +29,9 @@ urlpatterns = [
         views.panel_personal,
         name="panel_personal",
     ),
-
     # ============================================================
     # INFRAESTRUCTURA
     # ============================================================
-
     # Pisos
     path(
         "pisos/",
@@ -51,7 +48,6 @@ urlpatterns = [
         views.piso_editar,
         name="piso_editar",
     ),
-
     # Aulas
     path(
         "aulas/",
@@ -78,7 +74,11 @@ urlpatterns = [
         views.inventario_aula,
         name="inventario_aula",
     ),
-
+    path(
+        "aula/<int:aula_id>/software/nuevo/",
+        views.software_crear,
+        name="software_crear_aula",
+    ),
     # ============================================================
     # COMPUTADORES
     # ============================================================
@@ -107,12 +107,6 @@ urlpatterns = [
         views.computador_activar,
         name="computador_activar",
     ),
-    path(
-        "computadores/<int:computador_id>/",
-        views.detalle_computador,
-        name="detalle_computador",
-    ),
-
     # ============================================================
     # EQUIPOS TECNOLÓGICOS
     # ============================================================
@@ -131,7 +125,6 @@ urlpatterns = [
         views.detalle_equipo,
         name="detalle_equipo",
     ),
-
     # ============================================================
     # MOBILIARIO
     # ============================================================
@@ -145,7 +138,6 @@ urlpatterns = [
         views.detalle_mobiliario,
         name="detalle_mobiliario",
     ),
-
     # ============================================================
     # PERSONAL
     # ============================================================
@@ -159,7 +151,11 @@ urlpatterns = [
         views.personal_crear,
         name="personal_crear",
     ),
-
+    path(
+        "personal/<int:usuario_id>/eliminar/",
+        views.personal_eliminar,
+        name="personal_eliminar",
+    ),
     # ============================================================
     # PANEL PERSONAL
     # ============================================================
@@ -183,7 +179,6 @@ urlpatterns = [
         views.personal_movimientos_lista,
         name="personal_movimientos_lista",
     ),
-
     # ============================================================
     # MANTENIMIENTOS
     # ============================================================
@@ -197,7 +192,6 @@ urlpatterns = [
         views.mantenimiento_crear,
         name="mantenimiento_crear",
     ),
-
     # ============================================================
     # MOVIMIENTOS
     # ============================================================
@@ -211,7 +205,6 @@ urlpatterns = [
         views.movimiento_crear,
         name="movimiento_crear",
     ),
-
     # ============================================================
     # API
     # ============================================================
@@ -230,7 +223,6 @@ urlpatterns = [
         views.aula_activo,
         name="aula_activo",
     ),
-
     # ============================================================
     # MANTENIMIENTOS Y MOVIMIENTOS - PERSONAL
     # ============================================================

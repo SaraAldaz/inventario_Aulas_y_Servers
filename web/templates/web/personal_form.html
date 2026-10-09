@@ -14,10 +14,7 @@
         {{ titulo }} - Aulas y Servidores
     </title>
 
-    <link
-        rel="stylesheet"
-        href="{% static 'web/css/estilos.css' %}"
-    >
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
 
 </head>
 
@@ -25,61 +22,61 @@
 <body>
 
 
-<header class="encabezado">
+    <header class="encabezado">
 
-    <div class="contenedor">
+        <div class="contenedor">
 
-        <h1>
-            {{ titulo }}
-        </h1>
+            <h1>
+                {{ titulo }}
+            </h1>
 
-        <p>
-            Administración de personal
-            · Aulas y Servidores
-        </p>
+            <p>
+                Administración de personal
+                · Aulas y Servidores
+            </p>
 
-    </div>
+        </div>
 
-</header>
-
-
-
-<main class="contenedor contenido">
+    </header>
 
 
-    <section class="introduccion">
 
-        <h2>
-            Información del personal
-        </h2>
+    <main class="contenedor contenido">
 
-        <p>
-            {% if titulo == "Editar personal" %}
+
+        <section class="introduccion">
+
+            <h2>
+                Información del personal
+            </h2>
+
+            <p>
+                {% if titulo == "Editar personal" %}
 
                 Modifique la información del usuario
                 seleccionado.
 
-            {% else %}
+                {% else %}
 
                 Registre un nuevo usuario para la
                 administración del sistema.
 
-            {% endif %}
-        </p>
+                {% endif %}
+            </p>
 
-    </section>
-
-
-
-    <section class="formulario-contenedor">
+        </section>
 
 
-        <form method="post">
 
-            {% csrf_token %}
+        <section class="formulario-contenedor">
 
 
-            {% if form.non_field_errors %}
+            <form method="post">
+
+                {% csrf_token %}
+
+
+                {% if form.non_field_errors %}
 
                 <div class="mensaje-error">
 
@@ -87,25 +84,25 @@
 
                 </div>
 
-            {% endif %}
+                {% endif %}
 
 
 
-            <!-- ==================================================
+                <!-- ==================================================
                  NOMBRES
             =================================================== -->
 
-            <div class="campo-formulario">
+                <div class="campo-formulario">
 
-                <label for="{{ form.first_name.id_for_label }}">
+                    <label for="{{ form.first_name.id_for_label }}">
 
-                    Nombres
+                        Nombres
 
-                </label>
+                    </label>
 
-                {{ form.first_name }}
+                    {{ form.first_name }}
 
-                {% if form.first_name.errors %}
+                    {% if form.first_name.errors %}
 
                     <div class="error-campo">
 
@@ -113,27 +110,27 @@
 
                     </div>
 
-                {% endif %}
+                    {% endif %}
 
-            </div>
+                </div>
 
 
 
-            <!-- ==================================================
+                <!-- ==================================================
                  APELLIDOS
             =================================================== -->
 
-            <div class="campo-formulario">
+                <div class="campo-formulario">
 
-                <label for="{{ form.last_name.id_for_label }}">
+                    <label for="{{ form.last_name.id_for_label }}">
 
-                    Apellidos
+                        Apellidos
 
-                </label>
+                    </label>
 
-                {{ form.last_name }}
+                    {{ form.last_name }}
 
-                {% if form.last_name.errors %}
+                    {% if form.last_name.errors %}
 
                     <div class="error-campo">
 
@@ -141,27 +138,27 @@
 
                     </div>
 
-                {% endif %}
+                    {% endif %}
 
-            </div>
+                </div>
 
 
 
-            <!-- ==================================================
+                <!-- ==================================================
                  USUARIO
             =================================================== -->
 
-            <div class="campo-formulario">
+                <div class="campo-formulario">
 
-                <label for="{{ form.username.id_for_label }}">
+                    <label for="{{ form.username.id_for_label }}">
 
-                    Usuario
+                        Usuario
 
-                </label>
+                    </label>
 
-                {{ form.username }}
+                    {{ form.username }}
 
-                {% if form.username.errors %}
+                    {% if form.username.errors %}
 
                     <div class="error-campo">
 
@@ -169,27 +166,27 @@
 
                     </div>
 
-                {% endif %}
+                    {% endif %}
 
-            </div>
+                </div>
 
 
 
-            <!-- ==================================================
+                <!-- ==================================================
                  CORREO
             =================================================== -->
 
-            <div class="campo-formulario">
+                <div class="campo-formulario">
 
-                <label for="{{ form.email.id_for_label }}">
+                    <label for="{{ form.email.id_for_label }}">
 
-                    Correo electrónico
+                        Correo electrónico
 
-                </label>
+                    </label>
 
-                {{ form.email }}
+                    {{ form.email }}
 
-                {% if form.email.errors %}
+                    {% if form.email.errors %}
 
                     <div class="error-campo">
 
@@ -197,27 +194,35 @@
 
                     </div>
 
-                {% endif %}
+                    {% endif %}
 
-            </div>
+                </div>
 
 
+                <div class="campo-formulario">
+                    <label for="{{ form.rol.id_for_label }}">Rol del usuario</label>
+                    {{ form.rol }}
 
-            <!-- ==================================================
+                    {% if form.rol.errors %}
+                    <div class="error-campo">{{ form.rol.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- ==================================================
                  CONTRASEÑA
             =================================================== -->
 
-            <div class="campo-formulario">
+                <div class="campo-formulario">
 
-                <label for="{{ form.password.id_for_label }}">
+                    <label for="{{ form.password.id_for_label }}">
 
-                    Contraseña
+                        Contraseña
 
-                </label>
+                    </label>
 
-                {{ form.password }}
+                    {{ form.password }}
 
-                {% if form.password.errors %}
+                    {% if form.password.errors %}
 
                     <div class="error-campo">
 
@@ -225,27 +230,27 @@
 
                     </div>
 
-                {% endif %}
+                    {% endif %}
 
-            </div>
+                </div>
 
 
 
-            <!-- ==================================================
+                <!-- ==================================================
                  CONFIRMAR CONTRASEÑA
             =================================================== -->
 
-            <div class="campo-formulario">
+                <div class="campo-formulario">
 
-                <label for="{{ form.password_confirmacion.id_for_label }}">
+                    <label for="{{ form.password_confirmacion.id_for_label }}">
 
-                    Confirmar contraseña
+                        Confirmar contraseña
 
-                </label>
+                    </label>
 
-                {{ form.password_confirmacion }}
+                    {{ form.password_confirmacion }}
 
-                {% if form.password_confirmacion.errors %}
+                    {% if form.password_confirmacion.errors %}
 
                     <div class="error-campo">
 
@@ -253,27 +258,27 @@
 
                     </div>
 
-                {% endif %}
+                    {% endif %}
 
-            </div>
+                </div>
 
 
 
-            <!-- ==================================================
+                <!-- ==================================================
                  ESTADO
             =================================================== -->
 
-            <div class="campo-formulario campo-checkbox">
+                <div class="campo-formulario campo-checkbox">
 
-                {{ form.is_active }}
+                    {{ form.is_active }}
 
-                <label for="{{ form.is_active.id_for_label }}">
+                    <label for="{{ form.is_active.id_for_label }}">
 
-                    Personal activo
+                        Personal activo
 
-                </label>
+                    </label>
 
-                {% if form.is_active.errors %}
+                    {% if form.is_active.errors %}
 
                     <div class="error-campo">
 
@@ -281,72 +286,66 @@
 
                     </div>
 
-                {% endif %}
+                    {% endif %}
 
-            </div>
+                </div>
 
 
 
-            <!-- ==================================================
+                <!-- ==================================================
                  BOTONES
             =================================================== -->
 
-            <div class="acciones-formulario">
+                <div class="acciones-formulario">
 
-                <button
-                    type="submit"
-                    class="boton boton-primario"
-                >
+                    <button type="submit" class="boton boton-primario">
 
-                    {% if titulo == "Editar personal" %}
+                        {% if titulo == "Editar personal" %}
 
                         Guardar cambios
 
-                    {% else %}
+                        {% else %}
 
                         Registrar personal
 
-                    {% endif %}
+                        {% endif %}
 
-                </button>
-
-
-                <a
-                    href="{% url 'personal_lista' %}"
-                    class="boton boton-secundario"
-                >
-
-                    Cancelar
-
-                </a>
-
-            </div>
+                    </button>
 
 
-        </form>
+                    <a href="{% url 'personal_lista' %}" class="boton boton-secundario">
+
+                        Cancelar
+
+                    </a>
+
+                </div>
 
 
-    </section>
+            </form>
 
 
-</main>
+        </section>
+
+
+    </main>
 
 
 
-<footer class="pie">
+    <footer class="pie">
 
-    <div class="contenedor">
+        <div class="contenedor">
 
-        <p>
+            <p>
 
-            Sistema de Inventario
-            · Aulas y Servidores
+                Sistema de Inventario
+                · Aulas y Servidores
 
-        </p>
+            </p>
 
-    </div>
+        </div>
 
-</footer>
+    </footer>
 
 
 </body>

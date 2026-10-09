@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+</head>
+
+<body>
+    <header class="encabezado">
+        <div class="contenedor">
+            <h1>{{ titulo }}</h1>
+            <a href="{% url 'inventario_aula' aula.id %}" class="boton-volver">
+                ← Volver al aula
+            </a>
+        </div>
+    </header>
+
+    <main class="contenedor contenido">
+        <section class="introduccion">
+            <h2>Aula {{ aula.codigo }}</h2>
+            <p>{{ aula.nombre }}</p>
+            <p>El software registrado se asociará a toda esta aula.</p>
+        </section>
+
+        <section>
+            <form method="post">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="campo-formulario">
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% for error in field.errors %}
+                    <p class="error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                <div class="errores">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <button type="submit" class="boton">
+                    Guardar software
+                </button>
+            </form>
+        </section>
+    </main>
+</body>
+
+</html>

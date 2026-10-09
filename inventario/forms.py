@@ -9,6 +9,7 @@ from .models import (
     Mobiliario,
     MovimientoActivo,
     Mantenimiento,
+    SoftwareInstalado,
 )
 
 
@@ -75,7 +76,6 @@ class MovimientoActivoForm(forms.ModelForm):
 
         opciones = []
 
-
         for objeto in Computador.objects.select_related("aula").all():
 
             opciones.append(
@@ -84,7 +84,6 @@ class MovimientoActivoForm(forms.ModelForm):
                     f"Computador - {objeto.codigo_inventario}",
                 )
             )
-
 
         for objeto in ComponenteComputador.objects.select_related(
             "computador__aula"
@@ -97,7 +96,6 @@ class MovimientoActivoForm(forms.ModelForm):
                 )
             )
 
-
         for objeto in EquipoTecnologico.objects.select_related("aula").all():
 
             opciones.append(
@@ -106,7 +104,6 @@ class MovimientoActivoForm(forms.ModelForm):
                     f"{objeto.get_tipo_display()} - " f"{objeto.codigo_inventario}",
                 )
             )
-
 
         for objeto in Mobiliario.objects.select_related("aula").all():
 
@@ -144,7 +141,6 @@ class MovimientoActivoForm(forms.ModelForm):
 
                 self.fields["aula_origen_mostrada"].initial = str(aula)
 
-
         if self.instance and self.instance.pk:
 
             activo = self.instance.activo
@@ -156,7 +152,6 @@ class MovimientoActivoForm(forms.ModelForm):
                 if aula:
 
                     self.fields["aula_origen_mostrada"].initial = str(aula)
-
 
     @staticmethod
     def obtener_aula_activo(activo):
@@ -174,7 +169,6 @@ class MovimientoActivoForm(forms.ModelForm):
             return activo.computador.aula
 
         return None
-
 
     def clean(self):
 
@@ -245,7 +239,7 @@ class MovimientoActivoForm(forms.ModelForm):
 
             self.fields["aula_origen_mostrada"].initial = str(aula_actual)
 
-#Traslado
+        # Traslado
 
         if tipo_movimiento == "TRASLADO":
 
@@ -264,8 +258,6 @@ class MovimientoActivoForm(forms.ModelForm):
                     f"al aula actual."
                 )
 
-
-
         elif tipo_movimiento == "SALIDA":
 
             if aula_destino:
@@ -273,8 +265,6 @@ class MovimientoActivoForm(forms.ModelForm):
                 raise forms.ValidationError(
                     "Una salida temporal no debe tener " "un aula de destino."
                 )
-
-   
 
         elif tipo_movimiento == "BAJA":
 
@@ -284,21 +274,18 @@ class MovimientoActivoForm(forms.ModelForm):
                     "Una baja no debe tener " "un aula de destino."
                 )
 
-
         elif tipo_movimiento == "REINGRESO":
 
             if not aula_destino:
 
                 raise forms.ValidationError(
-                    "Para un reingreso debe seleccionar "
-                    "el aula de origen."
+                    "Para un reingreso debe seleccionar " "el aula de origen."
                 )
 
             if aula_actual and aula_destino.pk != aula_actual.pk:
 
                 raise forms.ValidationError(
-                    f"El reingreso debe realizarse en el aula "
-                    f"{aula_actual.codigo}."
+                    f"El reingreso debe realizarse en el aula " f"{aula_actual.codigo}."
                 )
 
         return cleaned_data
@@ -368,9 +355,7 @@ class MovimientoActivoForm(forms.ModelForm):
                 elif tipo_activo == "componente":
 
                     objeto.computador.aula = movimiento.aula_destino
-                    objeto.computador.save(
-                        update_fields=["aula"]
-                    )
+                    objeto.computador.save(update_fields=["aula"])
 
             # ========================================================
             # BAJA
@@ -422,9 +407,7 @@ class MovimientoActivoForm(forms.ModelForm):
                     elif tipo_activo == "componente":
 
                         objeto.computador.aula = movimiento.aula_destino
-                        objeto.computador.save(
-                            update_fields=["aula"]
-                        )
+                        objeto.computador.save(update_fields=["aula"])
 
         return movimiento
 
@@ -855,29 +838,43 @@ class AulaForm(forms.ModelForm):
 
 class PersonalForm(forms.ModelForm):
 
+    ROL_CHOICES = [
+        ("Personal", "Personal"),
+        ("Administradores", "Administrador"),
+    ]
+
+    rol = forms.ChoiceField(
+        label="Rol del usuario",
+        choices=ROL_CHOICES,
+        widget=forms.Select(attrs={"class": "form-control"}),
+    )
+
     password = forms.CharField(
         label="Contraseña",
+        required=False,
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control",
                 "placeholder": "Contraseña",
+                "autocomplete": "new-password",
             }
         ),
     )
 
     password_confirmacion = forms.CharField(
         label="Confirmar contraseña",
+        required=False,
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control",
                 "placeholder": "Confirmar contraseña",
+                "autocomplete": "new-password",
             }
         ),
     )
 
     class Meta:
         model = User
-
         fields = [
             "first_name",
             "last_name",
@@ -888,60 +885,111 @@ class PersonalForm(forms.ModelForm):
 
         widgets = {
             "first_name": forms.TextInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Nombres",
-                }
+                attrs={"class": "form-control", "placeholder": "Nombres"}
             ),
             "last_name": forms.TextInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Apellidos",
-                }
+                attrs={"class": "form-control", "placeholder": "Apellidos"}
             ),
             "username": forms.TextInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Usuario",
-                }
+                attrs={"class": "form-control", "placeholder": "Usuario"}
             ),
             "email": forms.EmailInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Correo electrónico",
-                }
+                attrs={"class": "form-control", "placeholder": "Correo electrónico"}
             ),
-            "is_active": forms.CheckboxInput(
-                attrs={
-                    "class": "form-check-input",
-                }
-            ),
+            "is_active": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
 
-    def clean(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
+        # Al editar, conservar el rol actual.
+        if self.instance and self.instance.pk:
+            grupo = self.instance.groups.filter(
+                name__in=["Administradores", "Personal"]
+            ).first()
+
+            if grupo:
+                self.fields["rol"].initial = grupo.name
+
+    def clean(self):
         cleaned_data = super().clean()
 
         password = cleaned_data.get("password")
+        confirmacion = cleaned_data.get("password_confirmacion")
 
-        password_confirmacion = cleaned_data.get("password_confirmacion")
+        if self.instance and self.instance.pk:
+            # La contraseña solo se cambia si se diligencia.
+            if password or confirmacion:
+                if password != confirmacion:
+                    raise forms.ValidationError("Las contraseñas no coinciden.")
+        else:
+            # Para un usuario nuevo, la contraseña es obligatoria.
+            if not password:
+                self.add_error("password", "La contraseña es obligatoria.")
 
-        if password != password_confirmacion:
-
-            raise forms.ValidationError("Las contraseñas no coinciden.")
+            if password != confirmacion:
+                raise forms.ValidationError("Las contraseñas no coinciden.")
 
         return cleaned_data
 
     def save(self, commit=True):
-
         usuario = super().save(commit=False)
 
         password = self.cleaned_data.get("password")
 
-        usuario.set_password(password)
+        if password:
+            usuario.set_password(password)
 
         if commit:
-
             usuario.save()
+            self.save_m2m()
+
+            from django.contrib.auth.models import Group
+
+            nombre_rol = self.cleaned_data["rol"]
+            grupo, _ = Group.objects.get_or_create(name=nombre_rol)
+
+            usuario.groups.remove(
+                *usuario.groups.filter(name__in=["Administradores", "Personal"])
+            )
+            usuario.groups.add(grupo)
 
         return usuario
+
+
+class SoftwareInstaladoForm(forms.ModelForm):
+    class Meta:
+        model = SoftwareInstalado
+        fields = [
+            "nombre",
+            "version",
+            "tipo_licencia",
+            "observaciones",
+            "activo",
+        ]
+        widgets = {
+            "nombre": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Ej. AutoCAD, SPSS, Geo5",
+                }
+            ),
+            "version": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Ej. 2025, 31.0",
+                }
+            ),
+            "tipo_licencia": forms.Select(
+                attrs={
+                    "class": "form-control",
+                }
+            ),
+            "observaciones": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 3,
+                }
+            ),
+            "activo": forms.CheckboxInput(),
+        }

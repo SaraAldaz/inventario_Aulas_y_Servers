@@ -183,7 +183,7 @@ class Mobiliario(models.Model):
 
 class MovimientoActivo(models.Model):
 
-    TIPOS_MOVIMIENTO = [ 
+    TIPOS_MOVIMIENTO = [
         ("TRASLADO", "Traslado"),
         ("SALIDA", "Salida temporal"),
         ("BAJA", "Baja"),
@@ -229,13 +229,16 @@ class MovimientoActivo(models.Model):
 
     fecha_registro = models.DateTimeField(auto_now_add=True)
 
+
 class Meta:
     ordering = ["-fecha"]
     verbose_name = "Movimiento de activo"
     verbose_name_plural = "Movimientos de activos"
 
+
 def __str__(self):
     return f"{self.get_tipo_display()} - {self.activo}"
+
 
 def obtener_aula_actual(self):
 
@@ -305,3 +308,45 @@ class Mantenimiento(models.Model):
 
     def __str__(self):
         return f"{self.get_tipo_display()} - {self.activo}"
+
+
+class SoftwareInstalado(models.Model):
+    aula = models.ForeignKey(
+        "infraestructura.Aula",
+        on_delete=models.PROTECT,
+        related_name="software_instalado",
+    )
+
+    nombre = models.CharField(max_length=150)
+    version = models.CharField(max_length=80, blank=True)
+
+    tipo_licencia = models.CharField(
+        max_length=30,
+        choices=[
+            ("LIBRE", "Libre o gratuito"),
+            ("INSTITUCIONAL", "Licencia institucional"),
+            ("COMERCIAL", "Licencia comercial"),
+            ("ACADEMICA", "Licencia académica"),
+            ("OTRO", "Otro"),
+        ],
+        default="INSTITUCIONAL",
+    )
+
+    observaciones = models.TextField(blank=True)
+    activo = models.BooleanField(default=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["nombre"]
+        verbose_name = "Software instalado"
+        verbose_name_plural = "Software instalado"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["aula", "nombre"],
+                name="unique_software_por_aula",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.nombre} - {self.aula}"

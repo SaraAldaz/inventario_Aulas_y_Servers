@@ -632,6 +632,44 @@
 
 
         </section>
+        
+        <!-- SOFTWARE INSTALADO EN EL AULA -->
+        <section class="seccion">
+            <div class="encabezado-seccion">
+                <h2>Software instalado en el aula</h2>
+
+                <a href="{% url 'software_crear_aula' aula.id %}" class="boton boton-primario">
+                    + Registrar software
+                </a>
+            </div>
+
+            {% if software_aula %}
+            <div class="tabla-contenedor">
+                <table class="tabla-inventario">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Versión</th>
+                            <th>Tipo de licencia</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for software in software_aula %}
+                        <tr>
+                            <td>{{ software.nombre }}</td>
+                            <td>{{ software.version|default:"No especificada" }}</td>
+                            <td>{{ software.get_tipo_licencia_display }}</td>
+                            <td>{{ software.observaciones|default:"Sin observaciones" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>Actualmente no hay software registrado en esta aula.</p>
+            {% endif %}
+        </section>
 
 
     </main>
