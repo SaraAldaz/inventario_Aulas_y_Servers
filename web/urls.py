@@ -93,6 +93,11 @@ urlpatterns = [
         name="computador_crear",
     ),
     path(
+        "computadores/<int:computador_id>/",
+        views.detalle_computador,
+        name="detalle_computador",
+    ),
+    path(
         "computadores/<int:computador_id>/editar/",
         views.computador_editar,
         name="computador_editar",
@@ -235,6 +240,14 @@ urlpatterns = [
         "personal/movimientos/",
         views.movimientos_personal,
         name="movimientos_personal",
+    ),
+    # ============================================================
+    # SOFTWARE INSTALADO
+    # ============================================================
+    path(
+        "software/buscar/",
+        views.buscar_software,
+        name="buscar_software",
     ),
 ]
 

@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar software instalado</title>
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+</head>
+
+<body>
+    <main class="contenedor">
+        <h1>Buscar software instalado</h1>
+        <p>Consulta en qué aulas está registrado un programa.</p>
+
+        <form method="get" action="{% url 'buscar_software' %}">
+            <label for="buscar">Nombre del software</label>
+            <input type="search" id="buscar" name="buscar" value="{{ buscar }}"
+                placeholder="Ej. AutoCAD, Office, Java..." required>
+            <button type="submit" class="boton boton-primario">
+                Buscar
+            </button>
+            <a href="{% url 'buscar_software' %}" class="boton boton-secundario">
+                Limpiar
+            </a>
+        </form>
+
+        {% if realizo_busqueda %}
+        <h2>Resultados para "{{ buscar }}"</h2>
+
+        {% if software %}
+        <div class="tabla-contenedor">
+            <table class="tabla-inventario">
+                <thead>
+                    <tr>
+                        <th>Software</th>
+                        <th>Versión</th>
+                        <th>Licencia</th>
+                        <th>Aula</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in software %}
+                    <tr>
+                        <td>{{ item.nombre }}</td>
+                        <td>{{ item.version|default:"No especificada" }}</td>
+                        <td>{{ item.get_tipo_licencia_display }}</td>
+                        <td>
+                            <a href="{% url 'inventario_aula' item.aula_id %}">
+                                {{ item.aula.codigo }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No se encontró software activo con ese nombre.</p>
+        {% endif %}
+        {% endif %}
+
+        <p>
+            <a href="{% url 'inicio' %}" class="boton boton-secundario">
+                Volver al inicio
+            </a>
+        </p>
+    </main>
+</body>
+
+</html>

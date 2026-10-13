@@ -173,6 +173,26 @@
 
                 </a>
 
+                <a href="{% url 'buscar_software' %}" class="acceso-rapido">
+
+                    <div class="acceso-icono">
+                        💿
+                    </div>
+
+                    <div class="acceso-contenido">
+
+                        <strong>
+                            Buscar software instalado
+                        </strong>
+
+                        <span>
+                            Consultar en qué aulas se encuentra
+                        </span>
+
+                    </div>
+
+                </a>
+
             </div>
 
         </div>
@@ -190,6 +210,12 @@
                 Seleccione el piso que desea consultar
                 para visualizar las aulas disponibles.
             </p>
+
+            {% if user.is_authenticated and user.is_superuser %}
+            <a href="{% url 'piso_crear' %}">
+                + Nuevo piso
+            </a>
+            {% endif %}
 
         </section>
 
@@ -236,7 +262,7 @@
         <div class="contenedor">
 
             <p>
-                Sistema de Inventario | Aulas y Servidores
+                Sistema de Inventario · Aulas y Servidores
             </p>
 
         </div>

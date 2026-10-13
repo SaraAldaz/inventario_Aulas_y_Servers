@@ -1291,3 +1291,30 @@ def movimientos_personal(request):
     }
 
     return render(request, "web/movimientos_lista.html", contexto)
+
+
+@login_required
+def buscar_software(request):
+    busqueda = request.GET.get("buscar", "").strip()
+
+    software = (
+        SoftwareInstalado.objects
+        .select_related("aula", "aula__piso")
+        .filter(activo=True)
+        .order_by("nombre", "aula__codigo")
+    )
+
+    if busqueda:
+        software = software.filter(nombre__icontains=busqueda)
+
+    contexto = {
+        "software": software,
+        "buscar": busqueda,
+        "realizo_busqueda": bool(busqueda),
+    }
+
+    return render(
+        request,
+        "web/buscar_software.html",
+        contexto,
+    )
