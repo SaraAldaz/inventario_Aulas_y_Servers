@@ -2,7 +2,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.forms import UserChangeForm
 from django.http import JsonResponse, HttpResponseForbidden
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
@@ -955,6 +956,16 @@ def aula_editar(request, aula_id):
     return render(request, "web/aula_form.html", contexto)
 
 
+@login_required
+@solo_admin
+@require_POST
+def aula_eliminar(request, aula_id):
+    aula = get_object_or_404(Aula, pk=aula_id)
+    aula.delete()
+
+    return redirect("aulas_lista")
+
+
 # ============================================================
 # PERSONAL
 # SOLO ADMIN
@@ -996,6 +1007,42 @@ def personal_crear(request):
     }
 
     return render(request, "web/personal_form.html", contexto)
+
+
+@login_required
+@solo_admin
+def personal_editar(request, pk):
+    persona = get_object_or_404(User, pk=pk)
+
+    form = PersonalForm(request.POST or None, instance=persona)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("personal_lista")
+
+    contexto = {
+        "form": form,
+        "titulo": "Editar personal",
+        "persona": persona,
+    }
+
+    return render(request, "web/personal_editar.html", contexto)
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser)
+@require_POST
+def personal_estado(request, pk):
+    persona = get_object_or_404(User, pk=pk)
+
+    # Proteger al usuario actual y a los superusuarios
+    if persona.pk == request.user.pk or persona.is_superuser:
+        return redirect("personal_lista")  # Ajusta al nombre de tu listado
+
+    persona.is_active = not persona.is_active
+    persona.save(update_fields=["is_active"])
+
+    return redirect("personal_lista")  # Ajusta al nombre de tu listad
 
 
 @login_required
@@ -1298,8 +1345,7 @@ def buscar_software(request):
     busqueda = request.GET.get("buscar", "").strip()
 
     software = (
-        SoftwareInstalado.objects
-        .select_related("aula", "aula__piso")
+        SoftwareInstalado.objects.select_related("aula", "aula__piso")
         .filter(activo=True)
         .order_by("nombre", "aula__codigo")
     )

@@ -1096,6 +1096,36 @@ ul.errorlist {
 }
 
 
+/* Acciones del personal en una sola fila */
+.acciones-personal {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+/* Evitar que los formularios ocupen toda la fila */
+.acciones-personal form {
+    display: inline-flex;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0;
+}
+
+/* Evitar que los botones se encojan */
+.acciones-personal .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+
+
 /* =========================================================
    PIE DE PÁGINA
 ========================================================= */

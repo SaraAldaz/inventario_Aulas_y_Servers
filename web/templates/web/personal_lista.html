@@ -1,4 +1,5 @@
 {% load static %}
+<link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
 
 <!DOCTYPE html>
 
@@ -39,7 +40,7 @@
             </div>
 
 
-            <a href="{% url 'inicio' %}" class="boton-volver">
+            <a href="{% url 'inicio'%}" class="boton-volver">
                 ← Volver al inicio
             </a>
 
@@ -156,27 +157,48 @@
                         <!-- ESTADO -->
 
                         <td>
-                            {% if persona.is_active %}
-                            <span class="estado estado-operativo">
-                                Activo
-                            </span>
-                            {% else %}
-                            <span class="estado estado-inactivo">
-                                Inactivo
-                            </span>
-                            {% endif %}
+                            
+                            <!-- Activar / Inactivar -->
+                            <form method="post" action="{% url 'personal_estado' persona.pk %}"
+                                onsubmit="return confirm('¿Deseas cambiar el estado de este usuario?');">
+                                {% csrf_token %}
+
+                                {% if persona.is_active %}
+                                <button type="submit" class="boton boton-peligro">
+                                    Inactivar
+                                </button>
+                                {% else %}
+                                <button type="submit" class="boton boton-primario">
+                                    Activar
+                                </button>
+                                {% endif %}
+                            </form>
+
                         </td>
-
-
                         <td>
                             {% if persona.pk != request.user.pk and not persona.is_superuser %}
-                            <form method="post" action="{% url 'personal_eliminar' persona.pk %}"
-                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar al usuario {{ persona.username|escapejs }}? Esta acción no se puede deshacer.');">
-                                {% csrf_token %}
-                                <button type="submit" class="boton boton-peligro">
-                                    Eliminar
-                                </button>
-                            </form>
+
+                            <div class="acciones-personal">
+
+                                <!-- Editar -->
+                                <a href="{% url 'personal_editar' persona.pk %}" class="boton boton-primario">
+                                    Editar
+                                </a>
+
+
+
+                                <!-- Eliminar -->
+                                <form method="post" action="{% url 'personal_eliminar' persona.pk %}"
+                                    onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="boton boton-peligro">
+                                        Eliminar
+                                    </button>
+                                </form>
+
+                            </div>
+
                             {% else %}
                             <span>-</span>
                             {% endif %}

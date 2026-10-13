@@ -30,8 +30,7 @@ load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
-
+DEBUG = True
 
 # Permite trabajar desde el computador local y posteriormente
 # desde el servidor y otros dispositivos de la red.

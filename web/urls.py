@@ -64,6 +64,10 @@ urlpatterns = [
         views.aula_editar,
         name="aula_editar",
     ),
+    path("aulas/<int:aula_id>/eliminar/", 
+        views.aula_eliminar, 
+        name="aula_eliminar"
+    ),
     path(
         "piso/<int:piso_id>/",
         views.aulas_por_piso,
@@ -156,6 +160,8 @@ urlpatterns = [
         views.personal_crear,
         name="personal_crear",
     ),
+    path("personal/<int:pk>/editar/", views.personal_editar, name="personal_editar"),
+    path("personal/<int:pk>/estado/", views.personal_estado, name="personal_estado"),
     path(
         "personal/<int:usuario_id>/eliminar/",
         views.personal_eliminar,

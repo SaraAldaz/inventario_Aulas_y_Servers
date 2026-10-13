@@ -1,0 +1,216 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ titulo }} - Aulas y Servidores</title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+</head>
+
+<body>
+
+    <header class="encabezado">
+        <div class="contenedor">
+
+            <h1>{{ titulo }}</h1>
+
+            <p>
+                Administración de personal · Aulas y Servidores
+            </p>
+
+        </div>
+    </header>
+
+    <main class="contenedor contenido">
+
+        <section class="introduccion">
+
+            <h2>Información del personal</h2>
+
+            <p>
+                Modifique la información del usuario seleccionado.
+            </p>
+
+        </section>
+
+        <section class="formulario-contenedor">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="mensaje-error">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <!-- NOMBRES -->
+                <div class="campo-formulario">
+
+                    <label for="{{ form.first_name.id_for_label }}">
+                        Nombres
+                    </label>
+
+                    {{ form.first_name }}
+
+                    {% if form.first_name.errors %}
+                    <div class="error-campo">
+                        {{ form.first_name.errors }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- APELLIDOS -->
+                <div class="campo-formulario">
+
+                    <label for="{{ form.last_name.id_for_label }}">
+                        Apellidos
+                    </label>
+
+                    {{ form.last_name }}
+
+                    {% if form.last_name.errors %}
+                    <div class="error-campo">
+                        {{ form.last_name.errors }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- USUARIO -->
+                <div class="campo-formulario">
+
+                    <label for="{{ form.username.id_for_label }}">
+                        Usuario
+                    </label>
+
+                    {{ form.username }}
+
+                    {% if form.username.errors %}
+                    <div class="error-campo">
+                        {{ form.username.errors }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- CORREO -->
+                <div class="campo-formulario">
+
+                    <label for="{{ form.email.id_for_label }}">
+                        Correo electrónico
+                    </label>
+
+                    {{ form.email }}
+
+                    {% if form.email.errors %}
+                    <div class="error-campo">
+                        {{ form.email.errors }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- ROL -->
+                <div class="campo-formulario">
+
+                    <label for="{{ form.rol.id_for_label }}">
+                        Rol del usuario
+                    </label>
+
+                    {{ form.rol }}
+
+                    {% if form.rol.errors %}
+                    <div class="error-campo">
+                        {{ form.rol.errors }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- NUEVA CONTRASEÑA -->
+                <div class="campo-formulario">
+
+                    <label for="{{ form.password.id_for_label }}">
+                        Nueva contraseña
+                    </label>
+
+                    {{ form.password }}
+
+                    {% if form.password.errors %}
+                    <div class="error-campo">
+                        {{ form.password.errors }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- CONFIRMAR CONTRASEÑA -->
+                <div class="campo-formulario">
+
+                    <label for="{{ form.password_confirmacion.id_for_label }}">
+                        Confirmar nueva contraseña
+                    </label>
+
+                    {{ form.password_confirmacion }}
+
+                    {% if form.password_confirmacion.errors %}
+                    <div class="error-campo">
+                        {{ form.password_confirmacion.errors }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- ESTADO -->
+                <div class="campo-formulario campo-checkbox">
+
+                    {{ form.is_active }}
+
+                    <label for="{{ form.is_active.id_for_label }}">
+                        Personal activo
+                    </label>
+
+                    {% if form.is_active.errors %}
+                    <div class="error-campo">
+                        {{ form.is_active.errors }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- BOTONES -->
+                <div class="acciones-formulario">
+
+                    <button type="submit" class="boton boton-primario">
+                        Guardar cambios
+                    </button>
+
+                    <a href="{% url 'personal_lista' %}" class="boton boton-secundario">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="pie">
+        <div class="contenedor">
+            <p>Sistema de Inventario · Aulas y Servidores</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

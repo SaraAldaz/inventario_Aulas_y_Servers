@@ -204,6 +204,19 @@
 
                                 </a>
 
+                                <form method="post" action="{% url 'aula_eliminar' aula.id %}"
+                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta aula? Esta acción no se puede deshacer.');"
+                                    style="margin: 0;">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="boton boton-peligro">
+                                        Eliminar
+                                    </button>
+
+                                </form>
+
+
                             </div>
 
                         </td>
