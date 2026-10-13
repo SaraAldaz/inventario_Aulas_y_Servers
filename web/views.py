@@ -3,7 +3,8 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.forms import UserChangeForm
+from django.db.models.deletion import ProtectedError, RestrictedError
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, HttpResponseForbidden
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
@@ -961,7 +962,44 @@ def aula_editar(request, aula_id):
 @require_POST
 def aula_eliminar(request, aula_id):
     aula = get_object_or_404(Aula, pk=aula_id)
-    aula.delete()
+
+    # Verificar si el aula tiene registros relacionados
+    tiene_registros = False
+
+    for relacion in aula._meta.related_objects:
+        try:
+            relacionado = getattr(aula, relacion.get_accessor_name())
+
+            if relacion.one_to_one:
+                tiene_registros = True
+            elif relacionado.exists():
+                tiene_registros = True
+
+            if tiene_registros:
+                break
+
+        except ObjectDoesNotExist:
+            continue
+
+    if tiene_registros:
+        messages.error(
+            request,
+            f"No se puede eliminar el aula {aula.codigo} porque tiene "
+            "computadores, mobiliario u otros registros relacionados. "
+            "Retira o reasigna esos registros primero."
+        )
+        return redirect("aulas_lista")
+
+    try:
+        aula.delete()
+        messages.success(request, "El aula se eliminó correctamente.")
+
+    except (ProtectedError, RestrictedError):
+        messages.error(
+            request,
+            "No se puede eliminar esta aula porque tiene registros "
+            "relacionados que impiden su eliminación."
+        )
 
     return redirect("aulas_lista")
 

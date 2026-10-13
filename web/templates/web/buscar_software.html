@@ -1,72 +1,184 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar software instalado</title>
+
+    <title>Buscar software - Inventario</title>
+
     <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
 </head>
 
 <body>
-    <main class="contenedor">
-        <h1>Buscar software instalado</h1>
-        <p>Consulta en qué aulas está registrado un programa.</p>
 
-        <form method="get" action="{% url 'buscar_software' %}">
-            <label for="buscar">Nombre del software</label>
-            <input type="search" id="buscar" name="buscar" value="{{ buscar }}"
-                placeholder="Ej. AutoCAD, Office, Java..." required>
-            <button type="submit" class="boton boton-primario">
-                Buscar
-            </button>
-            <a href="{% url 'buscar_software' %}" class="boton boton-secundario">
-                Limpiar
+    <!-- ENCABEZADO -->
+
+    <header class="encabezado">
+
+        <div class="contenedor">
+
+            <div>
+                <h1>Buscar software instalado</h1>
+
+            </div>
+
+            <a href="{% url 'inicio' %}" class="boton-volver">
+                ← Volver al inicio
             </a>
-        </form>
+
+        </div>
+
+    </header>
+
+
+    <!-- CONTENIDO -->
+
+    <main class="contenedor contenido">
+
+        <!-- INTRODUCCIÓN -->
+
+        <section class="introduccion">
+
+            <h2>Consulta de software</h2>
+
+            <p>
+                Busca un programa para conocer su versión,
+                tipo de licencia y aula donde está registrado.
+            </p>
+
+        </section>
+
+
+        <!-- BUSCADOR -->
+
+        <section class="busqueda">
+
+            <form method="get"
+                  action="{% url 'buscar_software' %}"
+                  class="formulario-busqueda">
+
+                <input
+                    type="search"
+                    id="buscar"
+                    name="buscar"
+                    value="{{ buscar }}"
+                    placeholder="Buscar por nombre: AutoCAD, Office, Java..."
+                    class="campo-busqueda"
+                    required
+                >
+
+                <button type="submit" class="boton boton-primario">
+                    Buscar
+                </button>
+
+                {% if buscar %}
+                    <a href="{% url 'buscar_software' %}"
+                       class="boton boton-secundario">
+                        Limpiar
+                    </a>
+                {% endif %}
+
+            </form>
+
+        </section>
+
+
+        <!-- INFORMACIÓN DE BÚSQUEDA -->
 
         {% if realizo_busqueda %}
-        <h2>Resultados para "{{ buscar }}"</h2>
 
-        {% if software %}
-        <div class="tabla-contenedor">
-            <table class="tabla-inventario">
-                <thead>
-                    <tr>
-                        <th>Software</th>
-                        <th>Versión</th>
-                        <th>Licencia</th>
-                        <th>Aula</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in software %}
-                    <tr>
-                        <td>{{ item.nombre }}</td>
-                        <td>{{ item.version|default:"No especificada" }}</td>
-                        <td>{{ item.get_tipo_licencia_display }}</td>
-                        <td>
-                            <a href="{% url 'inventario_aula' item.aula_id %}">
-                                {{ item.aula.codigo }}
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <p>No se encontró software activo con ese nombre.</p>
-        {% endif %}
+            <div class="mensaje-busqueda">
+                Resultados para:
+                <strong>"{{ buscar }}"</strong>
+            </div>
+
         {% endif %}
 
-        <p>
-            <a href="{% url 'inicio' %}" class="boton boton-secundario">
-                Volver al inicio
-            </a>
-        </p>
+
+        <!-- TABLA DE RESULTADOS -->
+
+        {% if realizo_busqueda %}
+
+            <section class="tabla-contenedor">
+
+                <table class="tabla-inventario">
+
+                    <thead>
+                        <tr>
+                            <th>Software</th>
+                            <th>Versión</th>
+                            <th>Licencia</th>
+                            <th>Aula</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in software %}
+
+                            <tr>
+
+                                <td>
+                                    {{ item.nombre }}
+                                </td>
+
+                                <td>
+                                    {{ item.version|default:"No especificada" }}
+                                </td>
+
+                                <td>
+                                    {{ item.get_tipo_licencia_display }}
+                                </td>
+
+                                <td>
+                                    <a href="{% url 'inventario_aula' item.aula_id %}">
+                                        Aula {{ item.aula.codigo }}
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+                                <td colspan="4" class="sin-registros">
+
+                                    No se encontró software activo
+                                    para "{{ buscar }}".
+
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+        {% endif %}
+
     </main>
-</body>
 
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer class="pie">
+
+        <div class="contenedor">
+
+            <p>
+                Sistema de Inventario
+                · Aulas y Servidores
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
 </html>
