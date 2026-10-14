@@ -632,9 +632,10 @@
 
 
         </section>
-        
+
         <!-- SOFTWARE INSTALADO EN EL AULA -->
         <section class="seccion">
+
             <div class="encabezado-seccion">
                 <h2>Software instalado en el aula</h2>
 
@@ -646,30 +647,62 @@
             {% if software_aula %}
             <div class="tabla-contenedor">
                 <table class="tabla-inventario">
+
                     <thead>
                         <tr>
                             <th>Nombre</th>
                             <th>Versión</th>
                             <th>Tipo de licencia</th>
                             <th>Observaciones</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {% for software in software_aula %}
                         <tr>
                             <td>{{ software.nombre }}</td>
-                            <td>{{ software.version|default:"No especificada" }}</td>
+
+                            <td>
+                                {{ software.version|default:"No especificada" }}
+                            </td>
+
                             <td>{{ software.get_tipo_licencia_display }}</td>
-                            <td>{{ software.observaciones|default:"Sin observaciones" }}</td>
+
+                            <td>
+                                {{ software.observaciones|default:"Sin observaciones" }}
+                            </td>
+
+                            <td>
+                                <a href="{% url 'software_editar_aula' aula.id software.id %}"
+                                    class="boton boton-primario">
+                                    Editar
+                                </a>
+
+                                <form method="post" action="{% url 'software_eliminar_aula' aula.id software.id %}"
+                                    style="display: inline;"
+                                    onsubmit="return confirm('¿Deseas desactivar este software del inventario?');">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="boton boton-peligro">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
+
                 </table>
             </div>
+
             {% else %}
             <p>Actualmente no hay software registrado en esta aula.</p>
             {% endif %}
+
         </section>
+
 
 
     </main>

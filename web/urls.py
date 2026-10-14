@@ -281,6 +281,19 @@ urlpatterns = [
         views.buscar_software,
         name="buscar_software",
     ),
+    
+    path(
+        "aula/<int:aula_id>/software/<int:software_id>/editar/",
+        views.software_editar_aula,
+        name="software_editar_aula",
+    ),
+
+    path(
+        "aula/<int:aula_id>/software/<int:software_id>/eliminar/",
+        views.software_eliminar_aula,
+        name="software_eliminar_aula",
+    ),
+
 ]
 
 

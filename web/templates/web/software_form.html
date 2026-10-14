@@ -1,61 +1,114 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ titulo }}</title>
+
+    <title>{{ titulo }} - Inventario</title>
+
     <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
 </head>
 
 <body>
+
     <header class="encabezado">
         <div class="contenedor">
-            <h1>{{ titulo }}</h1>
+            <div>
+                <h1>{{ titulo }}</h1>
+            </div>
+
+            {% if aula %}
             <a href="{% url 'inventario_aula' aula.id %}" class="boton-volver">
                 ← Volver al aula
             </a>
+            {% else %}
+            <a href="{% url 'buscar_software' %}" class="boton-volver">
+                ← Volver al software
+            </a>
+            {% endif %}
         </div>
     </header>
 
     <main class="contenedor contenido">
+
         <section class="introduccion">
-            <h2>Aula {{ aula.codigo }}</h2>
-            <p>{{ aula.nombre }}</p>
-            <p>El software registrado se asociará a toda esta aula.</p>
+            <h2>Información del software</h2>
+
+            <p>
+                {% if programa %}
+                Modifique la información del software instalado.
+                {% else %}
+                Complete la información del software que desea registrar.
+                {% endif %}
+            </p>
         </section>
 
-        <section>
+        <section class="formulario-contenedor">
+
+            {% if form.non_field_errors %}
+            <div class="mensaje-error">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
             <form method="post">
                 {% csrf_token %}
 
-                {% for field in form %}
+                {% for campo in form %}
                 <div class="campo-formulario">
-                    <label for="{{ field.id_for_label }}">
-                        {{ field.label }}
+
+                    <label for="{{ campo.id_for_label }}">
+                        {{ campo.label }}
                     </label>
 
-                    {{ field }}
+                    {{ campo }}
 
-                    {% for error in field.errors %}
-                    <p class="error">{{ error }}</p>
-                    {% endfor %}
+                    {% if campo.errors %}
+                    <div class="error-campo">
+                        {{ campo.errors }}
+                    </div>
+                    {% endif %}
+
                 </div>
                 {% endfor %}
 
-                {% if form.non_field_errors %}
-                <div class="errores">
-                    {{ form.non_field_errors }}
-                </div>
-                {% endif %}
+                <div class="acciones-formulario">
 
-                <button type="submit" class="boton">
-                    Guardar software
-                </button>
+                    <button type="submit" class="boton boton-primario">
+                        {% if programa %}
+                        Actualizar software
+                        {% else %}
+                        Guardar software
+                        {% endif %}
+                    </button>
+
+                    {% if aula %}
+                    <a href="{% url 'inventario_aula' aula.id %}" class="boton boton-secundario">
+                        Cancelar
+                    </a>
+                    {% else %}
+                    <a href="{% url 'buscar_software' %}" class="boton boton-secundario">
+                        Cancelar
+                    </a>
+                    {% endif %}
+
+                </div>
+
             </form>
+
         </section>
+
     </main>
+
+    <footer class="pie">
+        <div class="contenedor">
+            <p>Sistema de Inventario · Aulas y Servidores</p>
+        </div>
+    </footer>
+
 </body>
 
 </html>

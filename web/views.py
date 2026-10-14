@@ -495,6 +495,80 @@ def software_crear(request, aula_id):
     )
 
 
+@login_required
+def software_editar_aula(request, aula_id, software_id):
+    if not verificar_admin_o_personal(request):
+        return HttpResponseForbidden("No tiene permisos para modificar el software.")
+
+    aula = get_object_or_404(Aula, id=aula_id, activo=True)
+
+    programa = get_object_or_404(
+        SoftwareInstalado,
+        id=software_id,
+        aula=aula,
+        activo=True,
+    )
+
+    if request.method == "POST":
+        form = SoftwareInstaladoForm(
+            request.POST,
+            instance=programa,
+        )
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(
+                request,
+                "Software actualizado correctamente.",
+            )
+
+            return redirect("inventario_aula", aula_id=aula.id)
+
+    else:
+        form = SoftwareInstaladoForm(instance=programa)
+
+    return render(
+        request,
+        "web/software_form.html",
+        {
+            "form": form,
+            "programa": programa,
+            "aula": aula,
+            "titulo": "Editar software instalado",
+        },
+    )
+
+
+@login_required
+def software_eliminar_aula(request, aula_id, software_id):
+    if not verificar_admin_o_personal(request):
+        return HttpResponseForbidden("No tiene permisos para eliminar el software.")
+
+    if request.method != "POST":
+        return redirect("inventario_aula", aula_id=aula_id)
+
+    aula = get_object_or_404(Aula, id=aula_id, activo=True)
+
+    programa = get_object_or_404(
+        SoftwareInstalado,
+        id=software_id,
+        aula=aula,
+        activo=True,
+    )
+
+    nombre = programa.nombre
+    programa.activo = False
+    programa.save(update_fields=["activo"])
+
+    messages.success(
+        request,
+        f'El software "{nombre}" fue desactivado correctamente.',
+    )
+
+    return redirect("inventario_aula", aula_id=aula.id)
+
+
 # ============================================================
 # DETALLE EQUIPO
 # ADMIN + PERSONAL
