@@ -64,10 +64,7 @@ urlpatterns = [
         views.aula_editar,
         name="aula_editar",
     ),
-    path("aulas/<int:aula_id>/eliminar/", 
-        views.aula_eliminar, 
-        name="aula_eliminar"
-    ),
+    path("aulas/<int:aula_id>/eliminar/", views.aula_eliminar, name="aula_eliminar"),
     path(
         "piso/<int:piso_id>/",
         views.aulas_por_piso,
@@ -107,6 +104,11 @@ urlpatterns = [
         name="computador_editar",
     ),
     path(
+        "computadores/<int:computador_id>/eliminar/",
+        views.computador_eliminar,
+        name="computador_eliminar",
+    ),
+    path(
         "computadores/<int:computador_id>/desactivar/",
         views.computador_desactivar,
         name="computador_desactivar",
@@ -134,6 +136,15 @@ urlpatterns = [
         views.detalle_equipo,
         name="detalle_equipo",
     ),
+    path("equipos/<int:equipo_id>/editar/", 
+        views.equipo_editar, 
+        name="equipo_editar"
+    ),
+    path(
+        "equipos/<int:equipo_id>/eliminar/",
+        views.equipo_eliminar,
+        name="equipo_eliminar",
+    ),
     # ============================================================
     # MOBILIARIO
     # ============================================================
@@ -143,9 +154,24 @@ urlpatterns = [
         name="mobiliario_lista",
     ),
     path(
+        "mobiliario/agregar/",
+        views.mobiliario_crear,
+        name="mobiliario_crear",
+    ),
+    path(
         "mobiliario/<int:mobiliario_id>/",
         views.detalle_mobiliario,
         name="detalle_mobiliario",
+    ),
+    path(
+        "mobiliario/<int:mobiliario_id>/editar/",
+        views.mobiliario_editar,
+        name="mobiliario_editar",
+    ),
+    path(
+        "mobiliario/<int:mobiliario_id>/eliminar/",
+        views.mobiliario_eliminar,
+        name="mobiliario_eliminar",
     ),
     # ============================================================
     # PERSONAL

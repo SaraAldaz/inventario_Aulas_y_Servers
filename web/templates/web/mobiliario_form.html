@@ -1,0 +1,215 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% if mobiliario %}
+        Editar mobiliario
+        {% else %}
+        Agregar mobiliario
+        {% endif %}
+        - Inventario
+    </title>
+
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+</head>
+
+<body>
+
+    <header class="encabezado">
+        <div class="contenedor">
+
+            <div>
+                <h1>
+                    {% if mobiliario %}
+                    Editar mobiliario
+                    {% else %}
+                    Agregar mobiliario
+                    {% endif %}
+                </h1>
+
+                <p>
+                    Administración de mobiliario · Aulas y Servidores
+                </p>
+            </div>
+
+            <a href="{% url 'mobiliario_lista' %}" class="boton-volver">
+                ← Volver a mobiliario
+            </a>
+
+        </div>
+    </header>
+
+    <main class="contenedor contenido">
+
+        <!-- INTRODUCCIÓN -->
+
+        <section class="introduccion">
+
+            {% if mobiliario %}
+            <h2>Modificar información</h2>
+
+            <p>
+                Actualice la información del mobiliario seleccionado.
+            </p>
+            {% else %}
+            <h2>Registrar nuevo mobiliario</h2>
+
+            <p>
+                Complete la información del mobiliario que desea
+                registrar en el inventario.
+            </p>
+            {% endif %}
+
+        </section>
+
+        <!-- FORMULARIO -->
+
+        <section class="formulario-contenedor">
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="mensaje-error">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <!-- CÓDIGO DE INVENTARIO -->
+
+                <div class="campo-formulario">
+                    <label for="{{ form.codigo_inventario.id_for_label }}">
+                        Código de inventario
+                    </label>
+
+                    {{ form.codigo_inventario }}
+
+                    {% if form.codigo_inventario.errors %}
+                    <div class="error-campo">
+                        {{ form.codigo_inventario.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- AULA -->
+
+                <div class="campo-formulario">
+                    <label for="{{ form.aula.id_for_label }}">
+                        Aula
+                    </label>
+
+                    {{ form.aula }}
+
+                    {% if form.aula.errors %}
+                    <div class="error-campo">
+                        {{ form.aula.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- TIPO -->
+
+                <div class="campo-formulario">
+                    <label for="{{ form.tipo.id_for_label }}">
+                        Tipo de mobiliario
+                    </label>
+
+                    {{ form.tipo }}
+
+                    {% if form.tipo.errors %}
+                    <div class="error-campo">
+                        {{ form.tipo.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- ESTADO -->
+
+                <div class="campo-formulario">
+                    <label for="{{ form.estado.id_for_label }}">
+                        Estado
+                    </label>
+
+                    {{ form.estado }}
+
+                    {% if form.estado.errors %}
+                    <div class="error-campo">
+                        {{ form.estado.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- OBSERVACIONES -->
+
+                <div class="campo-formulario">
+                    <label for="{{ form.observaciones.id_for_label }}">
+                        Observaciones
+                    </label>
+
+                    {{ form.observaciones }}
+
+                    {% if form.observaciones.errors %}
+                    <div class="error-campo">
+                        {{ form.observaciones.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- MOBILIARIO ACTIVO -->
+
+                <div class="campo-checkbox">
+                    {{ form.activo }}
+
+                    <label for="{{ form.activo.id_for_label }}">
+                        Mobiliario activo
+                    </label>
+
+                    {% if form.activo.errors %}
+                    <div class="error-campo">
+                        {{ form.activo.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- ACCIONES -->
+
+                <div class="acciones-formulario">
+
+                    <button type="submit" class="boton boton-primario">
+                        {% if mobiliario %}
+                        Guardar cambios
+                        {% else %}
+                        Registrar mobiliario
+                        {% endif %}
+                    </button>
+
+                    <a href="{% url 'mobiliario_lista' %}" class="boton boton-secundario">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="pie">
+        <div class="contenedor">
+            <p>
+                Sistema de Inventario · Aulas y Servidores
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

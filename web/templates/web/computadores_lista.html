@@ -233,6 +233,15 @@
 
                             {% endif %}
 
+                            
+                            <form method="post" action="{% url 'computador_eliminar' computador.id %}"
+                                onsubmit="return confirm('¿Estás seguro de eliminar definitivamente este computador? Esta acción no se puede deshacer.');"
+                                style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                    
+
                         </td>
 
                     </tr>

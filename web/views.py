@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.db import transaction
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.deletion import ProtectedError, RestrictedError
@@ -23,6 +24,8 @@ from inventario.models import (
 
 from inventario.forms import (
     ComputadorForm,
+    ComponenteComputadorFormSet,
+    ComponenteComputadorForm,
     MovimientoActivoForm,
     MantenimientoForm,
     EquipoTecnologicoForm,
@@ -30,6 +33,7 @@ from inventario.forms import (
     AulaForm,
     PersonalForm,
     SoftwareInstaladoForm,
+    MobiliarioForm,
 )
 
 from .decorators import solo_admin, solo_personal
@@ -348,6 +352,44 @@ def inventario_aula(request, aula_id):
     return render(request, "web/inventario_aula.html", contexto)
 
 
+def activo_tiene_historial(activo):
+    tipo = ContentType.objects.get_for_model(activo)
+
+    # Historial genérico de mantenimiento y movimientos.
+    if Mantenimiento.objects.filter(
+        content_type=tipo,
+        object_id=activo.pk,
+    ).exists():
+        return True
+
+    if MovimientoActivo.objects.filter(
+        content_type=tipo,
+        object_id=activo.pk,
+    ).exists():
+        return True
+
+    # Relaciones inversas con otros modelos.
+    for relacion in activo._meta.related_objects:
+        accessor = relacion.get_accessor_name()
+
+        if accessor == "+":
+            continue
+
+        try:
+            relacionado = getattr(activo, accessor)
+
+            if relacion.one_to_one:
+                return True
+
+            if relacionado.exists():
+                return True
+
+        except (AttributeError, relacion.related_model.DoesNotExist):
+            continue
+
+    return False
+
+
 # ============================================================
 # DETALLE COMPUTADOR
 # ADMIN + PERSONAL
@@ -363,8 +405,6 @@ def detalle_computador(request, computador_id):
     computador = get_object_or_404(Computador, id=computador_id)
 
     componentes = computador.componentes.all().order_by("tipo")
-
-    software_instalado = computador.software_instalado.all().order_by("nombre")
 
     mantenimientos = (
         Mantenimiento.objects.filter(
@@ -389,10 +429,36 @@ def detalle_computador(request, computador_id):
         "componentes": componentes,
         "mantenimientos": mantenimientos,
         "movimientos": movimientos,
-        "software_instalado": software_instalado,
     }
 
     return render(request, "web/detalle_computador.html", contexto)
+
+
+@login_required
+@solo_admin
+@require_POST
+def computador_eliminar(request, computador_id):
+    computador = get_object_or_404(Computador, pk=computador_id)
+
+    if activo_tiene_historial(computador):
+        messages.error(
+            request,
+            "No se puede eliminar el computador porque tiene "
+            "mantenimientos, movimientos o registros relacionados.",
+        )
+        return redirect("computadores_lista")
+
+    try:
+        computador.delete()
+        messages.success(request, "Computador eliminado correctamente.")
+    except (ProtectedError, RestrictedError):
+        messages.error(
+            request,
+            "No se puede eliminar el computador porque tiene "
+            "registros relacionados.",
+        )
+
+    return redirect("computadores_lista")
 
 
 @login_required
@@ -470,6 +536,32 @@ def detalle_equipo(request, equipo_id):
     return render(request, "web/detalle_equipo.html", contexto)
 
 
+@login_required
+@solo_admin
+@require_POST
+def equipo_eliminar(request, equipo_id):
+    equipo = get_object_or_404(EquipoTecnologico, pk=equipo_id)
+
+    if activo_tiene_historial(equipo):
+        messages.error(
+            request,
+            "No se puede eliminar el equipo tecnológico porque tiene "
+            "mantenimientos, movimientos o registros relacionados.",
+        )
+        return redirect("equipos_lista")
+
+    try:
+        equipo.delete()
+        messages.success(request, "Equipo tecnológico eliminado correctamente.")
+    except (ProtectedError, RestrictedError):
+        messages.error(
+            request,
+            "No se puede eliminar el equipo porque tiene registros relacionados.",
+        )
+
+    return redirect("equipos_lista")
+
+
 # ============================================================
 # DETALLE MOBILIARIO
 # ADMIN + PERSONAL
@@ -499,6 +591,82 @@ def detalle_mobiliario(request, mobiliario_id):
     }
 
     return render(request, "web/detalle_mobiliario.html", contexto)
+
+
+@login_required
+@solo_admin
+def mobiliario_crear(request):
+    if request.method == "POST":
+        form = MobiliarioForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "El mobiliario se agregó correctamente.")
+            return redirect("mobiliario_lista")
+    else:
+        form = MobiliarioForm()
+
+    contexto = {
+        "form": form,
+        "titulo": "Agregar mobiliario",
+    }
+
+    return render(request, "web/mobiliario_form.html", contexto)
+
+
+@login_required
+@solo_admin
+@require_POST
+def mobiliario_eliminar(request, mobiliario_id):
+    mueble = get_object_or_404(Mobiliario, pk=mobiliario_id)
+
+    if activo_tiene_historial(mueble):
+        messages.error(
+            request,
+            "No se puede eliminar el mobiliario porque tiene "
+            "mantenimientos, movimientos o registros relacionados.",
+        )
+        return redirect("mobiliario_lista")
+
+    try:
+        mueble.delete()
+        messages.success(request, "Mobiliario eliminado correctamente.")
+    except (ProtectedError, RestrictedError):
+        messages.error(
+            request,
+            "No se puede eliminar el mobiliario porque tiene registros relacionados.",
+        )
+
+    return redirect("mobiliario_lista")
+
+
+@login_required
+@solo_admin
+def mobiliario_editar(request, mobiliario_id):
+    elemento = get_object_or_404(Mobiliario, pk=mobiliario_id)
+
+    if request.method == "POST":
+        form = MobiliarioForm(request.POST, instance=elemento)
+
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request,
+                "El mobiliario se actualizó correctamente.",
+            )
+            return redirect("mobiliario_lista")
+    else:
+        form = MobiliarioForm(instance=elemento)
+
+    return render(
+        request,
+        "web/mobiliario_form.html",
+        {
+            "form": form,
+            "mobiliario": elemento,
+            "titulo": "Editar mobiliario",
+        },
+    )
 
 
 # ============================================================
@@ -558,6 +726,65 @@ def equipo_crear(request):
     }
 
     return render(request, "web/equipo_form.html", contexto)
+
+
+@login_required
+@solo_admin
+def equipo_editar(request, equipo_id):
+    equipo = get_object_or_404(EquipoTecnologico, pk=equipo_id)
+
+    if request.method == "POST":
+        form = EquipoTecnologicoForm(request.POST, instance=equipo)
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(request, "Equipo tecnológico actualizado correctamente.")
+
+            return redirect("equipos_lista")
+
+    else:
+        form = EquipoTecnologicoForm(instance=equipo)
+
+    return render(
+        request,
+        "web/equipo_form.html",
+        {
+            "form": form,
+            "equipo": equipo,
+            "titulo": "Editar equipo tecnológico",
+        },
+    )
+
+
+@login_required
+@solo_admin
+@require_POST
+def equipo_eliminar(request, equipo_id):
+    equipo = get_object_or_404(EquipoTecnologico, pk=equipo_id)
+
+    if activo_tiene_historial(equipo):
+        messages.error(
+            request,
+            "No se puede eliminar este equipo tecnológico porque tiene "
+            "mantenimientos, movimientos u otros registros relacionados.",
+        )
+        return redirect("equipos_lista")
+
+    try:
+        equipo.delete()
+        messages.success(
+            request,
+            "El equipo tecnológico se eliminó correctamente.",
+        )
+    except (ProtectedError, RestrictedError):
+        messages.error(
+            request,
+            "No se puede eliminar el equipo porque tiene "
+            "registros relacionados que lo impiden.",
+        )
+
+    return redirect("equipos_lista")
 
 
 # ============================================================
@@ -694,56 +921,91 @@ def computadores_lista(request):
 @login_required
 @solo_admin
 def computador_crear(request):
+    tipos = ["CPU", "PANTALLA", "TECLADO", "MOUSE"]
 
     if request.method == "POST":
-
         form = ComputadorForm(request.POST)
+        componentes_form = ComponenteComputadorFormSet(request.POST)
 
-        if form.is_valid():
+        # Asignar el tipo correspondiente a cada formulario
+        for componente_form, tipo in zip(componentes_form.forms, tipos):
+            componente_form.instance.tipo = tipo
 
-            form.save()
+        if form.is_valid() and componentes_form.is_valid():
+            with transaction.atomic():
+                computador = form.save()
 
+                componentes_form.instance = computador
+
+                componentes = componentes_form.save(commit=False)
+
+                for componente in componentes:
+                    componente.computador = computador
+                    componente.save()
+
+                componentes_form.save_m2m()
+
+            messages.success(
+                request,
+                "Computador y sus cuatro componentes registrados correctamente.",
+            )
             return redirect("computadores_lista")
 
     else:
-
         form = ComputadorForm()
+        componentes_form = ComponenteComputadorFormSet()
 
-    contexto = {
-        "form": form,
-        "titulo": "Agregar computador",
-    }
+        for componente_form, tipo in zip(componentes_form.forms, tipos):
+            componente_form.initial["tipo"] = tipo
 
-    return render(request, "web/computador_form.html", contexto)
+    return render(
+        request,
+        "web/computador_form.html",
+        {
+            "form": form,
+            "componentes_form": componentes_form,
+        },
+    )
 
 
 @login_required
 @solo_admin
 def computador_editar(request, computador_id):
-
-    computador = get_object_or_404(Computador, id=computador_id)
+    computador = get_object_or_404(Computador, pk=computador_id)
 
     if request.method == "POST":
-
         form = ComputadorForm(request.POST, instance=computador)
+        componentes_form = ComponenteComputadorFormSet(
+            request.POST,
+            instance=computador,
+        )
 
-        if form.is_valid():
+        if form.is_valid() and componentes_form.is_valid():
+            with transaction.atomic():
+                form.save()
+                componentes_form.save()
 
-            form.save()
-
+            messages.success(
+                request,
+                "Computador y componentes actualizados correctamente.",
+            )
             return redirect("computadores_lista")
 
     else:
-
         form = ComputadorForm(instance=computador)
+        componentes_form = ComponenteComputadorFormSet(
+            instance=computador,
+        )
 
-    contexto = {
-        "form": form,
-        "computador": computador,
-        "titulo": "Editar computador",
-    }
-
-    return render(request, "web/computador_form.html", contexto)
+    return render(
+        request,
+        "web/computador_form.html",
+        {
+            "form": form,
+            "computador": computador,
+            "componentes_form": componentes_form,
+        },
+    )
 
 
 @login_required
@@ -986,7 +1248,7 @@ def aula_eliminar(request, aula_id):
             request,
             f"No se puede eliminar el aula {aula.codigo} porque tiene "
             "computadores, mobiliario u otros registros relacionados. "
-            "Retira o reasigna esos registros primero."
+            "Retira o reasigna esos registros primero.",
         )
         return redirect("aulas_lista")
 
@@ -998,7 +1260,7 @@ def aula_eliminar(request, aula_id):
         messages.error(
             request,
             "No se puede eliminar esta aula porque tiene registros "
-            "relacionados que impiden su eliminación."
+            "relacionados que impiden su eliminación.",
         )
 
     return redirect("aulas_lista")

@@ -14,48 +14,33 @@
 
 <body>
 
-    <!-- ENCABEZADO -->
-
     <header class="encabezado">
-
         <div class="contenedor">
-
             <div>
                 <h1>Buscar software instalado</h1>
-
+                <p>Inventario de software · Aulas y Servidores</p>
             </div>
 
             <a href="{% url 'inicio' %}" class="boton-volver">
                 ← Volver al inicio
             </a>
-
         </div>
-
     </header>
-
-
-    <!-- CONTENIDO -->
 
     <main class="contenedor contenido">
 
-        <!-- INTRODUCCIÓN -->
-
         <section class="introduccion">
-
-            <h2>Consulta de software</h2>
+            <h2>Listado de software</h2>
 
             <p>
-                Busca un programa para conocer su versión,
-                tipo de licencia y aula donde está registrado.
+                Consulte los programas registrados y conozca su versión,
+                tipo de licencia y aula donde están instalados.
             </p>
-
         </section>
-
 
         <!-- BUSCADOR -->
 
         <section class="busqueda">
-
             <form method="get"
                   action="{% url 'buscar_software' %}"
                   class="formulario-busqueda">
@@ -67,7 +52,6 @@
                     value="{{ buscar }}"
                     placeholder="Buscar por nombre: AutoCAD, Office, Java..."
                     class="campo-busqueda"
-                    required
                 >
 
                 <button type="submit" class="boton boton-primario">
@@ -82,102 +66,86 @@
                 {% endif %}
 
             </form>
-
         </section>
-
-
-        <!-- INFORMACIÓN DE BÚSQUEDA -->
-
-        {% if realizo_busqueda %}
-
-            <div class="mensaje-busqueda">
-                Resultados para:
-                <strong>"{{ buscar }}"</strong>
-            </div>
-
-        {% endif %}
-
 
         <!-- TABLA DE RESULTADOS -->
 
         {% if realizo_busqueda %}
+            <div class="mensaje-busqueda">
+                Resultados para:
+                <strong>"{{ buscar }}"</strong>
+            </div>
+        {% endif %}
 
-            <section class="tabla-contenedor">
+        <section class="tabla-contenedor">
 
-                <table class="tabla-inventario">
+            <table class="tabla-inventario">
 
-                    <thead>
+                <thead>
+                    <tr>
+                        <th>Software</th>
+                        <th>Versión</th>
+                        <th>Licencia</th>
+                        <th>Aula</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for item in software %}
                         <tr>
-                            <th>Software</th>
-                            <th>Versión</th>
-                            <th>Licencia</th>
-                            <th>Aula</th>
-                        </tr>
-                    </thead>
+                            <td>
+                                <strong>{{ item.nombre }}</strong>
+                            </td>
 
-                    <tbody>
+                            <td>
+                                {{ item.version|default:"No especificada" }}
+                            </td>
 
-                        {% for item in software %}
+                            <td>
+                                {{ item.get_tipo_licencia_display }}
+                            </td>
 
-                            <tr>
-
-                                <td>
-                                    {{ item.nombre }}
-                                </td>
-
-                                <td>
-                                    {{ item.version|default:"No especificada" }}
-                                </td>
-
-                                <td>
-                                    {{ item.get_tipo_licencia_display }}
-                                </td>
-
-                                <td>
+                            <td>
+                                {% if item.aula_id %}
                                     <a href="{% url 'inventario_aula' item.aula_id %}">
                                         Aula {{ item.aula.codigo }}
                                     </a>
-                                </td>
+                                {% else %}
+                                    Sin aula asignada
+                                {% endif %}
+                            </td>
+                        </tr>
 
-                            </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="sin-registros">
 
-                        {% empty %}
+                                {% if buscar %}
+                                    No se encontró software para "{{ buscar }}".
+                                {% else %}
+                                    No hay software registrado.
+                                {% endif %}
 
-                            <tr>
-                                <td colspan="4" class="sin-registros">
+                            </td>
+                        </tr>
+                    {% endfor %}
 
-                                    No se encontró software activo
-                                    para "{{ buscar }}".
+                </tbody>
 
-                                </td>
-                            </tr>
+            </table>
 
-                        {% endfor %}
-
-                    </tbody>
-
-                </table>
-
-            </section>
-
-        {% endif %}
+        </section>
 
     </main>
 
-
-    <!-- PIE DE PÁGINA -->
-
     <footer class="pie">
-
         <div class="contenedor">
-
             <p>
                 Sistema de Inventario
                 · Aulas y Servidores
             </p>
-
         </div>
-
     </footer>
 
 </body>

@@ -29,11 +29,9 @@
                 {{ titulo }}
             </h1>
 
-            <p>
-                Administración de equipos tecnológicos
-                · Aulas y Servidores
-            </p>
-
+            <a href="{% url 'equipos_lista' %}" class="boton-volver">
+                ← Volver a equipos
+            </a>
         </div>
 
     </header>
@@ -50,8 +48,11 @@
             </h2>
 
             <p>
-                Complete la información correspondiente
-                al equipo tecnológico.
+                {% if equipo %}
+                Modifique la información del equipo tecnológico.
+                {% else %}
+                Complete la información correspondiente al equipo tecnológico.
+                {% endif %}
             </p>
 
         </section>
@@ -326,7 +327,11 @@
                 <div class="acciones-formulario">
 
                     <button type="submit" class="boton boton-primario">
+                        {% if equipo %}
+                        Actualizar equipo
+                        {% else %}
                         Guardar equipo
+                        {% endif %}
                     </button>
 
 

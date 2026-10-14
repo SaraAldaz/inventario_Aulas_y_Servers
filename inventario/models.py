@@ -61,7 +61,7 @@ class ComponenteComputador(models.Model):
 
     modelo = models.CharField(max_length=100, blank=True)
 
-    serial = models.CharField(max_length=100, blank=True)
+    serial = models.CharField(max_length=100, blank=True, default="")
 
     estado = models.CharField(
         max_length=30,
@@ -74,7 +74,7 @@ class ComponenteComputador(models.Model):
         default="OPERATIVO",
     )
 
-    observaciones = models.TextField(blank=True)
+    observaciones = models.TextField(blank=True, default="")
 
     class Meta:
         ordering = ["computador__codigo_inventario", "tipo"]

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from infraestructura.models import Aula, Piso
+from django.forms import inlineformset_factory
 from django.contrib.auth.models import User
 from .models import (
     Computador,
@@ -589,7 +590,7 @@ class ComputadorForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "rows": 4,
-                    "placeholder": "Observaciones",
+                    "placeholder": "Características",
                 }
             ),
             "activo": forms.CheckboxInput(
@@ -598,6 +599,43 @@ class ComputadorForm(forms.ModelForm):
                 }
             ),
         }
+
+
+class ComponenteComputadorForm(forms.ModelForm):
+    class Meta:
+        model = ComponenteComputador
+        fields = ["tipo", "serial", "marca"]
+
+        widgets = {
+            "tipo": forms.HiddenInput(),
+            "serial": forms.TextInput(
+                attrs={
+                    "placeholder": "Ingrese el código de inventario",
+                    "class": "form-control",
+                }
+            ),
+            "marca": forms.TextInput(
+                attrs={
+                    "placeholder": "Ingrese la marca",
+                    "class": "form-control",
+                }
+            ),
+        }
+
+        labels = {
+            "serial": "Código de inventario del componente",
+            "marca": "Marca",
+        }
+
+
+ComponenteComputadorFormSet = inlineformset_factory(
+    Computador,
+    ComponenteComputador,
+    form=ComponenteComputadorForm,
+    extra=4,
+    max_num=4,
+    can_delete=False,
+)
 
 
 class EquipoTecnologicoForm(forms.ModelForm):
@@ -746,6 +784,45 @@ class EquipoTecnologicoForm(forms.ModelForm):
                 )
 
         return cleaned_data
+
+
+class MobiliarioForm(forms.ModelForm):
+    class Meta:
+        model = Mobiliario
+        fields = "__all__"
+        widgets = {
+            "codigo_inventario": forms.TextInput(
+                attrs={
+                    "class": "campo-formulario",
+                }
+            ),
+            "aula": forms.Select(
+                attrs={
+                    "class": "campo-formulario",
+                }
+            ),
+            "tipo": forms.Select(
+                attrs={
+                    "class": "campo-formulario",
+                }
+            ),
+            "estado": forms.Select(
+                attrs={
+                    "class": "campo-formulario",
+                }
+            ),
+            "observaciones": forms.Textarea(
+                attrs={
+                    "class": "campo-formulario",
+                    "rows": 4,
+                }
+            ),
+            "activo": forms.CheckboxInput(
+                attrs={
+                    "class": "campo-checkbox",
+                }
+            ),
+        }
 
 
 class PisoForm(forms.ModelForm):

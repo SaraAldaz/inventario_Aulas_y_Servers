@@ -63,6 +63,9 @@
                 registrados en las aulas.
             </p>
 
+            <a href="{% url 'mobiliario_crear' %}" class="boton boton-primario">
+                + Agregar mobiliario
+            </a>
         </section>
 
 
@@ -172,14 +175,25 @@
 
                         </td>
 
-
                         <td>
-
                             <a href="{% url 'detalle_mobiliario' elemento.id %}" class="boton boton-secundario">
                                 Ver
                             </a>
 
+                            <a href="{% url 'mobiliario_editar' elemento.id %}" class="boton boton-primario">
+                                Editar
+                            </a>
+
+                            <form method="post" action="{% url 'mobiliario_eliminar' elemento.id %}"
+                                style="display: inline;"
+                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar definitivamente este elemento de mobiliario? Esta acción no se puede deshacer.');">
+                                {% csrf_token %}
+                                <button type="submit" class="boton boton-peligro">
+                                    Eliminar
+                                </button>
+                            </form>
                         </td>
+
 
 
                     </tr>
