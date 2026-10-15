@@ -97,7 +97,8 @@ class EquipoTecnologico(models.Model):
         ("BARRA_SONIDO", "Barra de sonido"),
         ("AIRE_ACONDICIONADO", "Aire acondicionado"),
         ("TELON_PROYECCION", "Telón de proyección"),
-    ]
+        ("AYUDA_AUDIOVISUAL", "Ayuda audiovisual"),
+    ]    
 
     codigo_inventario = models.CharField(max_length=50, unique=True)
 
@@ -145,6 +146,7 @@ class Mobiliario(models.Model):
     TIPOS_MOBILIARIO = [
         ("MESA", "Mesa"),
         ("SILLA", "Silla"),
+        ("OTRO", "Otro"),
     ]
 
     codigo_inventario = models.CharField(max_length=50, unique=True)
