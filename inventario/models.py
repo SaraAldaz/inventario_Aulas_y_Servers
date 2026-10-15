@@ -93,11 +93,12 @@ class ComponenteComputador(models.Model):
 
 class EquipoTecnologico(models.Model):
     TIPOS_EQUIPO = [
-        ("VIDEO_BEAM", "Video Beam"),
-        ("BARRA_SONIDO", "Barra de sonido"),
         ("AIRE_ACONDICIONADO", "Aire acondicionado"),
-        ("TELON_PROYECCION", "Telón de proyección"),
         ("AYUDA_AUDIOVISUAL", "Ayuda audiovisual"),
+        ("BARRA_SONIDO", "Barra de sonido"),
+        ("CAMARA_VIDEOVIGILANCIA", "Cámara de videovigilancia"),
+        ("TELON_PROYECCION", "Telón de proyección"),
+        ("VIDEO_BEAM", "Video Beam"),
         ("OTRO", "Otro"),
     ]    
 
@@ -109,7 +110,7 @@ class EquipoTecnologico(models.Model):
 
     marca = models.CharField(max_length=100, blank=True)
 
-    modelo = models.CharField(max_length=100, blank=True)
+    modelo = models.CharField(max_length=100, blank=True, default="")
 
     serial = models.CharField(max_length=100, blank=True, default="")
 
