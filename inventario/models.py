@@ -98,13 +98,12 @@ class EquipoTecnologico(models.Model):
         ("AIRE_ACONDICIONADO", "Aire acondicionado"),
         ("TELON_PROYECCION", "Telón de proyección"),
         ("AYUDA_AUDIOVISUAL", "Ayuda audiovisual"),
+        ("OTRO", "Otro"),
     ]    
 
     codigo_inventario = models.CharField(max_length=50, unique=True)
 
-    aula = models.ForeignKey(
-        Aula, on_delete=models.PROTECT, related_name="equipos_tecnologicos"
-    )
+    aula = models.ForeignKey(Aula, on_delete=models.PROTECT, related_name="equipos_tecnologicos")
 
     tipo = models.CharField(max_length=30, choices=TIPOS_EQUIPO)
 
@@ -112,7 +111,7 @@ class EquipoTecnologico(models.Model):
 
     modelo = models.CharField(max_length=100, blank=True)
 
-    serial = models.CharField(max_length=100, blank=True)
+    serial = models.CharField(max_length=100, blank=True, default="")
 
     estado = models.CharField(
         max_length=30,

@@ -639,26 +639,12 @@ ComponenteComputadorFormSet = inlineformset_factory(
 
 
 class EquipoTecnologicoForm(forms.ModelForm):
-    piso = forms.ModelChoiceField(
-        queryset=Piso.objects.filter(activo=True),
-        required=True,
-        label="Piso",
-        empty_label="Seleccione un piso",
-        widget=forms.Select(
-            attrs={
-                "class": "form-control",
-                "id": "id_piso",
-            }
-        ),
-    )
-
     class Meta:
 
         model = EquipoTecnologico
 
         fields = [
             "codigo_inventario",
-            "piso",
             "aula",
             "tipo",
             "marca",
@@ -724,66 +710,13 @@ class EquipoTecnologicoForm(forms.ModelForm):
             ),
         }
 
-    def __init__(self, *args, **kwargs):
 
-        super().__init__(*args, **kwargs)
+def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
 
-        # ============================================================
-        # AULA VACÍA INICIALMENTE
-        # ============================================================
+    self.fields["aula"].queryset = Aula.objects.filter(activo=True).order_by("codigo")
 
-        self.fields["aula"].queryset = Aula.objects.none()
-
-        # ============================================================
-        # SI EL FORMULARIO YA TIENE UN AULA
-        # ============================================================
-
-        if self.instance and self.instance.pk:
-
-            if self.instance.aula:
-
-                self.fields["piso"].initial = self.instance.aula.piso
-
-                self.fields["aula"].queryset = Aula.objects.filter(
-                    piso=self.instance.aula.piso,
-                    activo=True,
-                ).order_by("codigo")
-
-        # ============================================================
-        # CUANDO EL USUARIO SELECCIONA UN PISO
-        # ============================================================
-
-        if "piso" in self.data:
-
-            try:
-
-                piso_id = int(self.data.get("piso"))
-
-                self.fields["aula"].queryset = Aula.objects.filter(
-                    piso_id=piso_id,
-                    activo=True,
-                ).order_by("codigo")
-
-            except (ValueError, TypeError):
-
-                self.fields["aula"].queryset = Aula.objects.none()
-
-    def clean(self):
-
-        cleaned_data = super().clean()
-
-        piso = cleaned_data.get("piso")
-        aula = cleaned_data.get("aula")
-
-        if piso and aula:
-
-            if aula.piso_id != piso.id:
-
-                raise forms.ValidationError(
-                    "El aula seleccionada no pertenece " "al piso seleccionado."
-                )
-
-        return cleaned_data
+    self.fields["aula"].empty_label = "Seleccione un aula"
 
 
 class MobiliarioForm(forms.ModelForm):

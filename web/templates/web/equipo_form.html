@@ -102,35 +102,7 @@
 
                 </div>
 
-
-
-                <!-- ==================================================
-                 PISO
-            =================================================== -->
-
-                <div class="campo-formulario">
-
-                    <label for="{{ form.piso.id_for_label }}">
-                        Piso
-                    </label>
-
-                    {{ form.piso }}
-
-                    {% if form.piso.errors %}
-
-                    <div class="error-campo">
-                        {{ form.piso.errors }}
-                    </div>
-
-                    {% endif %}
-
-                </div>
-
-
-
-                <!-- ==================================================
-                 AULA
-            =================================================== -->
+                <!-- AULA -->
 
                 <div class="campo-formulario">
 
@@ -138,12 +110,16 @@
                         Aula
                     </label>
 
+
                     {{ form.aula }}
+
 
                     {% if form.aula.errors %}
 
                     <div class="error-campo">
+
                         {{ form.aula.errors }}
+
                     </div>
 
                     {% endif %}
@@ -216,30 +192,6 @@
 
                     <div class="error-campo">
                         {{ form.modelo.errors }}
-                    </div>
-
-                    {% endif %}
-
-                </div>
-
-
-
-                <!-- ==================================================
-                 SERIAL
-            =================================================== -->
-
-                <div class="campo-formulario">
-
-                    <label for="{{ form.serial.id_for_label }}">
-                        Número de serial
-                    </label>
-
-                    {{ form.serial }}
-
-                    {% if form.serial.errors %}
-
-                    <div class="error-campo">
-                        {{ form.serial.errors }}
                     </div>
 
                     {% endif %}
