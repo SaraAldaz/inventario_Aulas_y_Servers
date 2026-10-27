@@ -13,11 +13,13 @@
     <title>
         {{ titulo }} - Inventario
     </title>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css">
     <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
 
-</head>
 
+</head>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
+<script src="{% static 'web/js/mantenimiento.js' %}"></script>
 
 <body>
 
@@ -34,9 +36,9 @@
                 {{ titulo }}
             </h1>
 
-            <p>
-                Gestión de mantenimiento · Aulas y Servidores
-            </p>
+            <a href="{% url 'mantenimientos_lista' %}" class="boton-volver">
+                ← Volver a mantenimientos
+            </a>
 
         </div>
 
@@ -116,13 +118,11 @@
                 </div>
 
 
-
                 <!-- =========================================
-                 ACTIVO
+                ACTIVO
             ========================================== -->
 
                 <div class="campo-formulario">
-
                     <label for="{{ form.activo_seleccionado.id_for_label }}">
                         Activo
                     </label>
@@ -130,13 +130,10 @@
                     {{ form.activo_seleccionado }}
 
                     {% if form.activo_seleccionado.errors %}
-
                     <div class="error-campo">
                         {{ form.activo_seleccionado.errors }}
                     </div>
-
                     {% endif %}
-
                 </div>
 
 
@@ -352,8 +349,6 @@
         </div>
 
     </footer>
-
-
 </body>
 
 </html>

@@ -1125,7 +1125,138 @@ ul.errorlist {
 }
 
 
+/* =====================================================
+   BUSCADOR INTEGRADO DE ACTIVOS - TOM SELECT
+===================================================== */
 
+
+/* =====================================================
+   TOM SELECT - ESTILO UNIFICADO CON LOS FORMULARIOS
+===================================================== */
+
+.campo-formulario .ts-wrapper {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+/* Campo de selección y búsqueda */
+.campo-formulario .ts-wrapper.single .ts-control {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 42px;
+    padding: 11px 13px;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: normal;
+    outline: none;
+    box-shadow: none;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+/* Texto seleccionado */
+.campo-formulario .ts-wrapper.single .ts-control .item {
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: normal;
+}
+
+/* Texto que se escribe para buscar */
+.campo-formulario .ts-wrapper .ts-control input {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: normal;
+}
+
+/* Texto de ayuda dentro del campo */
+.campo-formulario .ts-wrapper .ts-control input::placeholder {
+    color: #64748b;
+    opacity: 1;
+}
+
+/* Estado enfocado: igual que los demás campos */
+.campo-formulario .ts-wrapper.focus .ts-control,
+.campo-formulario .ts-wrapper.dropdown-active .ts-control {
+    border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(36, 90, 135, 0.12);
+}
+
+/* Lista desplegable */
+.campo-formulario .ts-wrapper .ts-dropdown {
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Opciones de la lista */
+.campo-formulario .ts-wrapper .ts-dropdown .option {
+    padding: 11px 13px;
+    color: var(--texto);
+    font-size: 14px;
+}
+
+/* Opción resaltada al navegar o buscar */
+.campo-formulario .ts-wrapper .ts-dropdown .active {
+    background: #f1f5f9;
+    color: var(--texto);
+}
+
+/* Campo deshabilitado */
+.campo-formulario .ts-wrapper.disabled .ts-control {
+    background: #f1f5f9;
+    color: #64748b;
+    cursor: not-allowed;
+}
+
+/* =====================================================
+   RESPONSIVIDAD
+===================================================== */
+
+.campo-formulario .ts-wrapper,
+.campo-formulario .ts-wrapper .ts-control {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+@media (max-width: 600px) {
+    .campo-formulario .ts-wrapper.single .ts-control {
+        min-height: 42px;
+        padding: 11px 13px;
+        font-size: 14px;
+    }
+
+    .campo-formulario .ts-wrapper .ts-control input,
+    .campo-formulario .ts-wrapper.single .ts-control .item {
+        font-size: 14px;
+    }
+
+    .campo-formulario .ts-wrapper .ts-dropdown {
+        max-width: 100%;
+        font-size: 14px;
+    }
+
+    .campo-formulario .ts-wrapper .ts-dropdown .option {
+        padding: 12px 13px;
+    }
+}
 
 
 /* =========================================================

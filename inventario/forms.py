@@ -461,31 +461,29 @@ class MantenimientoForm(forms.ModelForm):
             ),
         }
 
-    def __init__(self, *args, **kwargs):
 
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.fields["fecha"].input_formats = ["%Y-%m-%dT%H:%M"]
 
-        self.fields["responsable"].queryset = User.objects.filter(
-            is_active=True
-        ).order_by("first_name", "last_name")
+        self.fields["responsable"].queryset = User.objects.filter(is_active=True).order_by(
+            "first_name", "last_name"
+        )
         self.fields["responsable"].label = "Responsable"
         self.fields["responsable"].empty_label = "Seleccione el responsable"
 
         opciones = []
 
         for objeto in Computador.objects.all():
-
             opciones.append(
                 (
                     f"computador:{objeto.pk}",
-                    f"Computador - " f"{objeto.codigo_inventario}",
+                    f"Computador - {objeto.codigo_inventario}",
                 )
             )
 
         for objeto in ComponenteComputador.objects.all():
-
             opciones.append(
                 (
                     f"componente:{objeto.pk}",
@@ -494,24 +492,53 @@ class MantenimientoForm(forms.ModelForm):
             )
 
         for objeto in EquipoTecnologico.objects.all():
-
             opciones.append(
                 (
                     f"equipo:{objeto.pk}",
-                    f"{objeto.get_tipo_display()} - " f"{objeto.codigo_inventario}",
+                    f"{objeto.get_tipo_display()} - {objeto.codigo_inventario}",
                 )
             )
 
         for objeto in Mobiliario.objects.all():
-
             opciones.append(
                 (
                     f"mobiliario:{objeto.pk}",
-                    f"{objeto.get_tipo_display()} - " f"{objeto.codigo_inventario}",
+                    f"{objeto.get_tipo_display()} - {objeto.codigo_inventario}",
                 )
             )
 
-        self.fields["activo_seleccionado"].choices = opciones
+        self.fields["activo_seleccionado"].choices = [
+            ("", "Seleccione un activo")
+        ] + opciones
+
+
+    def clean_activo_seleccionado(self):
+        valor = self.cleaned_data.get("activo_seleccionado")
+        tipo_activo = self.cleaned_data.get("tipo_activo")
+
+        if not valor:
+            return valor
+
+        tipo_seleccionado, activo_id = valor.split(":", 1)
+
+        if tipo_seleccionado != tipo_activo:
+            raise forms.ValidationError(
+                "El activo seleccionado no corresponde al tipo de activo elegido."
+            )
+
+        modelos = {
+            "computador": Computador,
+            "componente": ComponenteComputador,
+            "equipo": EquipoTecnologico,
+            "mobiliario": Mobiliario,
+        }
+
+        modelo = modelos.get(tipo_seleccionado)
+
+        if modelo is None or not modelo.objects.filter(pk=activo_id).exists():
+            raise forms.ValidationError("El activo seleccionado no existe.")
+
+        return valor
 
     def save(self, commit=True):
 

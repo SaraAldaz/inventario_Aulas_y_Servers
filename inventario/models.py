@@ -268,6 +268,7 @@ class Mantenimiento(models.Model):
         ("CORRECTIVO", "Correctivo"),
         ("LIMPIEZA", "Limpieza"),
         ("DIAGNOSTICO", "Diagnóstico"),
+        ("PREDICTIVO", "Predictivo"),
         ("ACTUALIZACION", "Actualización"),
         ("CAMBIO_COMPONENTE", "Cambio de componente"),
         ("OTRO", "Otro"),
