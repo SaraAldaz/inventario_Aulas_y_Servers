@@ -67,9 +67,11 @@
             </p>
 
 
+            {% if request.user.is_authenticated %}
             <a href="{% url 'computador_crear' %}" class="boton boton-primario">
                 + Agregar computador
             </a>
+            {% endif %}
 
         </section>
 
@@ -213,11 +215,9 @@
                                 Ver
                             </a>
 
-
-                            <a href="{% url 'computador_editar' computador.id %}" class="boton boton-secundario">
+                            <a href="{% url 'computador_editar' computador.id %}" class="boton boton-primario">
                                 Editar
                             </a>
-
 
                             {% if computador.activo %}
 
@@ -233,14 +233,21 @@
 
                             {% endif %}
 
-                            
+                            {% if es_admin %}
+
                             <form method="post" action="{% url 'computador_eliminar' computador.id %}"
-                                onsubmit="return confirm('¿Estás seguro de eliminar definitivamente este computador? Esta acción no se puede deshacer.');"
+                                onsubmit="return confirm('¿Estás seguro de eliminar definitivamente este computador?');"
                                 style="display:inline;">
+
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
+
+                                <button type="submit" class="boton boton-peligro">
+                                    Eliminar
+                                </button>
+
                             </form>
-                    
+
+                            {% endif %}
 
                         </td>
 

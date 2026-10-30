@@ -1,0 +1,339 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Movimientos - Inventario
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'web/css/estilos.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     ENCABEZADO
+====================================================== -->
+
+<header class="encabezado">
+
+    <div class="contenedor">
+
+        <div>
+
+            <h1>
+                Movimientos de activos
+            </h1>
+
+            <p>
+                Historial de movimientos del inventario institucional
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'inicio' %}"
+            class="boton-volver"
+        >
+            ← Volver al inicio
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     CONTENIDO
+====================================================== -->
+
+<main class="contenedor contenido">
+
+
+    <!-- =================================================
+         INTRODUCCIÓN
+    ================================================== -->
+
+    <section class="introduccion">
+
+        <h2>
+            Historial de movimientos
+        </h2>
+
+        <p>
+            Consulte y administre los movimientos registrados
+            para los activos del inventario.
+        </p>
+
+
+        <a
+            href="{% url 'movimiento_crear' %}"
+            class="boton boton-primario"
+        >
+            + Registrar movimiento
+        </a>
+
+    </section>
+
+
+
+    <!-- =================================================
+         BUSCADOR
+    ================================================== -->
+
+    <section class="busqueda">
+
+        <form
+            method="get"
+            class="formulario-busqueda"
+        >
+
+            <input
+                type="text"
+                name="buscar"
+                value="{{ buscar }}"
+                placeholder="Buscar por código de activo o responsable"
+                class="campo-busqueda"
+            >
+
+
+            <button
+                type="submit"
+                class="boton boton-primario"
+            >
+                Buscar
+            </button>
+
+
+            {% if buscar %}
+
+                <a
+                    href="{% url 'personal_movimientos_lista' %}"
+                    class="boton boton-secundario"
+                >
+                    Limpiar
+                </a>
+
+            {% endif %}
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =================================================
+         MENSAJE DE BÚSQUEDA
+    ================================================== -->
+
+    {% if buscar %}
+
+        <div class="mensaje-busqueda">
+
+            Resultados para:
+
+            <strong>
+                "{{ buscar }}"
+            </strong>
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- =================================================
+         TABLA
+    ================================================== -->
+
+    <section class="tabla-contenedor">
+
+        <table class="tabla-inventario">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Fecha
+                    </th>
+
+                    <th>
+                        Activo
+                    </th>
+
+                    <th>
+                        Movimiento
+                    </th>
+
+                    <th>
+                        Aula origen
+                    </th>
+
+                    <th>
+                        Aula destino
+                    </th>
+
+                    <th>
+                        Motivo
+                    </th>
+
+                    <th>
+                        Responsable
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for movimiento in movimientos %}
+
+                    <tr>
+
+                        <td>
+                            {{ movimiento.fecha|date:"d/m/Y H:i" }}
+                        </td>
+
+
+                        <td>
+                            {{ movimiento.activo }}
+                        </td>
+
+
+                        <td>
+                            {{ movimiento.get_tipo_display }}
+                        </td>
+
+
+                        <td>
+
+                            {% if movimiento.aula_origen %}
+
+                                {{ movimiento.aula_origen.codigo }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if movimiento.aula_destino %}
+
+                                {{ movimiento.aula_destino.codigo }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ movimiento.motivo }}
+                        </td>
+
+
+                        <td>
+
+                            {% if movimiento.responsable.get_full_name %}
+
+                                {{ movimiento.responsable.get_full_name }}
+
+                            {% else %}
+
+                                {{ movimiento.responsable.username }}
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="sin-registros"
+                        >
+
+                            {% if buscar %}
+
+                                No se encontraron movimientos
+                                para "{{ buscar }}".
+
+                            {% else %}
+
+                                No hay movimientos registrados.
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     PIE DE PÁGINA
+====================================================== -->
+
+<footer class="pie">
+
+    <div class="contenedor">
+
+        <p>
+            Sistema de Inventario
+            · Aulas y Servidores
+        </p>
+
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>

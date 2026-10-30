@@ -316,10 +316,16 @@
                         Guardar mantenimiento
                     </button>
 
-
+                    {% if es_admin %}
                     <a href="{% url 'mantenimientos_lista' %}" class="boton boton-secundario">
                         Cancelar
                     </a>
+                    {% endif %}
+                    {% if es_personal %}
+                    <a href="{% url 'personal_mantenimientos_lista' %}" class="boton boton-secundario">
+                        Cancelar
+                    </a>
+                    {% endif %}
 
                 </div>
 

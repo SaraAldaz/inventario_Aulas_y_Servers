@@ -176,6 +176,7 @@
                         </td>
 
                         <td>
+
                             <a href="{% url 'detalle_mobiliario' elemento.id %}" class="boton boton-secundario">
                                 Ver
                             </a>
@@ -184,16 +185,23 @@
                                 Editar
                             </a>
 
+                            {% if es_admin %}
+
                             <form method="post" action="{% url 'mobiliario_eliminar' elemento.id %}"
-                                style="display: inline;"
-                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar definitivamente este elemento de mobiliario? Esta acción no se puede deshacer.');">
+                                style="display:inline;"
+                                onsubmit="return confirm('¿Estás seguro de eliminar definitivamente este elemento de mobiliario?');">
+
                                 {% csrf_token %}
+
                                 <button type="submit" class="boton boton-peligro">
                                     Eliminar
                                 </button>
-                            </form>
-                        </td>
 
+                            </form>
+
+                            {% endif %}
+
+                        </td>
 
 
                     </tr>

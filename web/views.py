@@ -34,6 +34,9 @@ from inventario.forms import (
     PersonalForm,
     SoftwareInstaladoForm,
     MobiliarioForm,
+    PersonalComputadorForm,
+    PersonalEquipoTecnologicoForm,
+    PersonalMobiliarioForm,
 )
 
 from .decorators import solo_admin, solo_personal
@@ -668,7 +671,6 @@ def detalle_mobiliario(request, mobiliario_id):
 
 
 @login_required
-@solo_admin
 def mobiliario_crear(request):
     if request.method == "POST":
         form = MobiliarioForm(request.POST)
@@ -715,7 +717,6 @@ def mobiliario_eliminar(request, mobiliario_id):
 
 
 @login_required
-@solo_admin
 def mobiliario_editar(request, mobiliario_id):
     elemento = get_object_or_404(Mobiliario, pk=mobiliario_id)
 
@@ -750,7 +751,6 @@ def mobiliario_editar(request, mobiliario_id):
 
 
 @login_required
-@solo_admin
 def equipos_lista(request):
 
     buscar = request.GET.get("buscar", "").strip()
@@ -771,13 +771,13 @@ def equipos_lista(request):
     contexto = {
         "equipos": equipos,
         "buscar": buscar,
+        "es_admin": usuario_es_admin(request.user),
     }
 
     return render(request, "web/equipos_lista.html", contexto)
 
 
 @login_required
-@solo_admin
 def equipo_crear(request):
 
     if request.method == "POST":
@@ -803,7 +803,6 @@ def equipo_crear(request):
 
 
 @login_required
-@solo_admin
 def equipo_editar(request, equipo_id):
     equipo = get_object_or_404(EquipoTecnologico, pk=equipo_id)
 
@@ -868,7 +867,6 @@ def equipo_eliminar(request, equipo_id):
 
 
 @login_required
-@solo_admin
 def mobiliario_lista(request):
 
     buscar = request.GET.get("buscar", "").strip()
@@ -887,6 +885,7 @@ def mobiliario_lista(request):
     contexto = {
         "mobiliario": mobiliario,
         "buscar": buscar,
+        "es_admin": usuario_es_admin(request.user),
     }
 
     return render(request, "web/mobiliario_lista.html", contexto)
@@ -967,7 +966,6 @@ def aula_activo(request, tipo, activo_id):
 
 
 @login_required
-@solo_admin
 def computadores_lista(request):
 
     buscar = request.GET.get("buscar", "").strip()
@@ -987,13 +985,13 @@ def computadores_lista(request):
     contexto = {
         "computadores": computadores,
         "buscar": buscar,
+        "es_admin": usuario_es_admin(request.user),
     }
 
     return render(request, "web/computadores_lista.html", contexto)
 
 
 @login_required
-@solo_admin
 def computador_crear(request):
     tipos = ["CPU", "PANTALLA", "TECLADO", "MOUSE"]
 
@@ -1043,7 +1041,6 @@ def computador_crear(request):
 
 
 @login_required
-@solo_admin
 def computador_editar(request, computador_id):
     computador = get_object_or_404(Computador, pk=computador_id)
 
@@ -1083,7 +1080,6 @@ def computador_editar(request, computador_id):
 
 
 @login_required
-@solo_admin
 def computador_desactivar(request, computador_id):
 
     computador = get_object_or_404(Computador, id=computador_id)
@@ -1102,7 +1098,6 @@ def computador_desactivar(request, computador_id):
 
 
 @login_required
-@solo_admin
 def computador_activar(request, computador_id):
 
     computador = get_object_or_404(Computador, id=computador_id)
@@ -1499,31 +1494,90 @@ def mantenimientos_lista(request):
 @login_required
 def mantenimiento_crear(request):
 
+    if not verificar_admin_o_personal(request):
+        return HttpResponseForbidden("No tiene permisos para registrar mantenimientos.")
+
+    es_admin = (
+        request.user.is_superuser
+        or request.user.groups.filter(name="Administradores").exists()
+    )
+
+    es_personal = request.user.groups.filter(name="Personal").exists()
+
     if request.method == "POST":
 
         form = MantenimientoForm(request.POST)
 
         if form.is_valid():
 
-            mantenimiento = form.save(commit=False)
+            mantenimiento = form.save()
 
-            mantenimiento.responsable = request.user
+            messages.success(request, "El mantenimiento se registró correctamente.")
 
-            mantenimiento.save()
+            if es_admin:
+                return redirect("mantenimientos_lista")
 
-            return redirect("personal_mantenimientos_lista")
+            elif es_personal:
+                return redirect("personal_mantenimientos_lista")
 
     else:
-
         form = MantenimientoForm()
 
-    contexto = {
-        "form": form,
-        "titulo": "Registrar mantenimiento",
-        "usuario": request.user,
-    }
+    return render(
+        request,
+        "web/mantenimiento_form.html",
+        {
+            "form": form,
+            "titulo": "Registrar mantenimiento",
+            "es_admin": es_admin,
+            "es_personal": es_personal,
+        },
+    )
 
-    return render(request, "web/mantenimiento_form.html", contexto)
+
+@solo_admin
+def mantenimiento_editar(request, mantenimiento_id):
+
+    mantenimiento = get_object_or_404(Mantenimiento, id=mantenimiento_id)
+
+    if request.method == "POST":
+        form = MantenimientoForm(request.POST, instance=mantenimiento)
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(request, "El mantenimiento se actualizó correctamente.")
+
+            return redirect("mantenimientos_lista")
+
+    else:
+        form = MantenimientoForm(instance=mantenimiento)
+
+    return render(
+        request,
+        "web/mantenimiento_form.html",
+        {
+            "form": form,
+            "mantenimiento": mantenimiento,
+            "titulo": "Editar mantenimiento",
+        },
+    )
+
+
+@solo_admin
+def mantenimiento_eliminar(request, mantenimiento_id):
+
+    mantenimiento = get_object_or_404(Mantenimiento, id=mantenimiento_id)
+
+    if request.method == "POST":
+
+        mantenimiento.delete()
+
+        messages.success(request, "El mantenimiento fue eliminado correctamente.")
+
+        return redirect("mantenimientos_lista")
+
+    return redirect("mantenimientos_lista")
 
 
 # ============================================================

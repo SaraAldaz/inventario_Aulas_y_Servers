@@ -461,15 +461,14 @@ class MantenimientoForm(forms.ModelForm):
             ),
         }
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.fields["fecha"].input_formats = ["%Y-%m-%dT%H:%M"]
 
-        self.fields["responsable"].queryset = User.objects.filter(is_active=True).order_by(
-            "first_name", "last_name"
-        )
+        self.fields["responsable"].queryset = User.objects.filter(
+            is_active=True
+        ).order_by("first_name", "last_name")
         self.fields["responsable"].label = "Responsable"
         self.fields["responsable"].empty_label = "Seleccione el responsable"
 
@@ -511,7 +510,6 @@ class MantenimientoForm(forms.ModelForm):
             ("", "Seleccione un activo")
         ] + opciones
 
-
     def clean_activo_seleccionado(self):
         valor = self.cleaned_data.get("activo_seleccionado")
         tipo_activo = self.cleaned_data.get("tipo_activo")
@@ -546,7 +544,7 @@ class MantenimientoForm(forms.ModelForm):
 
         valor = self.cleaned_data["activo_seleccionado"]
 
-        tipo_activo, activo_id = valor.split(":")
+        tipo_activo, activo_id = valor.split(":", 1)
 
         modelos = {
             "computador": Computador,
@@ -560,12 +558,18 @@ class MantenimientoForm(forms.ModelForm):
         objeto = modelo.objects.get(pk=activo_id)
 
         mantenimiento.content_type = ContentType.objects.get_for_model(modelo)
-
         mantenimiento.object_id = objeto.pk
 
         if commit:
 
             mantenimiento.save()
+
+            # Actualizar el estado del activo seleccionado
+            if tipo_activo in ["computador", "componente", "equipo"]:
+
+                objeto.estado = mantenimiento.estado_posterior
+
+                objeto.save(update_fields=["estado"])
 
         return mantenimiento
 
@@ -783,6 +787,43 @@ class MobiliarioForm(forms.ModelForm):
                 }
             ),
         }
+
+
+# ============================================================
+# FORMULARIOS PARA PERSONAL
+# ============================================================
+
+
+class PersonalComputadorForm(ComputadorForm):
+    class Meta(ComputadorForm.Meta):
+        fields = [
+            "codigo_inventario",
+            "aula",
+            "marca",
+            "modelo",
+            "estado",
+            "observaciones",
+        ]
+
+
+class PersonalEquipoTecnologicoForm(EquipoTecnologicoForm):
+    class Meta(EquipoTecnologicoForm.Meta):
+        fields = [
+            "codigo_inventario",
+            "aula",
+            "tipo",
+            "marca",
+            "modelo",
+            "serial",
+            "estado",
+            "observaciones",
+        ]
+
+
+class PersonalMobiliarioForm(MobiliarioForm):
+    class Meta:
+        model = Mobiliario
+        exclude = ["activo"]
 
 
 class PisoForm(forms.ModelForm):

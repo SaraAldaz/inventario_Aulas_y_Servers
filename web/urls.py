@@ -136,10 +136,7 @@ urlpatterns = [
         views.detalle_equipo,
         name="detalle_equipo",
     ),
-    path("equipos/<int:equipo_id>/editar/", 
-        views.equipo_editar, 
-        name="equipo_editar"
-    ),
+    path("equipos/<int:equipo_id>/editar/", views.equipo_editar, name="equipo_editar"),
     path(
         "equipos/<int:equipo_id>/eliminar/",
         views.equipo_eliminar,
@@ -229,6 +226,16 @@ urlpatterns = [
         views.mantenimiento_crear,
         name="mantenimiento_crear",
     ),
+    path(
+        "mantenimientos/<int:mantenimiento_id>/editar/",
+        views.mantenimiento_editar,
+        name="mantenimiento_editar",
+    ),
+    path(
+        "mantenimientos/<int:mantenimiento_id>/eliminar/",
+        views.mantenimiento_eliminar,
+        name="mantenimiento_eliminar",
+    ),
     # ============================================================
     # MOVIMIENTOS
     # ============================================================
@@ -281,19 +288,16 @@ urlpatterns = [
         views.buscar_software,
         name="buscar_software",
     ),
-    
     path(
         "aula/<int:aula_id>/software/<int:software_id>/editar/",
         views.software_editar_aula,
         name="software_editar_aula",
     ),
-
     path(
         "aula/<int:aula_id>/software/<int:software_id>/eliminar/",
         views.software_eliminar_aula,
         name="software_eliminar_aula",
     ),
-
 ]
 
 

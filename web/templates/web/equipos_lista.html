@@ -205,16 +205,26 @@
                             <a href="{% url 'detalle_equipo' equipo.id %}" class="boton boton-secundario">
                                 Ver
                             </a>
+
                             <a href="{% url 'equipo_editar' equipo.id %}" class="boton boton-primario">
                                 Editar
                             </a>
 
+                            {% if es_admin %}
+
                             <form method="post" action="{% url 'equipo_eliminar' equipo.id %}"
-                                onsubmit="return confirm('¿Estás seguro de eliminar definitivamente este equipo tecnológico? Esta acción no se puede deshacer.');"
+                                onsubmit="return confirm('¿Estás seguro de eliminar definitivamente este equipo tecnológico?');"
                                 style="display:inline;">
+
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
+
+                                <button type="submit" class="boton boton-peligro">
+                                    Eliminar
+                                </button>
+
                             </form>
+
+                            {% endif %}
 
                         </td>
 

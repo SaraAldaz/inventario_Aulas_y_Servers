@@ -175,6 +175,9 @@
                             Estado posterior
                         </th>
 
+                        <th>
+                            Acciones
+                        </th>
                     </tr>
 
                 </thead>
@@ -229,6 +232,25 @@
                         <td>
                             {{ mantenimiento.get_estado_posterior_display }}
                         </td>
+                        <td class="acciones">
+
+                            <a href="{% url 'mantenimiento_editar' mantenimiento.id %}" class="boton boton-secundario">
+                                Editar
+                            </a>
+
+                            <form method="POST" action="{% url 'mantenimiento_eliminar' mantenimiento.id %}"
+                                style="display:inline;"
+                                onsubmit="return confirm('¿Está seguro de eliminar este mantenimiento? Esta acción no se puede deshacer.');">
+
+                                {% csrf_token %}
+
+                                <button type="submit" class="boton boton-peligro">
+                                    Eliminar
+                                </button>
+
+                            </form>
+
+                        </td>
 
                     </tr>
 
@@ -237,7 +259,7 @@
 
                     <tr>
 
-                        <td colspan="7" class="sin-registros">
+                        <td colspan="8" class="sin-registros">
 
                             {% if buscar %}
 

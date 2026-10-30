@@ -4,692 +4,238 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Panel de personal | Sistema de Inventario</title>
+    <title>Panel de usuario | Sistema de Inventario</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: "Segoe UI", Arial, sans-serif;
-            background: #f4f6f9;
-            color: #1f2937;
-        }
-
-        /* =====================================================
-           HEADER
-        ===================================================== */
-
-        .header {
-            background: linear-gradient(135deg,
-                    #0f4c81,
-                    #1f6b9e);
-
-            color: white;
-            padding: 22px 0;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
-        }
-
-        .header-container {
-            width: min(1180px, 92%);
-            margin: auto;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .brand h1 {
-            font-size: 25px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .brand p {
-            font-size: 14px;
-            opacity: 0.85;
-        }
-
-        .user-area {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info {
-            text-align: right;
-        }
-
-        .user-label {
-            font-size: 12px;
-            opacity: 0.75;
-        }
-
-        .username {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .logout-btn {
-            display: inline-block;
-
-            background: white;
-            color: #0f4c81;
-
-            padding: 10px 16px;
-
-            border-radius: 8px;
-
-            text-decoration: none;
-
-            font-size: 14px;
-            font-weight: 600;
-
-            transition: all 0.2s ease;
-        }
-
-        .logout-btn:hover {
-            background: #eaf1f7;
-            transform: translateY(-1px);
-        }
-
-
-        /* =====================================================
-           CONTENEDOR
-        ===================================================== */
-
-        .container {
-            width: min(1180px, 92%);
-            margin: 35px auto 60px;
-        }
-
-
-        /* =====================================================
-           BIENVENIDA
-        ===================================================== */
-
-        .welcome {
-            background: white;
-
-            border-radius: 14px;
-
-            padding: 28px 30px;
-
-            margin-bottom: 32px;
-
-            border: 1px solid #e3e8ee;
-
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .welcome h2 {
-            font-size: 24px;
-            color: #12395b;
-
-            margin-bottom: 8px;
-        }
-
-        .welcome p {
-            color: #64748b;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-
-        /* =====================================================
-           TITULOS DE SECCION
-        ===================================================== */
-
-        .section {
-            margin-bottom: 38px;
-        }
-
-        .section-header {
-            margin-bottom: 18px;
-        }
-
-        .section-title {
-            font-size: 21px;
-            color: #12395b;
-            font-weight: 700;
-
-            margin-bottom: 5px;
-        }
-
-        .section-description {
-            color: #718096;
-            font-size: 14px;
-        }
-
-
-        /* =====================================================
-           PISOS
-        ===================================================== */
-
-        .floors-grid {
-            display: grid;
-
-            grid-template-columns: repeat(auto-fit,
-                    minmax(210px, 1fr));
-
-            gap: 18px;
-        }
-
-        .floor-card {
-            background: white;
-
-            border: 1px solid #e1e7ee;
-
-            border-radius: 13px;
-
-            padding: 24px;
-
-            text-decoration: none;
-            color: inherit;
-
-            display: flex;
-            flex-direction: column;
-
-            min-height: 145px;
-
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
-
-            transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease,
-                border-color 0.2s ease;
-        }
-
-        .floor-card:hover {
-            transform: translateY(-4px);
-
-            border-color: #2875a8;
-
-            box-shadow:
-                0 10px 25px rgba(15, 76, 129, 0.13);
-        }
-
-        .floor-icon {
-            width: 45px;
-            height: 45px;
-
-            border-radius: 10px;
-
-            background: #eaf3f9;
-
-            color: #17608e;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 21px;
-
-            margin-bottom: 16px;
-        }
-
-        .floor-name {
-            font-size: 17px;
-            font-weight: 700;
-
-            color: #1e3a56;
-
-            margin-bottom: 6px;
-        }
-
-        .floor-action {
-            margin-top: auto;
-
-            font-size: 13px;
-            font-weight: 600;
-
-            color: #2670a0;
-        }
-
-
-        /* =====================================================
-           OPERACIONES
-        ===================================================== */
-
-        .operations-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(auto-fit,
-                    minmax(280px, 1fr));
-
-            gap: 20px;
-        }
-
-        .operation-card {
-            background: white;
-
-            border: 1px solid #e1e7ee;
-
-            border-radius: 14px;
-
-            padding: 25px;
-
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
-        }
-
-        .operation-icon {
-            width: 48px;
-            height: 48px;
-
-            border-radius: 11px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #edf5fa;
-
-            color: #17608e;
-
-            font-size: 22px;
-
-            margin-bottom: 17px;
-        }
-
-        .operation-card h3 {
-            color: #1e3a56;
-
-            font-size: 18px;
-
-            margin-bottom: 8px;
-        }
-
-        .operation-card p {
-            color: #718096;
-
-            font-size: 14px;
-
-            line-height: 1.55;
-
-            margin-bottom: 20px;
-        }
-
-        .operation-buttons {
-            display: flex;
-
-            flex-wrap: wrap;
-
-            gap: 10px;
-        }
-
-        .btn {
-            display: inline-block;
-
-            padding: 10px 15px;
-
-            border-radius: 8px;
-
-            text-decoration: none;
-
-            font-size: 13px;
-
-            font-weight: 600;
-
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary {
-            background: #17608e;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #124d75;
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: #edf2f6;
-            color: #31516c;
-        }
-
-        .btn-secondary:hover {
-            background: #dfe8ef;
-        }
-
-
-        /* =====================================================
-           PIE
-        ===================================================== */
-
-        .footer {
-            text-align: center;
-
-            color: #8a98a8;
-
-            font-size: 13px;
-
-            padding-top: 10px;
-        }
-
-
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
-
-        @media (max-width: 700px) {
-
-            .header-container {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .user-area {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .user-info {
-                text-align: left;
-            }
-
-            .container {
-                width: 94%;
-                margin-top: 25px;
-            }
-
-            .welcome {
-                padding: 22px;
-            }
-
-        }
-    </style>
-
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
 </head>
-
 
 <body>
 
+    <!-- ENCABEZADO -->
 
-    <!-- =========================================================
-     HEADER
-========================================================= -->
+    <header class="encabezado">
+        <div class="contenedor">
 
-    <header class="header">
-
-        <div class="header-container">
-
-            <div class="brand">
-
-                <h1>
-                    Sistema de Inventario
-                </h1>
-
-                <p>
-                    Bloque María Inmaculada · Universidad Mariana
-                </p>
-
+            <div>
+                <h1>Sistema de Inventario</h1>
+                <p>Aulas y Servidores</p>
             </div>
 
+            <div>
+                <strong>{{ usuario.get_full_name|default:usuario.username }}</strong>
 
-            <div class="user-area">
-
-                <div class="user-info">
-
-                    <div class="user-label">
-                        Usuario
-                    </div>
-
-                    <div class="username">
-                        {{ usuario.get_full_name|default:usuario.username }}
-                    </div>
-
-                </div>
-
-
-                <a href="{% url 'logout' %}" class="logout-btn">
+                <a href="{% url 'logout' %}" class="acceso-rapido">
                     Cerrar sesión
                 </a>
-
             </div>
 
         </div>
-
     </header>
 
 
+    <!-- CONTENIDO PRINCIPAL -->
 
-    <!-- =========================================================
-     CONTENIDO
-========================================================= -->
+    <main class="contenido">
+        <div class="contenedor">
+            <!-- INVENTARIO POR PISO -->
 
-    <main class="container">
+            <section class="seccion">
 
-
-        <!-- BIENVENIDA -->
-
-        <section class="welcome">
-
-            <h2>
-                Bienvenido al sistema
-            </h2>
-
-            <p>
-                Desde este panel puede consultar el inventario
-                de las aulas y registrar movimientos y mantenimientos
-                de los activos institucionales.
-            </p>
-
-        </section>
-
-
-
-        <!-- =====================================================
-         INVENTARIO POR PISO
-    ====================================================== -->
-
-        <section class="section">
-
-            <div class="section-header">
-
-                <h2 class="section-title">
-                    Inventario por piso
-                </h2>
-
-                <p class="section-description">
-                    Seleccione un piso para consultar las aulas
-                    y los activos disponibles.
-                </p>
-
-            </div>
-
-
-            {% if pisos %}
-
-            <div class="floors-grid">
-
-                {% for piso in pisos %}
-
-                <a href="{% url 'personal_aulas_por_piso' piso.id %}" class="floor-card">
-
-                    <div class="floor-icon">
-                        🏢
-                    </div>
-
-                    <div class="floor-name">
-
-                        {{ piso }}
-
-                    </div>
-
-                    <div class="floor-action">
-
-                        Consultar aulas →
-
-                    </div>
-
-                </a>
-
-                {% endfor %}
-
-            </div>
-
-            {% else %}
-
-            <div class="welcome">
+                <div class="titulo-seccion">
+                    <h2>Inventario por piso</h2>
+                </div>
 
                 <p>
+                    Seleccione un piso para consultar las aulas y los activos disponibles.
+                </p>
+
+                {% if pisos %}
+
+                <div class="pisos">
+
+                    {% for piso in pisos %}
+
+                    <article class="tarjeta-piso">
+
+                        <div class="icono-piso">
+                            🏢
+                        </div>
+
+                        <h3>{{ piso }}</h3>
+
+                        <p>
+                            Consulte las aulas y sus activos registrados.
+                        </p>
+
+                        <a href="{% url 'personal_aulas_por_piso' piso.id %}">
+                            Consultar aulas →
+                        </a>
+
+                    </article>
+
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <div class="mensaje-vacio">
                     No hay pisos activos registrados.
+                </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- ADMINISTRACIÓN DE ACTIVOS -->
+
+            <section class="seccion">
+
+                <div class="titulo-seccion">
+                    <h2>Administración de activos</h2>
+                </div>
+
+                <p>
+                    Consulte, registre y actualice la información de los activos
+                    institucionales.
                 </p>
 
-            </div>
+                <div class="accesos-rapidos">
 
-            {% endif %}
+                    <!-- COMPUTADORES -->
 
-        </section>
+                    <a href="{% url 'computadores_lista' %}" class="acceso-rapido">
+
+                        <div class="acceso-icono">
+                            🖥️
+                        </div>
+
+                        <div class="acceso-contenido">
+                            <strong>Computadores</strong>
+                            <span>Consultar, registrar y editar computadores.</span>
+                        </div>
+
+                    </a>
 
 
+                    <!-- EQUIPOS TECNOLÓGICOS -->
 
-        <!-- =====================================================
-         OPERACIONES
-    ====================================================== -->
+                    <a href="{% url 'equipos_lista' %}" class="acceso-rapido">
 
-        <section class="section">
+                        <div class="acceso-icono">
+                            📽️
+                        </div>
 
-            <div class="section-header">
+                        <div class="acceso-contenido">
+                            <strong>Equipos tecnológicos</strong>
+                            <span>Consultar, registrar y editar equipos tecnológicos.</span>
+                        </div>
 
-                <h2 class="section-title">
-                    Operaciones
-                </h2>
+                    </a>
 
-                <p class="section-description">
-                    Consulte y registre actividades relacionadas
-                    con los activos del inventario.
+
+                    <!-- MOBILIARIO -->
+
+                    <a href="{% url 'mobiliario_lista' %}" class="acceso-rapido">
+
+                        <div class="acceso-icono">
+                            🪑
+                        </div>
+
+                        <div class="acceso-contenido">
+                            <strong>Mobiliario</strong>
+                            <span>Consultar, registrar y editar mobiliario institucional.</span>
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- OPERACIONES -->
+
+            <section class="seccion">
+
+                <div class="titulo-seccion">
+                    <h2>Operaciones</h2>
+                </div>
+
+                <p>
+                    Consulte y registre actividades relacionadas con los activos
+                    del inventario.
                 </p>
 
-            </div>
+                <div class="accesos-rapidos">
 
+                    <!-- MANTENIMIENTOS -->
 
-            <div class="operations-grid">
+                    <a href="{% url 'personal_mantenimientos_lista' %}" class="acceso-rapido">
 
+                        <div class="acceso-icono">
+                            🔧
+                        </div>
 
-                <!-- MANTENIMIENTOS -->
+                        <div class="acceso-contenido">
+                            <strong>Mantenimientos</strong>
+                            <span>Consultar mantenimientos registrados.</span>
+                        </div>
 
-                <article class="operation-card">
-
-                    <div class="operation-icon">
-                        🔧
-                    </div>
-
-                    <h3>
-                        Mantenimientos
-                    </h3>
-
-                    <p>
-                        Consulte los mantenimientos registrados
-                        y registre nuevos mantenimientos realizados
-                        sobre los activos institucionales.
-                    </p>
-
-                    <div class="operation-buttons">
-
-                        <a href="{% url 'mantenimientos_lista' %}" class="btn btn-secondary">
-                            Ver mantenimientos
-                        </a>
-
-                        <a href="{% url 'mantenimiento_crear' %}" class="btn btn-primary">
-                            Registrar
-                        </a>
-
-                    </div>
-
-                </article>
+                    </a>
 
 
 
-                <!-- MOVIMIENTOS -->
+                    <!-- MOVIMIENTOS -->
 
-                <article class="operation-card">
+                    <a href="{% url 'personal_movimientos_lista' %}" class="acceso-rapido">
 
-                    <div class="operation-icon">
-                        ↔
-                    </div>
+                        <div class="acceso-icono">
+                            ↔️
+                        </div>
 
-                    <h3>
-                        Movimientos
-                    </h3>
+                        <div class="acceso-contenido">
+                            <strong>Movimientos</strong>
+                            <span>Consultar movimientos de activos.</span>
+                        </div>
 
-                    <p>
-                        Consulte los movimientos de activos y registre
-                        traslados, salidas o reingresos.
-                    </p>
+                    </a>
 
-                    <div class="operation-buttons">
+                    <!-- SOFTWARE -->
 
-                        <a href="{% url 'movimientos_lista' %}" class="btn btn-secondary">
-                            Ver movimientos
-                        </a>
+                    <a href="{% url 'buscar_software' %}" class="acceso-rapido">
 
-                        <a href="{% url 'movimiento_crear' %}" class="btn btn-primary">
-                            Registrar
-                        </a>
+                        <div class="acceso-icono">
+                            💿
+                        </div>
 
-                    </div>
+                        <div class="acceso-contenido">
+                            <strong>Software instalado</strong>
+                            <span>
+                                Buscar programas, versiones y tipos de licencia
+                                registrados en las aulas.
+                            </span>
+                        </div>
 
-                </article>
+                    </a>
 
-                <!-- BUSCAR SOFTWARE INSTALADO -->
+                </div>
 
-                <article class="operation-card">
-
-                    <div class="operation-icon">
-                        💿
-                    </div>
-
-                    <h3>
-                        Software instalado
-                    </h3>
-
-                    <p>
-                        Busque un programa por su nombre y consulte
-                        en qué aulas se encuentra registrado,
-                        junto con su versión y tipo de licencia.
-                    </p>
-
-                    <div class="operation-buttons">
-
-                        <a href="{% url 'buscar_software' %}" class="btn btn-primary">
-                            Buscar software
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =====================================================
-         FOOTER
-    ====================================================== -->
-
-        <div class="footer">
-
-            Sistema de Inventario
+            </section>
 
         </div>
-
-
     </main>
 
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer class="pie">
+        <strong>Sistema de Inventario</strong><br>
+    </footer>
 
 </body>
 
